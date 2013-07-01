@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.workflow.WorkflowDefinition;
 import com.liferay.portal.kernel.workflow.WorkflowException;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.workflow.kaleo.NoSuchDefinitionException;
-import com.liferay.portal.workflow.kaleo.WorkflowDefinitionAdapter;
 import com.liferay.portal.workflow.kaleo.definition.Condition;
 import com.liferay.portal.workflow.kaleo.definition.Definition;
 import com.liferay.portal.workflow.kaleo.definition.Node;
@@ -35,6 +34,7 @@ import com.liferay.portal.workflow.kaleo.service.KaleoDefinitionLocalServiceUtil
 import com.liferay.portal.workflow.kaleo.service.KaleoNodeLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoTaskLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoTransitionLocalServiceUtil;
+import com.liferay.portal.workflow.kaleo.util.WorkflowModelUtil;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -45,6 +45,7 @@ import java.util.Map;
  */
 public class DefaultWorkflowDeployer implements WorkflowDeployer {
 
+	@Override
 	public WorkflowDefinition deploy(
 			String title, Definition definition, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -95,11 +96,9 @@ public class DefaultWorkflowDeployer implements WorkflowDeployer {
 		}
 
 		for (Node node : nodes) {
-			Collection<Transition> transitions = node.getTransitionsEntries();
-
 			KaleoNode kaleoNode = kaleoNodesMap.get(node.getName());
 
-			for (Transition transition : transitions) {
+			for (Transition transition : node.getOutgoingTransitionsList()) {
 				KaleoNode sourceKaleoNode = kaleoNodesMap.get(
 					transition.getSourceNode().getName());
 
@@ -138,7 +137,7 @@ public class DefaultWorkflowDeployer implements WorkflowDeployer {
 		KaleoDefinitionLocalServiceUtil.activateKaleoDefinition(
 			kaleoDefinitionId, kaleoNode.getKaleoNodeId(), serviceContext);
 
-		return new WorkflowDefinitionAdapter(kaleoDefinition);
+		return WorkflowModelUtil.toWorkflowDefinition(kaleoDefinition);
 	}
 
 }

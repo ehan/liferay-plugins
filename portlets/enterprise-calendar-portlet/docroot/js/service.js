@@ -1,1 +1,0 @@
-Liferay.Service.register("Liferay.Service.Calendar", "com.liferay.calendar.service", "enterprise-calendar-portlet");

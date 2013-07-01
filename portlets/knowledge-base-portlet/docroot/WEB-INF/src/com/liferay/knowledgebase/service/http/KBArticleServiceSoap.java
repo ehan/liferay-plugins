@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,13 +22,11 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import java.rmi.RemoteException;
 
 /**
- * <p>
- * This class provides a SOAP utility for the
+ * Provides the SOAP utility for the
  * {@link com.liferay.knowledgebase.service.KBArticleServiceUtil} service utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it is difficult for SOAP to
  * support certain types.
- * </p>
  *
  * <p>
  * ServiceBuilder follows certain rules in translating the methods. For example,
@@ -48,9 +46,8 @@ import java.rmi.RemoteException;
  * </p>
  *
  * <p>
- * You can see a list of services at
- * http://localhost:8080/api/secure/axis. Set the property
- * <b>axis.servlet.hosts.allowed</b> in portal.properties to configure
+ * You can see a list of services at http://localhost:8080/api/axis. Set the
+ * property <b>axis.servlet.hosts.allowed</b> in portal.properties to configure
  * security.
  * </p>
  *
@@ -58,10 +55,10 @@ import java.rmi.RemoteException;
  * The SOAP utility is only generated for remote services.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       KBArticleServiceHttp
- * @see       com.liferay.knowledgebase.model.KBArticleSoap
- * @see       com.liferay.knowledgebase.service.KBArticleServiceUtil
+ * @author Brian Wing Shun Chan
+ * @see KBArticleServiceHttp
+ * @see com.liferay.knowledgebase.model.KBArticleSoap
+ * @see com.liferay.knowledgebase.service.KBArticleServiceUtil
  * @generated
  */
 public class KBArticleServiceSoap {
@@ -100,10 +97,12 @@ public class KBArticleServiceSoap {
 		}
 	}
 
-	public static void deleteKBArticle(long resourcePrimKey)
-		throws RemoteException {
+	public static com.liferay.knowledgebase.model.KBArticleSoap deleteKBArticle(
+		long resourcePrimKey) throws RemoteException {
 		try {
-			KBArticleServiceUtil.deleteKBArticle(resourcePrimKey);
+			com.liferay.knowledgebase.model.KBArticle returnValue = KBArticleServiceUtil.deleteKBArticle(resourcePrimKey);
+
+			return com.liferay.knowledgebase.model.KBArticleSoap.toSoapModel(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -124,7 +123,7 @@ public class KBArticleServiceSoap {
 		}
 	}
 
-	public static com.liferay.knowledgebase.model.KBArticle[] getGroupKBArticles(
+	public static com.liferay.knowledgebase.model.KBArticleSoap[] getGroupKBArticles(
 		long groupId, int status, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws RemoteException {
@@ -133,7 +132,7 @@ public class KBArticleServiceSoap {
 				KBArticleServiceUtil.getGroupKBArticles(groupId, status, start,
 					end, orderByComparator);
 
-			return returnValue.toArray(new com.liferay.knowledgebase.model.KBArticle[returnValue.size()]);
+			return com.liferay.knowledgebase.model.KBArticleSoap.toSoapModels(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -172,7 +171,7 @@ public class KBArticleServiceSoap {
 		}
 	}
 
-	public static com.liferay.knowledgebase.model.KBArticle[] getKBArticleAndAllDescendants(
+	public static com.liferay.knowledgebase.model.KBArticleSoap[] getKBArticleAndAllDescendants(
 		long groupId, long resourcePrimKey, int status,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws RemoteException {
@@ -181,7 +180,25 @@ public class KBArticleServiceSoap {
 				KBArticleServiceUtil.getKBArticleAndAllDescendants(groupId,
 					resourcePrimKey, status, orderByComparator);
 
-			return returnValue.toArray(new com.liferay.knowledgebase.model.KBArticle[returnValue.size()]);
+			return com.liferay.knowledgebase.model.KBArticleSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static com.liferay.knowledgebase.model.KBArticleSoap[] getKBArticles(
+		long groupId, long[] resourcePrimKeys, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws RemoteException {
+		try {
+			java.util.List<com.liferay.knowledgebase.model.KBArticle> returnValue =
+				KBArticleServiceUtil.getKBArticles(groupId, resourcePrimKeys,
+					status, orderByComparator);
+
+			return com.liferay.knowledgebase.model.KBArticleSoap.toSoapModels(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -210,7 +227,7 @@ public class KBArticleServiceSoap {
 		}
 	}
 
-	public static com.liferay.knowledgebase.model.KBArticle[] getKBArticleVersions(
+	public static com.liferay.knowledgebase.model.KBArticleSoap[] getKBArticleVersions(
 		long groupId, long resourcePrimKey, int status, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws RemoteException {
@@ -219,7 +236,7 @@ public class KBArticleServiceSoap {
 				KBArticleServiceUtil.getKBArticleVersions(groupId,
 					resourcePrimKey, status, start, end, orderByComparator);
 
-			return returnValue.toArray(new com.liferay.knowledgebase.model.KBArticle[returnValue.size()]);
+			return com.liferay.knowledgebase.model.KBArticleSoap.toSoapModels(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -243,24 +260,6 @@ public class KBArticleServiceSoap {
 		}
 	}
 
-	public static com.liferay.knowledgebase.model.KBArticle[] getKBArticles(
-		long groupId, long[] resourcePrimKeys, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws RemoteException {
-		try {
-			java.util.List<com.liferay.knowledgebase.model.KBArticle> returnValue =
-				KBArticleServiceUtil.getKBArticles(groupId, resourcePrimKeys,
-					status, orderByComparator);
-
-			return returnValue.toArray(new com.liferay.knowledgebase.model.KBArticle[returnValue.size()]);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
 	public static com.liferay.knowledgebase.model.KBArticleSoap getLatestKBArticle(
 		long resourcePrimKey, int status) throws RemoteException {
 		try {
@@ -276,7 +275,7 @@ public class KBArticleServiceSoap {
 		}
 	}
 
-	public static com.liferay.knowledgebase.model.KBArticle[] getSectionsKBArticles(
+	public static com.liferay.knowledgebase.model.KBArticleSoap[] getSectionsKBArticles(
 		long groupId, java.lang.String[] sections, int status, int start,
 		int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
@@ -286,7 +285,7 @@ public class KBArticleServiceSoap {
 				KBArticleServiceUtil.getSectionsKBArticles(groupId, sections,
 					status, start, end, orderByComparator);
 
-			return returnValue.toArray(new com.liferay.knowledgebase.model.KBArticle[returnValue.size()]);
+			return com.liferay.knowledgebase.model.KBArticleSoap.toSoapModels(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -310,7 +309,7 @@ public class KBArticleServiceSoap {
 		}
 	}
 
-	public static com.liferay.knowledgebase.model.KBArticle[] getSiblingKBArticles(
+	public static com.liferay.knowledgebase.model.KBArticleSoap[] getSiblingKBArticles(
 		long groupId, long parentResourcePrimKey, int status, int start,
 		int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
@@ -320,7 +319,7 @@ public class KBArticleServiceSoap {
 				KBArticleServiceUtil.getSiblingKBArticles(groupId,
 					parentResourcePrimKey, status, start, end, orderByComparator);
 
-			return returnValue.toArray(new com.liferay.knowledgebase.model.KBArticle[returnValue.size()]);
+			return com.liferay.knowledgebase.model.KBArticleSoap.toSoapModels(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

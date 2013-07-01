@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -185,9 +185,9 @@ public class LiferayAppDataService implements AppDataService {
 		return new DataCollection(peopleAppData);
 	}
 
-	protected void doUpdatePersonData(UserId userId, GroupId groupId,
-			String appId, Set<String> fields, Map<String, String> values,
-			SecurityToken securityToken)
+	protected void doUpdatePersonData(
+			UserId userId, GroupId groupId, String appId, Set<String> fields,
+			Map<String, String> values, SecurityToken securityToken)
 		throws Exception {
 
 		long companyId = getCompanyId(securityToken);
@@ -201,8 +201,8 @@ public class LiferayAppDataService implements AppDataService {
 
 			String value = String.valueOf(values.get(key));
 
-			ExpandoColumn expandoColumn =
-				getExpandoColumn(companyId, getColumnName(appId, key));
+			ExpandoColumn expandoColumn = getExpandoColumn(
+				companyId, getColumnName(appId, key));
 
 			ExpandoValueLocalServiceUtil.addValue(
 				companyId, User.class.getName(),

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,18 +14,25 @@
 
 package com.liferay.privatemessaging.service;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
+import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ClassLoaderObjectInputStream;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.BaseModel;
 
 import com.liferay.privatemessaging.model.UserThreadClp;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -90,10 +97,6 @@ public class ClpSerializer {
 		}
 	}
 
-	public static void setClassLoader(ClassLoader classLoader) {
-		_classLoader = classLoader;
-	}
-
 	public static Object translateInput(BaseModel<?> oldModel) {
 		Class<?> oldModelClass = oldModel.getClass();
 
@@ -119,95 +122,13 @@ public class ClpSerializer {
 	}
 
 	public static Object translateInputUserThread(BaseModel<?> oldModel) {
-		UserThreadClp oldCplModel = (UserThreadClp)oldModel;
+		UserThreadClp oldClpModel = (UserThreadClp)oldModel;
 
-		Thread currentThread = Thread.currentThread();
+		BaseModel<?> newModel = oldClpModel.getUserThreadRemoteModel();
 
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
-		try {
-			currentThread.setContextClassLoader(_classLoader);
-
-			try {
-				Class<?> newModelClass = Class.forName("com.liferay.privatemessaging.model.impl.UserThreadImpl",
-						true, _classLoader);
-
-				Object newModel = newModelClass.newInstance();
-
-				Method method0 = newModelClass.getMethod("setUserThreadId",
-						new Class[] { Long.TYPE });
-
-				Long value0 = new Long(oldCplModel.getUserThreadId());
-
-				method0.invoke(newModel, value0);
-
-				Method method1 = newModelClass.getMethod("setCompanyId",
-						new Class[] { Long.TYPE });
-
-				Long value1 = new Long(oldCplModel.getCompanyId());
-
-				method1.invoke(newModel, value1);
-
-				Method method2 = newModelClass.getMethod("setUserId",
-						new Class[] { Long.TYPE });
-
-				Long value2 = new Long(oldCplModel.getUserId());
-
-				method2.invoke(newModel, value2);
-
-				Method method3 = newModelClass.getMethod("setCreateDate",
-						new Class[] { Date.class });
-
-				Date value3 = oldCplModel.getCreateDate();
-
-				method3.invoke(newModel, value3);
-
-				Method method4 = newModelClass.getMethod("setModifiedDate",
-						new Class[] { Date.class });
-
-				Date value4 = oldCplModel.getModifiedDate();
-
-				method4.invoke(newModel, value4);
-
-				Method method5 = newModelClass.getMethod("setMbThreadId",
-						new Class[] { Long.TYPE });
-
-				Long value5 = new Long(oldCplModel.getMbThreadId());
-
-				method5.invoke(newModel, value5);
-
-				Method method6 = newModelClass.getMethod("setTopMBMessageId",
-						new Class[] { Long.TYPE });
-
-				Long value6 = new Long(oldCplModel.getTopMBMessageId());
-
-				method6.invoke(newModel, value6);
-
-				Method method7 = newModelClass.getMethod("setRead",
-						new Class[] { Boolean.TYPE });
-
-				Boolean value7 = new Boolean(oldCplModel.getRead());
-
-				method7.invoke(newModel, value7);
-
-				Method method8 = newModelClass.getMethod("setDeleted",
-						new Class[] { Boolean.TYPE });
-
-				Boolean value8 = new Boolean(oldCplModel.getDeleted());
-
-				method8.invoke(newModel, value8);
-
-				return newModel;
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
-		}
-		finally {
-			currentThread.setContextClassLoader(contextClassLoader);
-		}
-
-		return oldModel;
+		return newModel;
 	}
 
 	public static Object translateInput(Object obj) {
@@ -259,89 +180,78 @@ public class ClpSerializer {
 		}
 	}
 
-	public static Object translateOutputUserThread(BaseModel<?> oldModel) {
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		try {
-			currentThread.setContextClassLoader(_classLoader);
-
+	public static Throwable translateThrowable(Throwable throwable) {
+		if (_useReflectionToTranslateThrowable) {
 			try {
-				UserThreadClp newModel = new UserThreadClp();
+				UnsyncByteArrayOutputStream unsyncByteArrayOutputStream = new UnsyncByteArrayOutputStream();
+				ObjectOutputStream objectOutputStream = new ObjectOutputStream(unsyncByteArrayOutputStream);
 
-				Class<?> oldModelClass = oldModel.getClass();
+				objectOutputStream.writeObject(throwable);
 
-				Method method0 = oldModelClass.getMethod("getUserThreadId");
+				objectOutputStream.flush();
+				objectOutputStream.close();
 
-				Long value0 = (Long)method0.invoke(oldModel, (Object[])null);
+				UnsyncByteArrayInputStream unsyncByteArrayInputStream = new UnsyncByteArrayInputStream(unsyncByteArrayOutputStream.unsafeGetByteArray(),
+						0, unsyncByteArrayOutputStream.size());
 
-				newModel.setUserThreadId(value0);
+				Thread currentThread = Thread.currentThread();
 
-				Method method1 = oldModelClass.getMethod("getCompanyId");
+				ClassLoader contextClassLoader = currentThread.getContextClassLoader();
 
-				Long value1 = (Long)method1.invoke(oldModel, (Object[])null);
+				ObjectInputStream objectInputStream = new ClassLoaderObjectInputStream(unsyncByteArrayInputStream,
+						contextClassLoader);
 
-				newModel.setCompanyId(value1);
+				throwable = (Throwable)objectInputStream.readObject();
 
-				Method method2 = oldModelClass.getMethod("getUserId");
+				objectInputStream.close();
 
-				Long value2 = (Long)method2.invoke(oldModel, (Object[])null);
-
-				newModel.setUserId(value2);
-
-				Method method3 = oldModelClass.getMethod("getCreateDate");
-
-				Date value3 = (Date)method3.invoke(oldModel, (Object[])null);
-
-				newModel.setCreateDate(value3);
-
-				Method method4 = oldModelClass.getMethod("getModifiedDate");
-
-				Date value4 = (Date)method4.invoke(oldModel, (Object[])null);
-
-				newModel.setModifiedDate(value4);
-
-				Method method5 = oldModelClass.getMethod("getMbThreadId");
-
-				Long value5 = (Long)method5.invoke(oldModel, (Object[])null);
-
-				newModel.setMbThreadId(value5);
-
-				Method method6 = oldModelClass.getMethod("getTopMBMessageId");
-
-				Long value6 = (Long)method6.invoke(oldModel, (Object[])null);
-
-				newModel.setTopMBMessageId(value6);
-
-				Method method7 = oldModelClass.getMethod("getRead");
-
-				Boolean value7 = (Boolean)method7.invoke(oldModel,
-						(Object[])null);
-
-				newModel.setRead(value7);
-
-				Method method8 = oldModelClass.getMethod("getDeleted");
-
-				Boolean value8 = (Boolean)method8.invoke(oldModel,
-						(Object[])null);
-
-				newModel.setDeleted(value8);
-
-				return newModel;
+				return throwable;
 			}
-			catch (Exception e) {
-				_log.error(e, e);
+			catch (SecurityException se) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Do not use reflection to translate throwable");
+				}
+
+				_useReflectionToTranslateThrowable = false;
+			}
+			catch (Throwable throwable2) {
+				_log.error(throwable2, throwable2);
+
+				return throwable2;
 			}
 		}
-		finally {
-			currentThread.setContextClassLoader(contextClassLoader);
+
+		Class<?> clazz = throwable.getClass();
+
+		String className = clazz.getName();
+
+		if (className.equals(PortalException.class.getName())) {
+			return new PortalException();
 		}
 
-		return oldModel;
+		if (className.equals(SystemException.class.getName())) {
+			return new SystemException();
+		}
+
+		if (className.equals(
+					"com.liferay.privatemessaging.NoSuchUserThreadException")) {
+			return new com.liferay.privatemessaging.NoSuchUserThreadException();
+		}
+
+		return throwable;
+	}
+
+	public static Object translateOutputUserThread(BaseModel<?> oldModel) {
+		UserThreadClp newModel = new UserThreadClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setUserThreadRemoteModel(oldModel);
+
+		return newModel;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(ClpSerializer.class);
-	private static ClassLoader _classLoader;
 	private static String _servletContextName;
+	private static boolean _useReflectionToTranslateThrowable = true;
 }

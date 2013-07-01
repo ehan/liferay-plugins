@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -39,7 +39,9 @@ import java.sql.Types;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the App service. Represents a row in the &quot;Marketplace_App&quot; database table, with each column mapped to a property of this class.
@@ -71,10 +73,16 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 			{ "createDate", Types.TIMESTAMP },
 			{ "modifiedDate", Types.TIMESTAMP },
 			{ "remoteAppId", Types.BIGINT },
+			{ "title", Types.VARCHAR },
+			{ "description", Types.VARCHAR },
+			{ "category", Types.VARCHAR },
+			{ "iconURL", Types.VARCHAR },
 			{ "version", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Marketplace_App (uuid_ VARCHAR(75) null,appId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,remoteAppId LONG,version VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table Marketplace_App (uuid_ VARCHAR(75) null,appId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,remoteAppId LONG,title VARCHAR(75) null,description VARCHAR(75) null,category VARCHAR(75) null,iconURL VARCHAR(75) null,version VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table Marketplace_App";
+	public static final String ORDER_BY_JPQL = " ORDER BY app.appId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY Marketplace_App.appId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -87,9 +95,11 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.marketplace.model.App"),
 			true);
-	public static long COMPANYID_COLUMN_BITMASK = 1L;
-	public static long REMOTEAPPID_COLUMN_BITMASK = 2L;
-	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long CATEGORY_COLUMN_BITMASK = 1L;
+	public static long COMPANYID_COLUMN_BITMASK = 2L;
+	public static long REMOTEAPPID_COLUMN_BITMASK = 4L;
+	public static long UUID_COLUMN_BITMASK = 8L;
+	public static long APPID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -98,6 +108,10 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 	 * @return the normal model instance
 	 */
 	public static App toModel(AppSoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
 		App model = new AppImpl();
 
 		model.setUuid(soapModel.getUuid());
@@ -108,6 +122,10 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		model.setCreateDate(soapModel.getCreateDate());
 		model.setModifiedDate(soapModel.getModifiedDate());
 		model.setRemoteAppId(soapModel.getRemoteAppId());
+		model.setTitle(soapModel.getTitle());
+		model.setDescription(soapModel.getDescription());
+		model.setCategory(soapModel.getCategory());
+		model.setIconURL(soapModel.getIconURL());
 		model.setVersion(soapModel.getVersion());
 
 		return model;
@@ -120,6 +138,10 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 	 * @return the normal model instances
 	 */
 	public static List<App> toModels(AppSoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
 		List<App> models = new ArrayList<App>(soapModels.length);
 
 		for (AppSoap soapModel : soapModels) {
@@ -135,30 +157,139 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 	public AppModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _appId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setAppId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_appId);
+		return _appId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return App.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return App.class.getName();
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("uuid", getUuid());
+		attributes.put("appId", getAppId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("remoteAppId", getRemoteAppId());
+		attributes.put("title", getTitle());
+		attributes.put("description", getDescription());
+		attributes.put("category", getCategory());
+		attributes.put("iconURL", getIconURL());
+		attributes.put("version", getVersion());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
+		Long appId = (Long)attributes.get("appId");
+
+		if (appId != null) {
+			setAppId(appId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long remoteAppId = (Long)attributes.get("remoteAppId");
+
+		if (remoteAppId != null) {
+			setRemoteAppId(remoteAppId);
+		}
+
+		String title = (String)attributes.get("title");
+
+		if (title != null) {
+			setTitle(title);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		String category = (String)attributes.get("category");
+
+		if (category != null) {
+			setCategory(category);
+		}
+
+		String iconURL = (String)attributes.get("iconURL");
+
+		if (iconURL != null) {
+			setIconURL(iconURL);
+		}
+
+		String version = (String)attributes.get("version");
+
+		if (version != null) {
+			setVersion(version);
+		}
+	}
+
+	@Override
 	@JSON
 	public String getUuid() {
 		if (_uuid == null) {
@@ -169,6 +300,7 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		}
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 		if (_originalUuid == null) {
 			_originalUuid = _uuid;
@@ -181,20 +313,24 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		return GetterUtil.getString(_originalUuid);
 	}
 
+	@Override
 	@JSON
 	public long getAppId() {
 		return _appId;
 	}
 
+	@Override
 	public void setAppId(long appId) {
 		_appId = appId;
 	}
 
+	@Override
 	@JSON
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -211,23 +347,28 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		return _originalCompanyId;
 	}
 
+	@Override
 	@JSON
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
+	@Override
 	@JSON
 	public String getUserName() {
 		if (_userName == null) {
@@ -238,33 +379,40 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
+	@Override
 	@JSON
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
+	@Override
 	@JSON
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	@JSON
 	public long getRemoteAppId() {
 		return _remoteAppId;
 	}
 
+	@Override
 	public void setRemoteAppId(long remoteAppId) {
 		_columnBitmask |= REMOTEAPPID_COLUMN_BITMASK;
 
@@ -281,6 +429,81 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		return _originalRemoteAppId;
 	}
 
+	@Override
+	@JSON
+	public String getTitle() {
+		if (_title == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _title;
+		}
+	}
+
+	@Override
+	public void setTitle(String title) {
+		_title = title;
+	}
+
+	@Override
+	@JSON
+	public String getDescription() {
+		if (_description == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _description;
+		}
+	}
+
+	@Override
+	public void setDescription(String description) {
+		_description = description;
+	}
+
+	@Override
+	@JSON
+	public String getCategory() {
+		if (_category == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _category;
+		}
+	}
+
+	@Override
+	public void setCategory(String category) {
+		_columnBitmask |= CATEGORY_COLUMN_BITMASK;
+
+		if (_originalCategory == null) {
+			_originalCategory = _category;
+		}
+
+		_category = category;
+	}
+
+	public String getOriginalCategory() {
+		return GetterUtil.getString(_originalCategory);
+	}
+
+	@Override
+	@JSON
+	public String getIconURL() {
+		if (_iconURL == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _iconURL;
+		}
+	}
+
+	@Override
+	public void setIconURL(String iconURL) {
+		_iconURL = iconURL;
+	}
+
+	@Override
 	@JSON
 	public String getVersion() {
 		if (_version == null) {
@@ -291,6 +514,7 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		}
 	}
 
+	@Override
 	public void setVersion(String version) {
 		_version = version;
 	}
@@ -300,29 +524,26 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 	}
 
 	@Override
-	public App toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (App)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
-					App.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
+			App.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public App toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (App)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -337,6 +558,10 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		appImpl.setCreateDate(getCreateDate());
 		appImpl.setModifiedDate(getModifiedDate());
 		appImpl.setRemoteAppId(getRemoteAppId());
+		appImpl.setTitle(getTitle());
+		appImpl.setDescription(getDescription());
+		appImpl.setCategory(getCategory());
+		appImpl.setIconURL(getIconURL());
 		appImpl.setVersion(getVersion());
 
 		appImpl.resetOriginalValues();
@@ -344,6 +569,7 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		return appImpl;
 	}
 
+	@Override
 	public int compareTo(App app) {
 		long primaryKey = app.getPrimaryKey();
 
@@ -360,18 +586,15 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof App)) {
 			return false;
 		}
 
-		App app = null;
-
-		try {
-			app = (App)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		App app = (App)obj;
 
 		long primaryKey = app.getPrimaryKey();
 
@@ -401,6 +624,8 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		appModelImpl._originalRemoteAppId = appModelImpl._remoteAppId;
 
 		appModelImpl._setOriginalRemoteAppId = false;
+
+		appModelImpl._originalCategory = appModelImpl._category;
 
 		appModelImpl._columnBitmask = 0;
 	}
@@ -451,6 +676,38 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 
 		appCacheModel.remoteAppId = getRemoteAppId();
 
+		appCacheModel.title = getTitle();
+
+		String title = appCacheModel.title;
+
+		if ((title != null) && (title.length() == 0)) {
+			appCacheModel.title = null;
+		}
+
+		appCacheModel.description = getDescription();
+
+		String description = appCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			appCacheModel.description = null;
+		}
+
+		appCacheModel.category = getCategory();
+
+		String category = appCacheModel.category;
+
+		if ((category != null) && (category.length() == 0)) {
+			appCacheModel.category = null;
+		}
+
+		appCacheModel.iconURL = getIconURL();
+
+		String iconURL = appCacheModel.iconURL;
+
+		if ((iconURL != null) && (iconURL.length() == 0)) {
+			appCacheModel.iconURL = null;
+		}
+
 		appCacheModel.version = getVersion();
 
 		String version = appCacheModel.version;
@@ -464,7 +721,7 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -482,6 +739,14 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		sb.append(getModifiedDate());
 		sb.append(", remoteAppId=");
 		sb.append(getRemoteAppId());
+		sb.append(", title=");
+		sb.append(getTitle());
+		sb.append(", description=");
+		sb.append(getDescription());
+		sb.append(", category=");
+		sb.append(getCategory());
+		sb.append(", iconURL=");
+		sb.append(getIconURL());
 		sb.append(", version=");
 		sb.append(getVersion());
 		sb.append("}");
@@ -489,8 +754,9 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(43);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.marketplace.model.App");
@@ -529,6 +795,22 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		sb.append(getRemoteAppId());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>title</column-name><column-value><![CDATA[");
+		sb.append(getTitle());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>description</column-name><column-value><![CDATA[");
+		sb.append(getDescription());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>category</column-name><column-value><![CDATA[");
+		sb.append(getCategory());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>iconURL</column-name><column-value><![CDATA[");
+		sb.append(getIconURL());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>version</column-name><column-value><![CDATA[");
 		sb.append(getVersion());
 		sb.append("]]></column-value></column>");
@@ -539,9 +821,7 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 	}
 
 	private static ClassLoader _classLoader = App.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			App.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { App.class };
 	private String _uuid;
 	private String _originalUuid;
 	private long _appId;
@@ -556,8 +836,12 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 	private long _remoteAppId;
 	private long _originalRemoteAppId;
 	private boolean _setOriginalRemoteAppId;
+	private String _title;
+	private String _description;
+	private String _category;
+	private String _originalCategory;
+	private String _iconURL;
 	private String _version;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
-	private App _escapedModelProxy;
+	private App _escapedModel;
 }

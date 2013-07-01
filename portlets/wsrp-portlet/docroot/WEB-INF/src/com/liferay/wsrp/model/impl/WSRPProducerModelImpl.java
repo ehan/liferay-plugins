@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,6 +34,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the WSRPProducer service. Represents a row in the &quot;WSRP_WSRPProducer&quot; database table, with each column mapped to a property of this class.
@@ -86,36 +88,118 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long GROUPID_COLUMN_BITMASK = 2L;
 	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long NAME_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.wsrp.model.WSRPProducer"));
 
 	public WSRPProducerModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _wsrpProducerId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setWsrpProducerId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_wsrpProducerId);
+		return _wsrpProducerId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return WSRPProducer.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return WSRPProducer.class.getName();
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("uuid", getUuid());
+		attributes.put("wsrpProducerId", getWsrpProducerId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("name", getName());
+		attributes.put("version", getVersion());
+		attributes.put("portletIds", getPortletIds());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
+		Long wsrpProducerId = (Long)attributes.get("wsrpProducerId");
+
+		if (wsrpProducerId != null) {
+			setWsrpProducerId(wsrpProducerId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String version = (String)attributes.get("version");
+
+		if (version != null) {
+			setVersion(version);
+		}
+
+		String portletIds = (String)attributes.get("portletIds");
+
+		if (portletIds != null) {
+			setPortletIds(portletIds);
+		}
+	}
+
+	@Override
 	public String getUuid() {
 		if (_uuid == null) {
 			return StringPool.BLANK;
@@ -125,6 +209,7 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 		}
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 		if (_originalUuid == null) {
 			_originalUuid = _uuid;
@@ -137,18 +222,22 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 		return GetterUtil.getString(_originalUuid);
 	}
 
+	@Override
 	public long getWsrpProducerId() {
 		return _wsrpProducerId;
 	}
 
+	@Override
 	public void setWsrpProducerId(long wsrpProducerId) {
 		_wsrpProducerId = wsrpProducerId;
 	}
 
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_columnBitmask |= GROUPID_COLUMN_BITMASK;
 
@@ -165,10 +254,12 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 		return _originalGroupId;
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -185,22 +276,27 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 		return _originalCompanyId;
 	}
 
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	public String getName() {
 		if (_name == null) {
 			return StringPool.BLANK;
@@ -210,12 +306,14 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 		}
 	}
 
+	@Override
 	public void setName(String name) {
 		_columnBitmask = -1L;
 
 		_name = name;
 	}
 
+	@Override
 	public String getVersion() {
 		if (_version == null) {
 			return StringPool.BLANK;
@@ -225,10 +323,12 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 		}
 	}
 
+	@Override
 	public void setVersion(String version) {
 		_version = version;
 	}
 
+	@Override
 	public String getPortletIds() {
 		if (_portletIds == null) {
 			return StringPool.BLANK;
@@ -238,6 +338,7 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 		}
 	}
 
+	@Override
 	public void setPortletIds(String portletIds) {
 		_portletIds = portletIds;
 	}
@@ -247,29 +348,26 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 	}
 
 	@Override
-	public WSRPProducer toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (WSRPProducer)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
-					WSRPProducer.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
+			WSRPProducer.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public WSRPProducer toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (WSRPProducer)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -291,6 +389,7 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 		return wsrpProducerImpl;
 	}
 
+	@Override
 	public int compareTo(WSRPProducer wsrpProducer) {
 		int value = 0;
 
@@ -305,18 +404,15 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof WSRPProducer)) {
 			return false;
 		}
 
-		WSRPProducer wsrpProducer = null;
-
-		try {
-			wsrpProducer = (WSRPProducer)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		WSRPProducer wsrpProducer = (WSRPProducer)obj;
 
 		long primaryKey = wsrpProducer.getPrimaryKey();
 
@@ -440,6 +536,7 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(31);
 
@@ -490,7 +587,7 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 	}
 
 	private static ClassLoader _classLoader = WSRPProducer.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			WSRPProducer.class
 		};
 	private String _uuid;
@@ -507,7 +604,6 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 	private String _name;
 	private String _version;
 	private String _portletIds;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
-	private WSRPProducer _escapedModelProxy;
+	private WSRPProducer _escapedModel;
 }

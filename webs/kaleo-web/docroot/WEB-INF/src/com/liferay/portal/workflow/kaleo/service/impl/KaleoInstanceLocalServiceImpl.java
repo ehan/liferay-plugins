@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -48,6 +48,7 @@ import java.util.Map;
 public class KaleoInstanceLocalServiceImpl
 	extends KaleoInstanceLocalServiceBaseImpl {
 
+	@Override
 	public KaleoInstance addKaleoInstance(
 			long kaleoDefinitionId, String kaleoDefinitionName,
 			int kaleoDefinitionVersion,
@@ -67,8 +68,8 @@ public class KaleoInstanceLocalServiceImpl
 
 		long kaleoInstanceId = counterLocalService.increment();
 
-		KaleoInstance kaleoInstance =
-			kaleoInstancePersistence.create(kaleoInstanceId);
+		KaleoInstance kaleoInstance = kaleoInstancePersistence.create(
+			kaleoInstanceId);
 
 		long groupId = StagingUtil.getLiveGroupId(
 			serviceContext.getScopeGroupId());
@@ -100,11 +101,12 @@ public class KaleoInstanceLocalServiceImpl
 		kaleoInstance.setWorkflowContext(
 			WorkflowContextUtil.convert(workflowContext));
 
-		kaleoInstancePersistence.update(kaleoInstance, false);
+		kaleoInstancePersistence.update(kaleoInstance);
 
 		return kaleoInstance;
 	}
 
+	@Override
 	public KaleoInstance completeKaleoInstance(long kaleoInstanceId)
 		throws PortalException, SystemException {
 
@@ -114,11 +116,12 @@ public class KaleoInstanceLocalServiceImpl
 		kaleoInstance.setCompleted(true);
 		kaleoInstance.setCompletionDate(new Date());
 
-		kaleoInstancePersistence.update(kaleoInstance, false);
+		kaleoInstancePersistence.update(kaleoInstance);
 
 		return kaleoInstance;
 	}
 
+	@Override
 	public void deleteCompanyKaleoInstances(long companyId)
 		throws SystemException {
 
@@ -128,8 +131,8 @@ public class KaleoInstanceLocalServiceImpl
 
 		// Kaleo instance tokens
 
-		kaleoInstanceTokenLocalService.
-			deleteKaleoDefinitionKaleoInstanceTokens(companyId);
+		kaleoInstanceTokenLocalService.deleteKaleoDefinitionKaleoInstanceTokens(
+			companyId);
 
 		// Kaleo logs
 
@@ -141,6 +144,7 @@ public class KaleoInstanceLocalServiceImpl
 			deleteKaleoDefinitionKaleoTaskInstanceTokens(companyId);
 	}
 
+	@Override
 	public void deleteKaleoDefinitionKaleoInstances(long kaleoDefinitionId)
 		throws SystemException {
 
@@ -150,8 +154,8 @@ public class KaleoInstanceLocalServiceImpl
 
 		// Kaleo instance tokens
 
-		kaleoInstanceTokenLocalService.
-			deleteKaleoDefinitionKaleoInstanceTokens(kaleoDefinitionId);
+		kaleoInstanceTokenLocalService.deleteKaleoDefinitionKaleoInstanceTokens(
+			kaleoDefinitionId);
 
 		// Kaleo logs
 
@@ -164,14 +168,16 @@ public class KaleoInstanceLocalServiceImpl
 	}
 
 	@Override
-	public void deleteKaleoInstance(long kaleoInstanceId)
+	public KaleoInstance deleteKaleoInstance(long kaleoInstanceId)
 		throws SystemException {
 
+		KaleoInstance kaleoInstance = null;
+
 		try {
-			kaleoInstancePersistence.remove(kaleoInstanceId);
+			kaleoInstance = kaleoInstancePersistence.remove(kaleoInstanceId);
 		}
 		catch (NoSuchInstanceException nsie) {
-			return;
+			return null;
 		}
 
 		// Kaleo instance tokens
@@ -192,8 +198,11 @@ public class KaleoInstanceLocalServiceImpl
 
 		kaleoTimerInstanceTokenLocalService.deleteKaleoTimerInstanceTokens(
 			kaleoInstanceId);
+
+		return kaleoInstance;
 	}
 
+	@Override
 	public List<KaleoInstance> getKaleoInstances(
 			Long userId, String assetClassName, Long assetClassPK,
 			Boolean completed, int start, int end,
@@ -206,6 +215,7 @@ public class KaleoInstanceLocalServiceImpl
 		return dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
 
+	@Override
 	public List<KaleoInstance> getKaleoInstances(
 			Long userId, String[] assetClassNames, Boolean completed, int start,
 			int end, OrderByComparator orderByComparator,
@@ -218,6 +228,7 @@ public class KaleoInstanceLocalServiceImpl
 		return dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
 
+	@Override
 	public List<KaleoInstance> getKaleoInstances(
 			String kaleoDefinitionName, int kaleoDefinitionVersion,
 			boolean completed, int start, int end,
@@ -231,6 +242,7 @@ public class KaleoInstanceLocalServiceImpl
 		return dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
 
+	@Override
 	public int getKaleoInstancesCount(long kaleoDefinitionId, boolean completed)
 		throws SystemException {
 
@@ -238,6 +250,7 @@ public class KaleoInstanceLocalServiceImpl
 			kaleoDefinitionId, completed);
 	}
 
+	@Override
 	public int getKaleoInstancesCount(
 			Long userId, String assetClassName, Long assetClassPK,
 			Boolean completed, ServiceContext serviceContext)
@@ -249,6 +262,7 @@ public class KaleoInstanceLocalServiceImpl
 		return (int)dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public int getKaleoInstancesCount(
 			Long userId, String[] assetClassNames, Boolean completed,
 			ServiceContext serviceContext)
@@ -260,6 +274,7 @@ public class KaleoInstanceLocalServiceImpl
 		return (int)dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public int getKaleoInstancesCount(
 			String kaleoDefinitionName, int kaleoDefinitionVersion,
 			boolean completed, ServiceContext serviceContext)
@@ -272,6 +287,7 @@ public class KaleoInstanceLocalServiceImpl
 		return (int)dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public KaleoInstance updateKaleoInstance(
 			long kaleoInstanceId, Map<String, Serializable> workflowContext,
 			ServiceContext serviceContext)
@@ -282,6 +298,8 @@ public class KaleoInstanceLocalServiceImpl
 
 		kaleoInstance.setWorkflowContext(
 			WorkflowContextUtil.convert(workflowContext));
+
+		kaleoInstancePersistence.update(kaleoInstance);
 
 		return kaleoInstance;
 	}
@@ -311,7 +329,7 @@ public class KaleoInstanceLocalServiceImpl
 		Boolean completed, ServiceContext serviceContext) {
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			KaleoInstance.class, getClass().getClassLoader());
+			KaleoInstance.class, getClassLoader());
 
 		Property companyIdProperty = PropertyFactoryUtil.forName("companyId");
 
@@ -354,7 +372,7 @@ public class KaleoInstanceLocalServiceImpl
 		boolean completed, ServiceContext serviceContext) {
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			KaleoInstance.class, getClass().getClassLoader());
+			KaleoInstance.class, getClassLoader());
 
 		Property companyIdProperty = PropertyFactoryUtil.forName("companyId");
 

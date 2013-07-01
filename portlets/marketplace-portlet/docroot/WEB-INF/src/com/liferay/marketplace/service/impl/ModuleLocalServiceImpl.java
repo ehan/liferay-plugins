@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,28 +25,37 @@ import java.util.List;
  */
 public class ModuleLocalServiceImpl extends ModuleLocalServiceBaseImpl {
 
+	@Override
 	public Module addModule(long userId, long appId, String contextName)
 		throws SystemException {
 
+		Module module = modulePersistence.fetchByA_C(appId, contextName);
+
+		if (module != null) {
+			return module;
+		}
+
 		long moduleId = counterLocalService.increment();
 
-		Module module = modulePersistence.create(moduleId);
+		module = modulePersistence.create(moduleId);
 
 		module.setModuleId(moduleId);
 		module.setAppId(appId);
 		module.setContextName(contextName);
 
-		modulePersistence.update(module, false);
+		modulePersistence.update(module);
 
 		return module;
 	}
 
+	@Override
 	public Module fetchModule(long appId, String contextName)
 		throws SystemException {
 
 		return modulePersistence.fetchByA_C(appId, contextName);
 	}
 
+	@Override
 	public List<Module> getModules(long appId) throws SystemException {
 		return modulePersistence.findByAppId(appId);
 	}

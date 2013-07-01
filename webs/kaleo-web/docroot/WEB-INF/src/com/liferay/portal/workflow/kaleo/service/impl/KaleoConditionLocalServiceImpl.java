@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -31,6 +31,7 @@ import java.util.Date;
 public class KaleoConditionLocalServiceImpl
 	extends KaleoConditionLocalServiceBaseImpl {
 
+	@Override
 	public KaleoCondition addKaleoCondition(
 			long kaleoDefinitionId, long kaleoNodeId, Condition condition,
 			ServiceContext serviceContext)
@@ -55,24 +56,29 @@ public class KaleoConditionLocalServiceImpl
 		kaleoCondition.setScript(condition.getScript());
 		kaleoCondition.setScriptLanguage(
 			condition.getScriptLanguage().getValue());
+		kaleoCondition.setScriptRequiredContexts(
+			condition.getScriptRequiredContexts());
 
-		kaleoConditionPersistence.update(kaleoCondition, false);
+		kaleoConditionPersistence.update(kaleoCondition);
 
 		return kaleoCondition;
 	}
 
+	@Override
 	public void deleteCompanyKaleoConditions(long companyId)
 		throws SystemException {
 
 		kaleoConditionPersistence.removeByCompanyId(companyId);
 	}
 
+	@Override
 	public void deleteKaleoDefinitionKaleoCondition(long kaleoDefinitionId)
 		throws SystemException {
 
 		kaleoConditionPersistence.removeByKaleoDefinitionId(kaleoDefinitionId);
 	}
 
+	@Override
 	public KaleoCondition getKaleoNodeKaleoCondition(long kaleoNodeId)
 		throws PortalException, SystemException {
 

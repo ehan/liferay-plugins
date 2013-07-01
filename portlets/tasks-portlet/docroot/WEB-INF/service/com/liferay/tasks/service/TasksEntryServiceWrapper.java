@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,12 +17,10 @@ package com.liferay.tasks.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link TasksEntryService}.
- * </p>
+ * Provides a wrapper for {@link TasksEntryService}.
  *
- * @author    Ryan Park
- * @see       TasksEntryService
+ * @author Ryan Park
+ * @see TasksEntryService
  * @generated
  */
 public class TasksEntryServiceWrapper implements TasksEntryService,
@@ -31,6 +29,34 @@ public class TasksEntryServiceWrapper implements TasksEntryService,
 		_tasksEntryService = tasksEntryService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		return _tasksEntryService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	@Override
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_tasksEntryService.setBeanIdentifier(beanIdentifier);
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _tasksEntryService.invokeMethod(name, parameterTypes, arguments);
+	}
+
+	@Override
 	public com.liferay.tasks.model.TasksEntry addTasksEntry(
 		java.lang.String title, int priority, long assigneeUserId,
 		int dueDateMonth, int dueDateDay, int dueDateYear, int dueDateHour,
@@ -43,12 +69,14 @@ public class TasksEntryServiceWrapper implements TasksEntryService,
 			dueDateMinute, neverDue, serviceContext);
 	}
 
+	@Override
 	public com.liferay.tasks.model.TasksEntry getTasksEntry(long tasksEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _tasksEntryService.getTasksEntry(tasksEntryId);
 	}
 
+	@Override
 	public com.liferay.tasks.model.TasksEntry updateTasksEntry(
 		long tasksEntryId, java.lang.String title, int priority,
 		long assigneeUserId, long resolverUserId, int dueDateMonth,
@@ -64,23 +92,25 @@ public class TasksEntryServiceWrapper implements TasksEntryService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public TasksEntryService getWrappedTasksEntryService() {
 		return _tasksEntryService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedTasksEntryService(TasksEntryService tasksEntryService) {
 		_tasksEntryService = tasksEntryService;
 	}
 
+	@Override
 	public TasksEntryService getWrappedService() {
 		return _tasksEntryService;
 	}
 
+	@Override
 	public void setWrappedService(TasksEntryService tasksEntryService) {
 		_tasksEntryService = tasksEntryService;
 	}

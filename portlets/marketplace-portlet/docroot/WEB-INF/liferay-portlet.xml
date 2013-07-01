@@ -9,7 +9,6 @@
 		<control-panel-entry-weight>1.0</control-panel-entry-weight>
 		<control-panel-entry-class>com.liferay.marketplace.store.portlet.StoreControlPanelEntry</control-panel-entry-class>
 		<use-default-template>false</use-default-template>
-		<instanceable>false</instanceable>
 		<private-request-attributes>false</private-request-attributes>
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
@@ -27,12 +26,27 @@
 		<control-panel-entry-class>com.liferay.marketplace.store.portlet.StoreControlPanelEntry</control-panel-entry-class>
 		<preferences-owned-by-group>false</preferences-owned-by-group>
 		<use-default-template>false</use-default-template>
-		<instanceable>false</instanceable>
 		<private-request-attributes>false</private-request-attributes>
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
 		<header-portlet-css>/store/css/main.css</header-portlet-css>
 		<header-portlet-javascript>/store/js/main.js</header-portlet-javascript>
+		<css-class-wrapper>marketplace-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+		<system>true</system>
+	</portlet>
+	<portlet>
+		<portlet-name>3</portlet-name>
+		<icon>/app_manager/icon.png</icon>
+		<control-panel-entry-category>marketplace</control-panel-entry-category>
+		<control-panel-entry-weight>3.0</control-panel-entry-weight>
+		<control-panel-entry-class>com.liferay.marketplace.appmanager.portlet.AppManagerControlPanelEntry</control-panel-entry-class>
+		<preferences-owned-by-group>false</preferences-owned-by-group>
+		<use-default-template>false</use-default-template>
+		<private-request-attributes>false</private-request-attributes>
+		<private-session-attributes>false</private-session-attributes>
+		<render-weight>50</render-weight>
+		<header-portlet-css>/app_manager/css/main.css</header-portlet-css>
 		<css-class-wrapper>marketplace-portlet</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 		<system>true</system>

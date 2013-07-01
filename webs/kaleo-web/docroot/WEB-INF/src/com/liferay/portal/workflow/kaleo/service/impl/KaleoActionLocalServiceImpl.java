@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -31,6 +31,7 @@ import java.util.List;
 public class KaleoActionLocalServiceImpl
 	extends KaleoActionLocalServiceBaseImpl {
 
+	@Override
 	public KaleoAction addKaleoAction(
 			String kaleoClassName, long kaleoClassPK, long kaleoDefinitionId,
 			String kaleoNodeName, Action action, ServiceContext serviceContext)
@@ -58,25 +59,39 @@ public class KaleoActionLocalServiceImpl
 		kaleoAction.setExecutionType(action.getExecutionType().getValue());
 		kaleoAction.setScript(action.getScript());
 		kaleoAction.setScriptLanguage(action.getScriptLanguage().getValue());
+		kaleoAction.setScriptRequiredContexts(
+			action.getScriptRequiredContexts());
 		kaleoAction.setPriority(action.getPriority());
 
-		kaleoActionPersistence.update(kaleoAction, false);
+		kaleoActionPersistence.update(kaleoAction);
 
 		return kaleoAction;
 	}
 
+	@Override
 	public void deleteCompanyKaleoActions(long companyId)
 		throws SystemException {
 
 		kaleoActionPersistence.removeByCompanyId(companyId);
 	}
 
+	@Override
 	public void deleteKaleoDefinitionKaleoActions(long kaleoDefinitionId)
 		throws SystemException {
 
 		kaleoActionPersistence.removeByKaleoDefinitionId(kaleoDefinitionId);
 	}
 
+	@Override
+	public List<KaleoAction> getKaleoActions(
+			String kaleoClassName, long kaleoClassPK)
+		throws SystemException {
+
+		return kaleoActionPersistence.findByKCN_KCPK(
+			kaleoClassName, kaleoClassPK);
+	}
+
+	@Override
 	public List<KaleoAction> getKaleoActions(
 			String kaleoClassName, long kaleoClassPK, String executionType)
 		throws SystemException {

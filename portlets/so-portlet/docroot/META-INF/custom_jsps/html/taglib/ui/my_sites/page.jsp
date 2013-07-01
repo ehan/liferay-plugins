@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -19,12 +19,23 @@
 
 <%@ include file="/html/taglib/init.jsp" %>
 
+<%@ page import="com.liferay.portal.NoSuchRoleException" %>
+
 <%
-Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), "Social Office User");
+boolean socialOfficeUser = false;
+
+try {
+	socialOfficeUser = UserLocalServiceUtil.hasRoleUser(themeDisplay.getCompanyId(), "Social Office User", themeDisplay.getUserId(), true);
+}
+catch (NoSuchRoleException nsre) {
+
+	// This exception should never be thrown except while SO is being uninstalled
+
+}
 %>
 
 <c:choose>
-	<c:when test="<%= (role == null) || !UserLocalServiceUtil.hasRoleUser(role.getRoleId(), themeDisplay.getUserId()) %>">
+	<c:when test="<%= !socialOfficeUser %>">
 		<liferay-util:include page="/html/taglib/ui/my_sites/page.portal.jsp" />
 	</c:when>
 	<c:otherwise>
@@ -36,14 +47,14 @@ Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), "Social 
 			</liferay-portlet:renderURL>
 
 			<li>
-				<a class="open-sites-directory" href="javascript:;" onClick="<portlet:namespace />displayDirectoryPopup('<%= viewSitesURL %>', '<liferay-ui:message key="more-sites" />');">
+				<a class="open-sites-directory" href="javascript:;" onClick="<portlet:namespace />displayDirectoryPopup('<%= viewSitesURL %>', '<liferay-ui:message key="sites-directory" unicode="<%= true %>" />');">
 					<span class="site-name">
 						<liferay-ui:icon
-							message="more-sites"
+							message="sites-directory"
 							src='<%= themeDisplay.getPathContext() + "/html/icons/more_sites.png" %>'
 						/>
 
-						<liferay-ui:message key="more-sites" />
+						<liferay-ui:message key="sites-directory" />
 					</span>
 				</a>
 			</li>
@@ -56,26 +67,25 @@ Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), "Social 
 				function(url, title) {
 					var A = AUI();
 
-					var dialog = new A.Dialog(
+					Liferay.Util.openWindow(
 						{
-							align: {
-								node: null,
-								points: ['tc', 'tc']
+							dialog: {
+								align: {
+									node: null,
+									points: ['tc', 'tc']
+								},
+								constrain2view: true,
+								cssClass: 'so-portlet-sites-dialog',
+								modal: true,
+								resizable: true,
+								width: 650
 							},
-							constrain2view: true,
-							cssClass: 'so-portlet-sites-dialog',
-							resizable: true,
 							title: title,
-							width: 650
-						}
-					).plug(
-						A.Plugin.IO,
-						{
 							uri: url
 						}
-					).render();
+					);
 				},
-				['aui-base', 'aui-dialog', 'aui-io']
+				['aui-base']
 			);
 		</aui:script>
 	</c:otherwise>

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -29,7 +29,6 @@
 page import="com.liferay.opensocial.GadgetPortletCategoryNamesException" %><%@
 page import="com.liferay.opensocial.GadgetURLException" %><%@
 page import="com.liferay.opensocial.NoSuchGadgetException" %><%@
-page import="com.liferay.opensocial.NoSuchOAuthConsumerException" %><%@
 page import="com.liferay.opensocial.model.Gadget" %><%@
 page import="com.liferay.opensocial.model.OAuthConsumer" %><%@
 page import="com.liferay.opensocial.model.OAuthConsumerConstants" %><%@
@@ -41,7 +40,6 @@ page import="com.liferay.opensocial.shindig.util.ShindigUtil" %><%@
 page import="com.liferay.opensocial.util.ActionKeys" %><%@
 page import="com.liferay.opensocial.util.PortletPropsValues" %><%@
 page import="com.liferay.opensocial.util.WebKeys" %><%@
-page import="com.liferay.portal.kernel.bean.BeanParamUtil" %><%@
 page import="com.liferay.portal.kernel.dao.search.ResultRow" %><%@
 page import="com.liferay.portal.kernel.json.JSONObject" %><%@
 page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
@@ -63,7 +61,8 @@ page import="com.liferay.portal.util.PortletListerFactoryUtil" %><%@
 page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %><%@
 page import="com.liferay.portlet.expando.service.ExpandoValueServiceUtil" %>
 
-<%@ page import="java.util.Map" %>
+<%@ page import="java.util.Locale" %><%@
+page import="java.util.Map" %>
 
 <%@ page import="javax.portlet.PortletPreferences" %><%@
 page import="javax.portlet.PortletURL" %>

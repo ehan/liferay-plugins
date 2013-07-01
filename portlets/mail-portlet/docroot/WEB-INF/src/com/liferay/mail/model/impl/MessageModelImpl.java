@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -37,6 +37,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the Message service. Represents a row in the &quot;Mail_Message&quot; database table, with each column mapped to a property of this class.
@@ -99,48 +101,203 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long FOLDERID_COLUMN_BITMASK = 2L;
 	public static long REMOTEMESSAGEID_COLUMN_BITMASK = 4L;
+	public static long SENTDATE_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.mail.model.Message"));
 
 	public MessageModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _messageId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setMessageId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_messageId);
+		return _messageId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Message.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Message.class.getName();
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("messageId", getMessageId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("accountId", getAccountId());
+		attributes.put("folderId", getFolderId());
+		attributes.put("sender", getSender());
+		attributes.put("to", getTo());
+		attributes.put("cc", getCc());
+		attributes.put("bcc", getBcc());
+		attributes.put("sentDate", getSentDate());
+		attributes.put("subject", getSubject());
+		attributes.put("preview", getPreview());
+		attributes.put("body", getBody());
+		attributes.put("flags", getFlags());
+		attributes.put("size", getSize());
+		attributes.put("remoteMessageId", getRemoteMessageId());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long messageId = (Long)attributes.get("messageId");
+
+		if (messageId != null) {
+			setMessageId(messageId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long accountId = (Long)attributes.get("accountId");
+
+		if (accountId != null) {
+			setAccountId(accountId);
+		}
+
+		Long folderId = (Long)attributes.get("folderId");
+
+		if (folderId != null) {
+			setFolderId(folderId);
+		}
+
+		String sender = (String)attributes.get("sender");
+
+		if (sender != null) {
+			setSender(sender);
+		}
+
+		String to = (String)attributes.get("to");
+
+		if (to != null) {
+			setTo(to);
+		}
+
+		String cc = (String)attributes.get("cc");
+
+		if (cc != null) {
+			setCc(cc);
+		}
+
+		String bcc = (String)attributes.get("bcc");
+
+		if (bcc != null) {
+			setBcc(bcc);
+		}
+
+		Date sentDate = (Date)attributes.get("sentDate");
+
+		if (sentDate != null) {
+			setSentDate(sentDate);
+		}
+
+		String subject = (String)attributes.get("subject");
+
+		if (subject != null) {
+			setSubject(subject);
+		}
+
+		String preview = (String)attributes.get("preview");
+
+		if (preview != null) {
+			setPreview(preview);
+		}
+
+		String body = (String)attributes.get("body");
+
+		if (body != null) {
+			setBody(body);
+		}
+
+		String flags = (String)attributes.get("flags");
+
+		if (flags != null) {
+			setFlags(flags);
+		}
+
+		Long size = (Long)attributes.get("size");
+
+		if (size != null) {
+			setSize(size);
+		}
+
+		Long remoteMessageId = (Long)attributes.get("remoteMessageId");
+
+		if (remoteMessageId != null) {
+			setRemoteMessageId(remoteMessageId);
+		}
+	}
+
+	@Override
 	public long getMessageId() {
 		return _messageId;
 	}
 
+	@Override
 	public void setMessageId(long messageId) {
 		_messageId = messageId;
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -157,22 +314,27 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		return _originalCompanyId;
 	}
 
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -182,38 +344,47 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	public long getAccountId() {
 		return _accountId;
 	}
 
+	@Override
 	public void setAccountId(long accountId) {
 		_accountId = accountId;
 	}
 
+	@Override
 	public long getFolderId() {
 		return _folderId;
 	}
 
+	@Override
 	public void setFolderId(long folderId) {
 		_columnBitmask |= FOLDERID_COLUMN_BITMASK;
 
@@ -230,6 +401,7 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		return _originalFolderId;
 	}
 
+	@Override
 	public String getSender() {
 		if (_sender == null) {
 			return StringPool.BLANK;
@@ -239,10 +411,12 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		}
 	}
 
+	@Override
 	public void setSender(String sender) {
 		_sender = sender;
 	}
 
+	@Override
 	public String getTo() {
 		if (_to == null) {
 			return StringPool.BLANK;
@@ -252,10 +426,12 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		}
 	}
 
+	@Override
 	public void setTo(String to) {
 		_to = to;
 	}
 
+	@Override
 	public String getCc() {
 		if (_cc == null) {
 			return StringPool.BLANK;
@@ -265,10 +441,12 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		}
 	}
 
+	@Override
 	public void setCc(String cc) {
 		_cc = cc;
 	}
 
+	@Override
 	public String getBcc() {
 		if (_bcc == null) {
 			return StringPool.BLANK;
@@ -278,20 +456,24 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		}
 	}
 
+	@Override
 	public void setBcc(String bcc) {
 		_bcc = bcc;
 	}
 
+	@Override
 	public Date getSentDate() {
 		return _sentDate;
 	}
 
+	@Override
 	public void setSentDate(Date sentDate) {
 		_columnBitmask = -1L;
 
 		_sentDate = sentDate;
 	}
 
+	@Override
 	public String getSubject() {
 		if (_subject == null) {
 			return StringPool.BLANK;
@@ -301,10 +483,12 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		}
 	}
 
+	@Override
 	public void setSubject(String subject) {
 		_subject = subject;
 	}
 
+	@Override
 	public String getPreview() {
 		if (_preview == null) {
 			return StringPool.BLANK;
@@ -314,10 +498,12 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		}
 	}
 
+	@Override
 	public void setPreview(String preview) {
 		_preview = preview;
 	}
 
+	@Override
 	public String getBody() {
 		if (_body == null) {
 			return StringPool.BLANK;
@@ -327,10 +513,12 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		}
 	}
 
+	@Override
 	public void setBody(String body) {
 		_body = body;
 	}
 
+	@Override
 	public String getFlags() {
 		if (_flags == null) {
 			return StringPool.BLANK;
@@ -340,22 +528,27 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		}
 	}
 
+	@Override
 	public void setFlags(String flags) {
 		_flags = flags;
 	}
 
+	@Override
 	public long getSize() {
 		return _size;
 	}
 
+	@Override
 	public void setSize(long size) {
 		_size = size;
 	}
 
+	@Override
 	public long getRemoteMessageId() {
 		return _remoteMessageId;
 	}
 
+	@Override
 	public void setRemoteMessageId(long remoteMessageId) {
 		_columnBitmask |= REMOTEMESSAGEID_COLUMN_BITMASK;
 
@@ -377,29 +570,26 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 	}
 
 	@Override
-	public Message toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Message)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
-					Message.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
+			Message.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public Message toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (Message)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -431,6 +621,7 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		return messageImpl;
 	}
 
+	@Override
 	public int compareTo(Message message) {
 		int value = 0;
 
@@ -445,18 +636,15 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof Message)) {
 			return false;
 		}
 
-		Message message = null;
-
-		try {
-			message = (Message)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		Message message = (Message)obj;
 
 		long primaryKey = message.getPrimaryKey();
 
@@ -659,6 +847,7 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(61);
 
@@ -749,7 +938,7 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 	}
 
 	private static ClassLoader _classLoader = Message.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Message.class
 		};
 	private long _messageId;
@@ -778,7 +967,6 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 	private long _remoteMessageId;
 	private long _originalRemoteMessageId;
 	private boolean _setOriginalRemoteMessageId;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
-	private Message _escapedModelProxy;
+	private Message _escapedModel;
 }

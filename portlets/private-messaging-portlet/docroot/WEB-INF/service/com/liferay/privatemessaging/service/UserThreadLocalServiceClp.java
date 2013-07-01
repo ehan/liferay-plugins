@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,143 +14,191 @@
 
 package com.liferay.privatemessaging.service;
 
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodHandler;
-import com.liferay.portal.kernel.util.MethodKey;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class UserThreadLocalServiceClp implements UserThreadLocalService {
-	public UserThreadLocalServiceClp(ClassLoaderProxy classLoaderProxy) {
-		_classLoaderProxy = classLoaderProxy;
+	public UserThreadLocalServiceClp(
+		InvokableLocalService invokableLocalService) {
+		_invokableLocalService = invokableLocalService;
 
-		_addUserThreadMethodKey0 = new MethodKey(_classLoaderProxy.getClassName(),
-				"addUserThread",
-				com.liferay.privatemessaging.model.UserThread.class);
+		_methodName0 = "addUserThread";
 
-		_createUserThreadMethodKey1 = new MethodKey(_classLoaderProxy.getClassName(),
-				"createUserThread", long.class);
+		_methodParameterTypes0 = new String[] {
+				"com.liferay.privatemessaging.model.UserThread"
+			};
 
-		_deleteUserThreadMethodKey2 = new MethodKey(_classLoaderProxy.getClassName(),
-				"deleteUserThread", long.class);
+		_methodName1 = "createUserThread";
 
-		_deleteUserThreadMethodKey3 = new MethodKey(_classLoaderProxy.getClassName(),
-				"deleteUserThread",
-				com.liferay.privatemessaging.model.UserThread.class);
+		_methodParameterTypes1 = new String[] { "long" };
 
-		_dynamicQueryMethodKey4 = new MethodKey(_classLoaderProxy.getClassName(),
-				"dynamicQuery",
-				com.liferay.portal.kernel.dao.orm.DynamicQuery.class);
+		_methodName2 = "deleteUserThread";
 
-		_dynamicQueryMethodKey5 = new MethodKey(_classLoaderProxy.getClassName(),
-				"dynamicQuery",
-				com.liferay.portal.kernel.dao.orm.DynamicQuery.class,
-				int.class, int.class);
+		_methodParameterTypes2 = new String[] { "long" };
 
-		_dynamicQueryMethodKey6 = new MethodKey(_classLoaderProxy.getClassName(),
-				"dynamicQuery",
-				com.liferay.portal.kernel.dao.orm.DynamicQuery.class,
-				int.class, int.class,
-				com.liferay.portal.kernel.util.OrderByComparator.class);
+		_methodName3 = "deleteUserThread";
 
-		_dynamicQueryCountMethodKey7 = new MethodKey(_classLoaderProxy.getClassName(),
-				"dynamicQueryCount",
-				com.liferay.portal.kernel.dao.orm.DynamicQuery.class);
+		_methodParameterTypes3 = new String[] {
+				"com.liferay.privatemessaging.model.UserThread"
+			};
 
-		_fetchUserThreadMethodKey8 = new MethodKey(_classLoaderProxy.getClassName(),
-				"fetchUserThread", long.class);
+		_methodName4 = "dynamicQuery";
 
-		_getUserThreadMethodKey9 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getUserThread", long.class);
+		_methodParameterTypes4 = new String[] {  };
 
-		_getPersistedModelMethodKey10 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getPersistedModel", java.io.Serializable.class);
+		_methodName5 = "dynamicQuery";
 
-		_getUserThreadsMethodKey11 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getUserThreads", int.class, int.class);
+		_methodParameterTypes5 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
+			};
 
-		_getUserThreadsCountMethodKey12 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getUserThreadsCount");
+		_methodName6 = "dynamicQuery";
 
-		_updateUserThreadMethodKey13 = new MethodKey(_classLoaderProxy.getClassName(),
-				"updateUserThread",
-				com.liferay.privatemessaging.model.UserThread.class);
+		_methodParameterTypes6 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int"
+			};
 
-		_updateUserThreadMethodKey14 = new MethodKey(_classLoaderProxy.getClassName(),
-				"updateUserThread",
-				com.liferay.privatemessaging.model.UserThread.class,
-				boolean.class);
+		_methodName7 = "dynamicQuery";
 
-		_getBeanIdentifierMethodKey15 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getBeanIdentifier");
+		_methodParameterTypes7 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
 
-		_setBeanIdentifierMethodKey16 = new MethodKey(_classLoaderProxy.getClassName(),
-				"setBeanIdentifier", java.lang.String.class);
+		_methodName8 = "dynamicQueryCount";
 
-		_addPrivateMessageMethodKey17 = new MethodKey(_classLoaderProxy.getClassName(),
-				"addPrivateMessage", long.class, long.class,
-				java.lang.String.class, java.lang.String.class,
-				java.lang.String.class, java.util.List.class,
-				com.liferay.portal.theme.ThemeDisplay.class);
+		_methodParameterTypes8 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
+			};
 
-		_addPrivateMessageBranchMethodKey18 = new MethodKey(_classLoaderProxy.getClassName(),
-				"addPrivateMessageBranch", long.class, long.class,
-				java.lang.String.class, java.util.List.class,
-				com.liferay.portal.theme.ThemeDisplay.class);
+		_methodName9 = "dynamicQueryCount";
 
-		_addUserThreadMethodKey19 = new MethodKey(_classLoaderProxy.getClassName(),
-				"addUserThread", long.class, long.class, long.class,
-				boolean.class, boolean.class);
+		_methodParameterTypes9 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery",
+				"com.liferay.portal.kernel.dao.orm.Projection"
+			};
 
-		_deleteUserMethodKey20 = new MethodKey(_classLoaderProxy.getClassName(),
-				"deleteUser", long.class);
+		_methodName10 = "fetchUserThread";
 
-		_deleteUserThreadMethodKey21 = new MethodKey(_classLoaderProxy.getClassName(),
-				"deleteUserThread", long.class, long.class);
+		_methodParameterTypes10 = new String[] { "long" };
 
-		_getMBThreadUserThreadsMethodKey22 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getMBThreadUserThreads", long.class);
+		_methodName11 = "getUserThread";
 
-		_getUserThreadMethodKey23 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getUserThread", long.class, long.class);
+		_methodParameterTypes11 = new String[] { "long" };
 
-		_getUserUserThreadCountMethodKey24 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getUserUserThreadCount", long.class, boolean.class);
+		_methodName12 = "getPersistedModel";
 
-		_getUserUserThreadCountMethodKey25 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getUserUserThreadCount", long.class, boolean.class,
-				boolean.class);
+		_methodParameterTypes12 = new String[] { "java.io.Serializable" };
 
-		_getUserUserThreadsMethodKey26 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getUserUserThreads", long.class, boolean.class);
+		_methodName13 = "getUserThreads";
 
-		_getUserUserThreadsMethodKey27 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getUserUserThreads", long.class, boolean.class, boolean.class);
+		_methodParameterTypes13 = new String[] { "int", "int" };
 
-		_getUserUserThreadsMethodKey28 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getUserUserThreads", long.class, boolean.class, int.class,
-				int.class);
+		_methodName14 = "getUserThreadsCount";
 
-		_markUserThreadAsReadMethodKey29 = new MethodKey(_classLoaderProxy.getClassName(),
-				"markUserThreadAsRead", long.class, long.class);
+		_methodParameterTypes14 = new String[] {  };
 
-		_markUserThreadAsUnreadMethodKey30 = new MethodKey(_classLoaderProxy.getClassName(),
-				"markUserThreadAsUnread", long.class, long.class);
+		_methodName15 = "updateUserThread";
+
+		_methodParameterTypes15 = new String[] {
+				"com.liferay.privatemessaging.model.UserThread"
+			};
+
+		_methodName16 = "getBeanIdentifier";
+
+		_methodParameterTypes16 = new String[] {  };
+
+		_methodName17 = "setBeanIdentifier";
+
+		_methodParameterTypes17 = new String[] { "java.lang.String" };
+
+		_methodName19 = "addPrivateMessage";
+
+		_methodParameterTypes19 = new String[] {
+				"long", "long", "java.lang.String", "java.lang.String",
+				"java.lang.String", "java.util.List",
+				"com.liferay.portal.theme.ThemeDisplay"
+			};
+
+		_methodName20 = "addPrivateMessageBranch";
+
+		_methodParameterTypes20 = new String[] {
+				"long", "long", "java.lang.String", "java.util.List",
+				"com.liferay.portal.theme.ThemeDisplay"
+			};
+
+		_methodName21 = "addUserThread";
+
+		_methodParameterTypes21 = new String[] {
+				"long", "long", "long", "boolean", "boolean"
+			};
+
+		_methodName22 = "deleteUser";
+
+		_methodParameterTypes22 = new String[] { "long" };
+
+		_methodName23 = "deleteUserThread";
+
+		_methodParameterTypes23 = new String[] { "long", "long" };
+
+		_methodName24 = "getMBThreadUserThreads";
+
+		_methodParameterTypes24 = new String[] { "long" };
+
+		_methodName25 = "getUserThread";
+
+		_methodParameterTypes25 = new String[] { "long", "long" };
+
+		_methodName26 = "getUserUserThreadCount";
+
+		_methodParameterTypes26 = new String[] { "long", "boolean" };
+
+		_methodName27 = "getUserUserThreadCount";
+
+		_methodParameterTypes27 = new String[] { "long", "boolean", "boolean" };
+
+		_methodName28 = "getUserUserThreads";
+
+		_methodParameterTypes28 = new String[] { "long", "boolean" };
+
+		_methodName29 = "getUserUserThreads";
+
+		_methodParameterTypes29 = new String[] { "long", "boolean", "boolean" };
+
+		_methodName30 = "getUserUserThreads";
+
+		_methodParameterTypes30 = new String[] { "long", "boolean", "int", "int" };
+
+		_methodName31 = "markUserThreadAsRead";
+
+		_methodParameterTypes31 = new String[] { "long", "long" };
+
+		_methodName32 = "markUserThreadAsUnread";
+
+		_methodParameterTypes32 = new String[] { "long", "long" };
+
+		_methodName33 = "updateUserName";
+
+		_methodParameterTypes33 = new String[] { "com.liferay.portal.model.User" };
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread addUserThread(
 		com.liferay.privatemessaging.model.UserThread userThread)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_addUserThreadMethodKey0,
-				ClpSerializer.translateInput(userThread));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName0,
+					_methodParameterTypes0,
+					new Object[] { ClpSerializer.translateInput(userThread) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -167,17 +215,18 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread createUserThread(
 		long userThreadId) {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_createUserThreadMethodKey1,
-				userThreadId);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName1,
+					_methodParameterTypes1, new Object[] { userThreadId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -190,16 +239,20 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
-	public void deleteUserThread(long userThreadId)
+	@Override
+	public com.liferay.privatemessaging.model.UserThread deleteUserThread(
+		long userThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		MethodHandler methodHandler = new MethodHandler(_deleteUserThreadMethodKey2,
-				userThreadId);
+		Object returnObj = null;
 
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName2,
+					_methodParameterTypes2, new Object[] { userThreadId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -216,18 +269,24 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 					" is not a valid exception");
 			}
 		}
+
+		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
-	public void deleteUserThread(
+	@Override
+	public com.liferay.privatemessaging.model.UserThread deleteUserThread(
 		com.liferay.privatemessaging.model.UserThread userThread)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		MethodHandler methodHandler = new MethodHandler(_deleteUserThreadMethodKey3,
-				ClpSerializer.translateInput(userThread));
+		Object returnObj = null;
 
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName3,
+					_methodParameterTypes3,
+					new Object[] { ClpSerializer.translateInput(userThread) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -240,21 +299,48 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 					" is not a valid exception");
 			}
 		}
+
+		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName4,
+					_methodParameterTypes4, new Object[] {  });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_dynamicQueryMethodKey4,
-				ClpSerializer.translateInput(dynamicQuery));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName5,
+					_methodParameterTypes5,
+					new Object[] { ClpSerializer.translateInput(dynamicQuery) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -271,19 +357,27 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_dynamicQueryMethodKey5,
-				ClpSerializer.translateInput(dynamicQuery), start, end);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName6,
+					_methodParameterTypes6,
+					new Object[] {
+						ClpSerializer.translateInput(dynamicQuery),
+						
+					start,
+						
+					end
+					});
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -300,6 +394,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -308,14 +403,22 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_dynamicQueryMethodKey6,
-				ClpSerializer.translateInput(dynamicQuery), start, end,
-				ClpSerializer.translateInput(orderByComparator));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName7,
+					_methodParameterTypes7,
+					new Object[] {
+						ClpSerializer.translateInput(dynamicQuery),
+						
+					start,
+						
+					end,
+						
+					ClpSerializer.translateInput(orderByComparator)
+					});
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -332,18 +435,20 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_dynamicQueryCountMethodKey7,
-				ClpSerializer.translateInput(dynamicQuery));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName8,
+					_methodParameterTypes8,
+					new Object[] { ClpSerializer.translateInput(dynamicQuery) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -360,18 +465,54 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName9,
+					_methodParameterTypes9,
+					new Object[] {
+						ClpSerializer.translateInput(dynamicQuery),
+						
+					ClpSerializer.translateInput(projection)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Long)returnObj).longValue();
+	}
+
+	@Override
 	public com.liferay.privatemessaging.model.UserThread fetchUserThread(
 		long userThreadId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_fetchUserThreadMethodKey8,
-				userThreadId);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName10,
+					_methodParameterTypes10, new Object[] { userThreadId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -388,19 +529,20 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread getUserThread(
 		long userThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getUserThreadMethodKey9,
-				userThreadId);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName11,
+					_methodParameterTypes11, new Object[] { userThreadId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -421,19 +563,21 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getPersistedModelMethodKey10,
-				ClpSerializer.translateInput(primaryKeyObj));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName12,
+					_methodParameterTypes12,
+					new Object[] { ClpSerializer.translateInput(primaryKeyObj) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -454,18 +598,19 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.privatemessaging.model.UserThread> getUserThreads(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getUserThreadsMethodKey11,
-				start, end);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName13,
+					_methodParameterTypes13, new Object[] { start, end });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -482,16 +627,18 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List<com.liferay.privatemessaging.model.UserThread>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getUserThreadsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getUserThreadsCountMethodKey12);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName14,
+					_methodParameterTypes14, new Object[] {  });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -508,18 +655,20 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread updateUserThread(
 		com.liferay.privatemessaging.model.UserThread userThread)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_updateUserThreadMethodKey13,
-				ClpSerializer.translateInput(userThread));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName15,
+					_methodParameterTypes15,
+					new Object[] { ClpSerializer.translateInput(userThread) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -536,43 +685,17 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
-	public com.liferay.privatemessaging.model.UserThread updateUserThread(
-		com.liferay.privatemessaging.model.UserThread userThread, boolean merge)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		MethodHandler methodHandler = new MethodHandler(_updateUserThreadMethodKey14,
-				ClpSerializer.translateInput(userThread), merge);
-
-		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
-		}
-		catch (Throwable t) {
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
-	}
-
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getBeanIdentifierMethodKey15);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName16,
+					_methodParameterTypes16, new Object[] {  });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -585,14 +708,16 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		MethodHandler methodHandler = new MethodHandler(_setBeanIdentifierMethodKey16,
-				ClpSerializer.translateInput(beanIdentifier));
-
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			_invokableLocalService.invokeMethod(_methodName17,
+				_methodParameterTypes17,
+				new Object[] { ClpSerializer.translateInput(beanIdentifier) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -603,6 +728,14 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		}
 	}
 
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMessage addPrivateMessage(
 		long userId, long mbThreadId, java.lang.String to,
 		java.lang.String subject, java.lang.String body,
@@ -612,17 +745,28 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_addPrivateMessageMethodKey17,
-				userId, mbThreadId, ClpSerializer.translateInput(to),
-				ClpSerializer.translateInput(subject),
-				ClpSerializer.translateInput(body),
-				ClpSerializer.translateInput(inputStreamOVPs),
-				ClpSerializer.translateInput(themeDisplay));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName19,
+					_methodParameterTypes19,
+					new Object[] {
+						userId,
+						
+					mbThreadId,
+						
+					ClpSerializer.translateInput(to),
+						
+					ClpSerializer.translateInput(subject),
+						
+					ClpSerializer.translateInput(body),
+						
+					ClpSerializer.translateInput(inputStreamOVPs),
+						
+					ClpSerializer.translateInput(themeDisplay)
+					});
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -643,6 +787,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.portlet.messageboards.model.MBMessage)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMessage addPrivateMessageBranch(
 		long userId, long parentMBMessageId, java.lang.String body,
 		java.util.List<com.liferay.portal.kernel.util.ObjectValuePair<java.lang.String, java.io.InputStream>> inputStreamOVPs,
@@ -651,15 +796,24 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_addPrivateMessageBranchMethodKey18,
-				userId, parentMBMessageId, ClpSerializer.translateInput(body),
-				ClpSerializer.translateInput(inputStreamOVPs),
-				ClpSerializer.translateInput(themeDisplay));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName20,
+					_methodParameterTypes20,
+					new Object[] {
+						userId,
+						
+					parentMBMessageId,
+						
+					ClpSerializer.translateInput(body),
+						
+					ClpSerializer.translateInput(inputStreamOVPs),
+						
+					ClpSerializer.translateInput(themeDisplay)
+					});
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -680,17 +834,19 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.portlet.messageboards.model.MBMessage)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void addUserThread(long userId, long mbThreadId,
 		long topMBMessageId, boolean read, boolean deleted)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		MethodHandler methodHandler = new MethodHandler(_addUserThreadMethodKey19,
-				userId, mbThreadId, topMBMessageId, read, deleted);
-
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			_invokableLocalService.invokeMethod(_methodName21,
+				_methodParameterTypes21,
+				new Object[] { userId, mbThreadId, topMBMessageId, read, deleted });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -709,16 +865,17 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		}
 	}
 
+	@Override
 	public void deleteUser(long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		MethodHandler methodHandler = new MethodHandler(_deleteUserMethodKey20,
-				userId);
-
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			_invokableLocalService.invokeMethod(_methodName22,
+				_methodParameterTypes22, new Object[] { userId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -737,16 +894,17 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		}
 	}
 
+	@Override
 	public void deleteUserThread(long userId, long mbThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		MethodHandler methodHandler = new MethodHandler(_deleteUserThreadMethodKey21,
-				userId, mbThreadId);
-
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			_invokableLocalService.invokeMethod(_methodName23,
+				_methodParameterTypes23, new Object[] { userId, mbThreadId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -765,18 +923,19 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		}
 	}
 
+	@Override
 	public java.util.List<com.liferay.privatemessaging.model.UserThread> getMBThreadUserThreads(
 		long mbThreadId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getMBThreadUserThreadsMethodKey22,
-				mbThreadId);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24, new Object[] { mbThreadId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -793,19 +952,20 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List<com.liferay.privatemessaging.model.UserThread>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread getUserThread(
 		long userId, long mbThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getUserThreadMethodKey23,
-				userId, mbThreadId);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25, new Object[] { userId, mbThreadId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -826,17 +986,18 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getUserUserThreadCount(long userId, boolean deleted)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getUserUserThreadCountMethodKey24,
-				userId, deleted);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26, new Object[] { userId, deleted });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -853,17 +1014,19 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public int getUserUserThreadCount(long userId, boolean read, boolean deleted)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getUserUserThreadCountMethodKey25,
-				userId, read, deleted);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27,
+					new Object[] { userId, read, deleted });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -880,18 +1043,19 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
 		long userId, boolean deleted)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getUserUserThreadsMethodKey26,
-				userId, deleted);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28, new Object[] { userId, deleted });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -908,18 +1072,20 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List<com.liferay.privatemessaging.model.UserThread>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
 		long userId, boolean read, boolean deleted)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getUserUserThreadsMethodKey27,
-				userId, read, deleted);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName29,
+					_methodParameterTypes29,
+					new Object[] { userId, read, deleted });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -936,18 +1102,20 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List<com.liferay.privatemessaging.model.UserThread>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
 		long userId, boolean deleted, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getUserUserThreadsMethodKey28,
-				userId, deleted, start, end);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName30,
+					_methodParameterTypes30,
+					new Object[] { userId, deleted, start, end });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -964,16 +1132,17 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List<com.liferay.privatemessaging.model.UserThread>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void markUserThreadAsRead(long userId, long mbThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		MethodHandler methodHandler = new MethodHandler(_markUserThreadAsReadMethodKey29,
-				userId, mbThreadId);
-
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			_invokableLocalService.invokeMethod(_methodName31,
+				_methodParameterTypes31, new Object[] { userId, mbThreadId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -992,16 +1161,17 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		}
 	}
 
+	@Override
 	public void markUserThreadAsUnread(long userId, long mbThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		MethodHandler methodHandler = new MethodHandler(_markUserThreadAsUnreadMethodKey30,
-				userId, mbThreadId);
-
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			_invokableLocalService.invokeMethod(_methodName32,
+				_methodParameterTypes32, new Object[] { userId, mbThreadId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -1020,40 +1190,96 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		}
 	}
 
-	public ClassLoaderProxy getClassLoaderProxy() {
-		return _classLoaderProxy;
+	@Override
+	public void updateUserName(com.liferay.portal.model.User user)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName33,
+				_methodParameterTypes33,
+				new Object[] { ClpSerializer.translateInput(user) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
 	}
 
-	private ClassLoaderProxy _classLoaderProxy;
-	private MethodKey _addUserThreadMethodKey0;
-	private MethodKey _createUserThreadMethodKey1;
-	private MethodKey _deleteUserThreadMethodKey2;
-	private MethodKey _deleteUserThreadMethodKey3;
-	private MethodKey _dynamicQueryMethodKey4;
-	private MethodKey _dynamicQueryMethodKey5;
-	private MethodKey _dynamicQueryMethodKey6;
-	private MethodKey _dynamicQueryCountMethodKey7;
-	private MethodKey _fetchUserThreadMethodKey8;
-	private MethodKey _getUserThreadMethodKey9;
-	private MethodKey _getPersistedModelMethodKey10;
-	private MethodKey _getUserThreadsMethodKey11;
-	private MethodKey _getUserThreadsCountMethodKey12;
-	private MethodKey _updateUserThreadMethodKey13;
-	private MethodKey _updateUserThreadMethodKey14;
-	private MethodKey _getBeanIdentifierMethodKey15;
-	private MethodKey _setBeanIdentifierMethodKey16;
-	private MethodKey _addPrivateMessageMethodKey17;
-	private MethodKey _addPrivateMessageBranchMethodKey18;
-	private MethodKey _addUserThreadMethodKey19;
-	private MethodKey _deleteUserMethodKey20;
-	private MethodKey _deleteUserThreadMethodKey21;
-	private MethodKey _getMBThreadUserThreadsMethodKey22;
-	private MethodKey _getUserThreadMethodKey23;
-	private MethodKey _getUserUserThreadCountMethodKey24;
-	private MethodKey _getUserUserThreadCountMethodKey25;
-	private MethodKey _getUserUserThreadsMethodKey26;
-	private MethodKey _getUserUserThreadsMethodKey27;
-	private MethodKey _getUserUserThreadsMethodKey28;
-	private MethodKey _markUserThreadAsReadMethodKey29;
-	private MethodKey _markUserThreadAsUnreadMethodKey30;
+	private InvokableLocalService _invokableLocalService;
+	private String _methodName0;
+	private String[] _methodParameterTypes0;
+	private String _methodName1;
+	private String[] _methodParameterTypes1;
+	private String _methodName2;
+	private String[] _methodParameterTypes2;
+	private String _methodName3;
+	private String[] _methodParameterTypes3;
+	private String _methodName4;
+	private String[] _methodParameterTypes4;
+	private String _methodName5;
+	private String[] _methodParameterTypes5;
+	private String _methodName6;
+	private String[] _methodParameterTypes6;
+	private String _methodName7;
+	private String[] _methodParameterTypes7;
+	private String _methodName8;
+	private String[] _methodParameterTypes8;
+	private String _methodName9;
+	private String[] _methodParameterTypes9;
+	private String _methodName10;
+	private String[] _methodParameterTypes10;
+	private String _methodName11;
+	private String[] _methodParameterTypes11;
+	private String _methodName12;
+	private String[] _methodParameterTypes12;
+	private String _methodName13;
+	private String[] _methodParameterTypes13;
+	private String _methodName14;
+	private String[] _methodParameterTypes14;
+	private String _methodName15;
+	private String[] _methodParameterTypes15;
+	private String _methodName16;
+	private String[] _methodParameterTypes16;
+	private String _methodName17;
+	private String[] _methodParameterTypes17;
+	private String _methodName19;
+	private String[] _methodParameterTypes19;
+	private String _methodName20;
+	private String[] _methodParameterTypes20;
+	private String _methodName21;
+	private String[] _methodParameterTypes21;
+	private String _methodName22;
+	private String[] _methodParameterTypes22;
+	private String _methodName23;
+	private String[] _methodParameterTypes23;
+	private String _methodName24;
+	private String[] _methodParameterTypes24;
+	private String _methodName25;
+	private String[] _methodParameterTypes25;
+	private String _methodName26;
+	private String[] _methodParameterTypes26;
+	private String _methodName27;
+	private String[] _methodParameterTypes27;
+	private String _methodName28;
+	private String[] _methodParameterTypes28;
+	private String _methodName29;
+	private String[] _methodParameterTypes29;
+	private String _methodName30;
+	private String[] _methodParameterTypes30;
+	private String _methodName31;
+	private String[] _methodParameterTypes31;
+	private String _methodName32;
+	private String[] _methodParameterTypes32;
+	private String _methodName33;
+	private String[] _methodParameterTypes33;
 }
