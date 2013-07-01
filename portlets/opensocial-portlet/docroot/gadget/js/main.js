@@ -35,7 +35,14 @@ AUI.add(
 					checksum: {},
 					content: {},
 					country: {
-						value: 'ALL'
+						setter: function(v) {
+							if (v) {
+								return v;
+							}
+							else {
+								return 'ALL';
+							}
+						}
 					},
 					debug: {},
 					height: {
@@ -55,7 +62,14 @@ AUI.add(
 						getter: '_getIframeUrl'
 					},
 					language: {
-						value: 'ALL'
+						setter: function(v) {
+							if (v) {
+								return v;
+							}
+							else {
+								return 'ALL';
+							}
+						}
 					},
 					moduleId: {
 						valueFn: function() {
@@ -104,7 +118,14 @@ AUI.add(
 						}
 					},
 					userPrefs: {
-						value: {}
+						setter: function(v) {
+							if (v) {
+								return v;
+							}
+							else {
+								return {};
+							}
+						}
 					},
 					view: {
 						value: 'default'
@@ -233,25 +254,6 @@ AUI.add(
 						);
 					},
 
-					syncUI: function() {
-						var instance = this;
-
-						instance.get('store').getPrefs(instance, A.bind(instance._syncPrefs, instance));
-					},
-
-					getUserPrefParams: function() {
-						var instance = this;
-
-						var userPrefs = instance.get('userPrefs');
-						var buffer = [];
-
-						for (var i in userPrefs) {
-							buffer.push('&up_' + encodeURIComponent(i) + '=' + encodeURIComponent(userPrefs[i]));
-						}
-
-						return buffer.join(STR_EMPTY);
-					},
-
 					_afterAdditionalParamsChange: function(event) {
 						var instance = this;
 
@@ -352,6 +354,8 @@ AUI.add(
 						if (!event.SYNC) {
 							instance.get('store').savePrefs(instance);
 						}
+
+						instance._refreshUserPrefs();
 					},
 
 					_afterViewChange: function(event) {
@@ -418,7 +422,7 @@ AUI.add(
 
 						url += instance.get('additionalParams');
 
-						url += instance.getUserPrefParams();
+						url += instance._getUserPrefParams();
 
 						if (secureToken) {
 							url += '&st=' + secureToken;
@@ -435,6 +439,20 @@ AUI.add(
 						}
 
 						return url;
+					},
+
+					_getUserPrefParams: function() {
+						var instance = this;
+
+						var userPrefs = instance.get('userPrefs');
+
+						var buffer = [];
+
+						for (var i in userPrefs) {
+							buffer.push('&up_' + encodeURIComponent(i) + '=' + encodeURIComponent(userPrefs[i]));
+						}
+
+						return buffer.join(STR_EMPTY);
 					},
 
 					_refreshSrcParameter: function(key, value) {
@@ -501,20 +519,6 @@ AUI.add(
 						return parameters.join('&');
 					},
 
-					_syncPrefs: function(prefs) {
-						var instance = this;
-
-						instance.set(
-							'userPrefs',
-							prefs,
-							{
-								SYNC: true
-							}
-						);
-
-						instance._refreshUserPrefs();
-					},
-
 					_uiSetIframeHeight: function(value) {
 						var instance = this;
 
@@ -546,7 +550,6 @@ AUI.add(
 				EXTENDS: A.Base,
 				NAME: 'gadgetstoredefault',
 				prototype: {
-					getPrefs: Lang.emptyFn,
 					savePrefs: Lang.emptyFn
 				}
 			}
@@ -557,14 +560,6 @@ AUI.add(
 				EXTENDS: DefaultStore,
 				NAME: 'gadgetstorecookie',
 				prototype: {
-					getPrefs: function(gadget, callback) {
-						var instance = this;
-
-						if (Lang.isFunction(callback)) {
-							callback(A.Cookie.getSubs(instance.get('userPrefsKey')) || {});
-						}
-					},
-
 					savePrefs: function(gadget) {
 						var instance = this;
 
@@ -579,48 +574,18 @@ AUI.add(
 				EXTENDS: DefaultStore,
 				NAME: 'gadgetstoreexpando',
 				prototype: {
-					getPrefs: function(gadget, callback) {
-						var instance = this;
-
-						Liferay.Service.Expando.ExpandoValue.getJSONData(
-							{
-								companyId: themeDisplay.getCompanyId(),
-								className: instance._CLASS_NAME,
-								tableName: instance._TABLE_NAME,
-								columnName: instance.get('userPrefsKey'),
-								classPK: themeDisplay.getPlid()
-							},
-							function(userPrefs) {
-								if (Lang.isFunction(callback)) {
-									if (!userPrefs.exception) {
-										callback(userPrefs || {});
-									}
-								}
-							}
-						);
-					},
-
 					savePrefs: function(gadget) {
 						var instance = this;
 
-						var serviceParameterTypes = [
-							'long',
-							'java.lang.String',
-							'java.lang.String',
-							'java.lang.String',
-							'long',
-							'java.lang.String'
-						];
-
-						return Liferay.Service.Expando.ExpandoValue.addValue(
+						Liferay.Service(
+							'/expandovalue/add-value',
 							{
 								companyId: themeDisplay.getCompanyId(),
 								className: instance._CLASS_NAME,
 								tableName: instance._TABLE_NAME,
 								columnName: instance.get('userPrefsKey'),
 								classPK: themeDisplay.getPlid(),
-								data: A.JSON.stringify(gadget.get('userPrefs')),
-								serviceParameterTypes: A.JSON.stringify(serviceParameterTypes)
+								data: A.JSON.stringify(gadget.get('userPrefs'))
 							}
 						);
 					},
@@ -892,7 +857,7 @@ AUI.add(
 
 		gadgets.rpc.register(
 			'set_pref',
-			 function(editToken, name, value) {
+			function(editToken, name, value) {
 				var gadget = Gadget.get(this.f);
 
 				if (gadget) {
@@ -920,6 +885,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-io', 'cookie', 'json', 'liferay-portlet-url', 'liferay-service', 'querystring']
+		requires: ['aui-base', 'aui-io', 'cookie', 'json', 'liferay-portlet-url', 'querystring']
 	}
 );

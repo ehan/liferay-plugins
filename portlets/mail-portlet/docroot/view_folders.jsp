@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -27,7 +27,7 @@ MailManager mailManager = MailManager.getInstance(request);
 		image="../mail/compose"
 	/>
 
-	<aui:a cssClass="compose-message" href="javascript:;" data-messageId="0" data-messageType="new" data-replyMessageId="0"><liferay-ui:message key="compose-email" /></aui:a>
+	<aui:a cssClass="compose-message" data-messageId="0" data-messageType="new" data-replyMessageId="0" href="javascript:;"><liferay-ui:message key="compose-email" /></aui:a>
 
 	<br /><br />
 
@@ -40,7 +40,7 @@ MailManager mailManager = MailManager.getInstance(request);
 		String folderImage = "../common/folder";
 
 		if (folder.getFolderId() == mailAccount.getInboxFolderId()) {
-			folderImage = "../dock/home";
+			folderImage = "../common/home";
 		}
 		else if (folder.getFolderId() == mailAccount.getDraftFolderId()) {
 			folderImage = "../mail/edit_draft";

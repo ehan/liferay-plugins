@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,10 +21,6 @@ PortletPreferences preferences = renderRequest.getPreferences();
 
 String portletResource = ParamUtil.getString(request, "portletResource");
 
-if (Validator.isNotNull(portletResource)) {
-	preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
-}
-
 boolean showKBArticleAuthorColumn = GetterUtil.getBoolean(preferences.getValue("showKBArticleAuthorColumn", null));
 boolean showKBArticleCreateDateColumn = GetterUtil.getBoolean(preferences.getValue("showKBArticleCreateDateColumn", null));
 boolean showKBArticleModifiedDateColumn = GetterUtil.getBoolean(preferences.getValue("showKBArticleModifiedDateColumn", null));
@@ -37,7 +33,8 @@ boolean enableKBArticleKBComments = GetterUtil.getBoolean(preferences.getValue("
 boolean showKBArticleKBComments = GetterUtil.getBoolean(preferences.getValue("showKBArticleKBComments", null));
 boolean enableKBArticleViewCountIncrement = GetterUtil.getBoolean(preferences.getValue("enableKBArticleViewCountIncrement", null));
 
-int rssDelta = GetterUtil.getInteger(preferences.getValue("rssDelta", null));
-String rssDisplayStyle = preferences.getValue("rssDisplayStyle", StringPool.BLANK);
-String rssFormat = preferences.getValue("rssFormat", StringPool.BLANK);
+boolean enableRSS = !PortalUtil.isRSSFeedsEnabled() ? false : GetterUtil.getBoolean(preferences.getValue("enableRss", null), true);
+int rssDelta = GetterUtil.getInteger(preferences.getValue("rssDelta", StringPool.BLANK), SearchContainer.DEFAULT_DELTA);
+String rssDisplayStyle = preferences.getValue("rssDisplayStyle", RSSUtil.DISPLAY_STYLE_DEFAULT);
+String rssFeedType = preferences.getValue("rssFeedType", RSSUtil.FEED_TYPE_DEFAULT);
 %>

@@ -1,16 +1,19 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * This file is part of Liferay Social Office. Liferay Social Office is free
+ * software: you can redistribute it and/or modify it under the terms of the GNU
+ * Affero General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ * Liferay Social Office is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 --%>
 
@@ -52,7 +55,7 @@ if ((microblogsEntry != null) && !edit) {
 
 	receiverUserId = microblogsEntry.getUserId();
 
-	receiverUserFullName = PortalUtil.getUserName(microblogsEntry.getUserId(), microblogsEntry.getUserName());
+	receiverUserFullName = PortalUtil.getUserName(microblogsEntry);
 
 	try {
 		User receiverUser = UserLocalServiceUtil.getUserById(microblogsEntry.getUserId());
@@ -98,7 +101,7 @@ if (comment) {
 					</div>
 
 					<div class="content">
-						<span><%= HtmlUtil.escape(microblogsEntry.getContent()) %><span>
+						<span><%= HtmlUtil.escape(microblogsEntry.getContent()) %></span>
 					</div>
 
 					<div class="footer">
@@ -123,18 +126,18 @@ if (comment) {
 	<aui:input name="receiverUserId" type="hidden" value="<%= receiverUserId %>" />
 	<aui:input name="receiverMicroblogsEntryId" type="hidden" value="<%= microblogsEntryId %>" />
 
+	<aui:model-context bean="<%= microblogsEntry %>" model="<%= MicroblogsEntry.class %>" />
+
 	<c:choose>
 		<c:when test="<%= repost %>">
 			<aui:input name="type" type="hidden" value="<%= MicroblogsEntryConstants.TYPE_REPOST %>" />
 
-			<aui:input name="content" type="hidden" value="<%= microblogsEntry.getContent() %>" />
+			<aui:input name="content" type="hidden" />
 		</c:when>
 		<c:when test="<%= comment %>">
 			<aui:input name="type" type="hidden" value="<%= MicroblogsEntryConstants.TYPE_REPLY %>" />
 		</c:when>
 	</c:choose>
-
-	<aui:model-context bean="<%= microblogsEntry %>" model="<%= MicroblogsEntry.class %>" />
 
 	<c:if test="<%= !repost %>">
 		<c:if test="<%= comment %>">
@@ -143,9 +146,9 @@ if (comment) {
 			</span>
 		</c:if>
 
-		<div class="autocomplete textarea" id="<portlet:namespace />autocomplete">
-			<div id="<portlet:namespace />autocompleteContent">
-				<span class="placeholder-text">
+		<div class="autocomplete textarea" id="<portlet:namespace />autocomplete<%= microblogsEntryId %>">
+			<div id="<portlet:namespace />autocompleteContent<%= microblogsEntryId %>">
+				<span class="placeholder-text" id="<portlet:namespace />placeholderText<%= microblogsEntryId %>">
 					<c:choose>
 						<c:when test="<%= comment %>">
 							<liferay-ui:message key="leave-a-comment" />
@@ -157,7 +160,7 @@ if (comment) {
 				</span>
 			</div>
 
-			<div class="highlighter-content <%= comment || edit || repost ? StringPool.BLANK : "textbox" %>" id="<portlet:namespace />highlighterContent"></div>
+			<div class="highlighter-content <%= comment || edit || repost ? StringPool.BLANK : "textbox" %>" id="<portlet:namespace />highlighterContent<%= microblogsEntryId %>"></div>
 		</div>
 
 		<aui:input label="" name="content" type="hidden" />
@@ -169,12 +172,12 @@ if (comment) {
 			<%
 			int socialRelationType = 0;
 
-			if(microblogsEntry != null) {
+			if (microblogsEntry != null) {
 				socialRelationType = microblogsEntry.getSocialRelationType();
 			}
 			%>
 
-			<aui:select label="viewable-by" inlineLabel="true" name="socialRelationType">
+			<aui:select inlineLabel="true" label="viewable-by" name="socialRelationType">
 				<aui:option label="everyone" selected="<%= socialRelationType == MicroblogsEntryConstants.TYPE_EVERYONE %>" value="<%= MicroblogsEntryConstants.TYPE_EVERYONE %>" />
 				<aui:option label="connections" selected="<%= socialRelationType == SocialRelationConstants.TYPE_BI_CONNECTION %>" value="<%= SocialRelationConstants.TYPE_BI_CONNECTION %>" />
 				<aui:option label="followers" selected="<%= socialRelationType == SocialRelationConstants.TYPE_UNI_FOLLOWER %>" value="<%= SocialRelationConstants.TYPE_UNI_FOLLOWER %>" />
@@ -186,7 +189,7 @@ if (comment) {
 				<span class="microblogs-countdown">150</span>
 			</c:if>
 
-			<aui:button inputCssClass="microblogs-button-input" name="submit" type="submit" value="post" />
+			<aui:button disabled="<%= !repost ? true : false %>" inputCssClass="microblogs-button-input" name="submit" type="submit" value="post" />
 
 			<c:if test="<%= repost %>">
 				<aui:button onClick="Liferay.Microblogs.closePopup();" type="cancel" />
@@ -201,7 +204,7 @@ if (comment) {
 			return '[@' + MAP_USERS[str] + ']';
 		},
 		userName: function(str, match) {
-			return '<b>' + str + '</b>'
+			return '<span>' + str + '</span>'
 		}
 	};
 
@@ -227,28 +230,31 @@ if (comment) {
 			var contentInput = event.currentTarget;
 
 			var countdown = form.one('.microblogs-countdown');
-			var submitButton = form.one('.aui-button-input-submit');
+			var submitButton = form.one('.aui-button-submit');
 
 			var remaining = (150 - contentInput.val().length);
 
-			var disabled = ((remaining < 0) || (remaining == 150));
+			var error = (remaining < 0);
+
+			var disabled = ((remaining == 150) || (contentInput.get('value') == "") || error);
 
 			countdown.html(remaining);
 
-			submitButton.attr('disabled', disabled);
-			submitButton.toggleClass('microblogs-button-input-disabled', disabled);
+			submitButton.one('.microblogs-button-input').attr('disabled', disabled);
+			submitButton.toggleClass('aui-button-disabled', disabled);
 
-			countdown.toggleClass('microblogs-countdown-warned', (remaining < 0));
+			submitButton.toggleClass('microblogs-button-input-disabled', error);
+			countdown.toggleClass('microblogs-countdown-warned', error);
 		};
 
 		var createTextarea = function(divId) {
-			var autocomplete = form.one('#<portlet:namespace/>autocomplete');
-			var autocompleteContent = autocomplete.one('#<portlet:namespace />autocompleteContent');
-			var highlighterContent = form.one('#<portlet:namespace/>highlighterContent');
+			var autocomplete = A.one('#<portlet:namespace/>autocomplete<%= microblogsEntryId %>');
+			var autocompleteContent = A.one('#<portlet:namespace />autocompleteContent<%= microblogsEntryId %>');
+			var highlighterContent = A.one('#<portlet:namespace/>highlighterContent<%= microblogsEntryId %>');
 
-			var inputValue = '<%= ((microblogsEntry != null) && (edit)) ? StringUtil.replace(microblogsEntry.getContent(), "\'", "\\'") : StringPool.BLANK %>';
+			var inputValue = '<%= ((microblogsEntry != null) && (edit)) ? StringUtil.replace(HtmlUtil.escapeJS(microblogsEntry.getContent()), "\'", "\\'") : StringPool.BLANK %>';
 
-			if (autocomplete.height() < 45 || highlighterContent.height() < 45) {
+			if ((autocomplete.height() < 45) || (highlighterContent.height() < 45)) {
 				autocomplete.height(45);
 
 				highlighterContent.height(45);
@@ -257,12 +263,12 @@ if (comment) {
 			var textarea = new A.Textarea(
 				{
 					autoSize: true,
-					id: '<portlet:namespace />contentInput',
+					id: '<portlet:namespace />contentInput<%= microblogsEntryId %>',
 					value: inputValue
 				}
 			).render(autocompleteContent);
 
-			var contentTextarea = form.one('#<portlet:namespace />contentInput textarea');
+			var contentTextarea = A.one('#<portlet:namespace />contentInput<%= microblogsEntryId %> textarea');
 
 			contentTextarea.on(
 				'focus',
@@ -271,12 +277,22 @@ if (comment) {
 
 					buttonContainer.show();
 
-					autocompleteContent.one('.placeholder-text').remove();
+					var placeholderText = A.one('#<portlet:namespace />placeholderText<%= microblogsEntryId %>');
+
+					if (placeholderText) {
+						placeholderText.remove();
+					}
 				}
 			);
 
+			var contextCountEvent = 'input';
+
+			if (A.UA.ie >= 9) {
+				contextCountEvent = ['input', 'keydown'];
+			}
+
 			contentTextarea.on(
-				'input',
+				contextCountEvent,
 				function(contentTextarea) {
 					updateHighlightDivSize(contentTextarea);
 
@@ -332,7 +348,7 @@ if (comment) {
 		var updateHighlightDivContent = function(event) {
 			var inputValue = event.inputValue;
 
-			var highlighterContent = form.one('#<portlet:namespace/>highlighterContent');
+			var highlighterContent = A.one('#<portlet:namespace/>highlighterContent<%= microblogsEntryId %>');
 
 			var query = inputValue.match(REGEX_USER_NAME);
 
@@ -348,14 +364,14 @@ if (comment) {
 			updatedText = updatedText.replace(/(\n)/gm, '<br />');
 			updatedText = updatedText.replace(/\s{2}/g, '&nbsp; ');
 
-			highlighterContent.html('<span>' + updatedText + '</span>');
+			highlighterContent.html('<div>' + updatedText + '</div>');
 		};
 
 		var updateHighlightDivSize = function(event) {
 			var contentInput = event.currentTarget;
 
-			var autocomplete = form.one('#<portlet:namespace/>autocomplete');
-			var highlighterContent = form.one('#<portlet:namespace/>highlighterContent');
+			var autocomplete = A.one('#<portlet:namespace/>autocomplete<%= microblogsEntryId %>');
+			var highlighterContent = A.one('#<portlet:namespace/>highlighterContent<%= microblogsEntryId %>');
 
 			var contentInputHeight = contentInput.height();
 
@@ -392,7 +408,7 @@ if (comment) {
 					maxResults: 5,
 					on: {
 						clear: function() {
-							var highlighterContent = form.one('#<portlet:namespace/>highlighterContent');
+							var highlighterContent = A.one('#<portlet:namespace/>highlighterContent<%= microblogsEntryId %>');
 
 							highlighterContent.html('');
 						},
@@ -409,13 +425,13 @@ if (comment) {
 
 		<c:choose>
 			<c:when test="<%= !edit %>">
-				var autocomplete = form.one('#<portlet:namespace/>autocomplete');
+				var autocomplete = A.one('#<portlet:namespace/>autocomplete<%= microblogsEntryId %>');
 
 				autocomplete.on(
 					'click',
 					function(event) {
-						var contentInput = form.one('#<portlet:namespace/>contentInput');
-						var highlighterContent = form.one('#<portlet:namespace/>highlighterContent');
+						var contentInput = A.one('#<portlet:namespace/>contentInput<%= microblogsEntryId %>');
+						var highlighterContent = A.one('#<portlet:namespace/>highlighterContent<%= microblogsEntryId %>');
 
 						if (!contentInput) {
 							highlighterContent.removeClass('textbox');
@@ -437,8 +453,8 @@ if (comment) {
 			event.halt(true);
 
 			<c:if test="<%= !repost %>">
-				var content = form.one('#<portlet:namespace />content');
-				var contentInput = form.one('#<portlet:namespace />contentInput textarea');
+				var content = form.one('input[name="<portlet:namespace />content"]');
+				var contentInput = A.one('#<portlet:namespace />contentInput<%= microblogsEntryId %> textarea');
 
 				var contentInputValue = contentInput.val();
 

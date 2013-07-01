@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -28,12 +28,12 @@ import java.util.List;
 /**
  * @author Brian Wing Shun Chan
  */
-public class KaleoTaskInstanceTokenImpl
-	extends KaleoTaskInstanceTokenBaseImpl {
+public class KaleoTaskInstanceTokenImpl extends KaleoTaskInstanceTokenBaseImpl {
 
 	public KaleoTaskInstanceTokenImpl() {
 	}
 
+	@Override
 	public KaleoInstanceToken getKaleoInstanceToken()
 		throws PortalException, SystemException {
 
@@ -41,10 +41,12 @@ public class KaleoTaskInstanceTokenImpl
 			getKaleoInstanceTokenId());
 	}
 
+	@Override
 	public KaleoTask getKaleoTask() throws PortalException, SystemException {
 		return KaleoTaskLocalServiceUtil.getKaleoTask(getKaleoTaskId());
 	}
 
+	@Override
 	public List<KaleoTaskAssignmentInstance> getKaleoTaskAssignmentInstances()
 		throws SystemException {
 

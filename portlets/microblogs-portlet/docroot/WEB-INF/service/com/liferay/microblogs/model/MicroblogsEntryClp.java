@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,20 +14,25 @@
 
 package com.liferay.microblogs.model;
 
+import com.liferay.microblogs.service.ClpSerializer;
 import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
 import java.io.Serializable;
 
-import java.lang.reflect.Proxy;
+import java.lang.reflect.Method;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Brian Wing Shun Chan
@@ -37,135 +42,456 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 	public MicroblogsEntryClp() {
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return MicroblogsEntry.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return MicroblogsEntry.class.getName();
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _microblogsEntryId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setMicroblogsEntryId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_microblogsEntryId);
+		return _microblogsEntryId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("microblogsEntryId", getMicroblogsEntryId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("content", getContent());
+		attributes.put("type", getType());
+		attributes.put("receiverUserId", getReceiverUserId());
+		attributes.put("receiverMicroblogsEntryId",
+			getReceiverMicroblogsEntryId());
+		attributes.put("socialRelationType", getSocialRelationType());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long microblogsEntryId = (Long)attributes.get("microblogsEntryId");
+
+		if (microblogsEntryId != null) {
+			setMicroblogsEntryId(microblogsEntryId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String content = (String)attributes.get("content");
+
+		if (content != null) {
+			setContent(content);
+		}
+
+		Integer type = (Integer)attributes.get("type");
+
+		if (type != null) {
+			setType(type);
+		}
+
+		Long receiverUserId = (Long)attributes.get("receiverUserId");
+
+		if (receiverUserId != null) {
+			setReceiverUserId(receiverUserId);
+		}
+
+		Long receiverMicroblogsEntryId = (Long)attributes.get(
+				"receiverMicroblogsEntryId");
+
+		if (receiverMicroblogsEntryId != null) {
+			setReceiverMicroblogsEntryId(receiverMicroblogsEntryId);
+		}
+
+		Integer socialRelationType = (Integer)attributes.get(
+				"socialRelationType");
+
+		if (socialRelationType != null) {
+			setSocialRelationType(socialRelationType);
+		}
+	}
+
+	@Override
 	public long getMicroblogsEntryId() {
 		return _microblogsEntryId;
 	}
 
+	@Override
 	public void setMicroblogsEntryId(long microblogsEntryId) {
 		_microblogsEntryId = microblogsEntryId;
+
+		if (_microblogsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _microblogsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setMicroblogsEntryId",
+						long.class);
+
+				method.invoke(_microblogsEntryRemoteModel, microblogsEntryId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
+
+		if (_microblogsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _microblogsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCompanyId", long.class);
+
+				method.invoke(_microblogsEntryRemoteModel, companyId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
+
+		if (_microblogsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _microblogsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserId", long.class);
+
+				method.invoke(_microblogsEntryRemoteModel, userId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
+	@Override
 	public String getUserName() {
 		return _userName;
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
+
+		if (_microblogsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _microblogsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserName", String.class);
+
+				method.invoke(_microblogsEntryRemoteModel, userName);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
+
+		if (_microblogsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _microblogsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCreateDate", Date.class);
+
+				method.invoke(_microblogsEntryRemoteModel, createDate);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
+
+		if (_microblogsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _microblogsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setModifiedDate", Date.class);
+
+				method.invoke(_microblogsEntryRemoteModel, modifiedDate);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getContent() {
 		return _content;
 	}
 
+	@Override
 	public void setContent(String content) {
 		_content = content;
+
+		if (_microblogsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _microblogsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setContent", String.class);
+
+				method.invoke(_microblogsEntryRemoteModel, content);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public int getType() {
 		return _type;
 	}
 
+	@Override
 	public void setType(int type) {
 		_type = type;
+
+		if (_microblogsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _microblogsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setType", int.class);
+
+				method.invoke(_microblogsEntryRemoteModel, type);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getReceiverUserId() {
 		return _receiverUserId;
 	}
 
+	@Override
 	public void setReceiverUserId(long receiverUserId) {
 		_receiverUserId = receiverUserId;
+
+		if (_microblogsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _microblogsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setReceiverUserId", long.class);
+
+				method.invoke(_microblogsEntryRemoteModel, receiverUserId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getReceiverUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getReceiverUserId(), "uuid",
 			_receiverUserUuid);
 	}
 
+	@Override
 	public void setReceiverUserUuid(String receiverUserUuid) {
 		_receiverUserUuid = receiverUserUuid;
 	}
 
+	@Override
 	public long getReceiverMicroblogsEntryId() {
 		return _receiverMicroblogsEntryId;
 	}
 
+	@Override
 	public void setReceiverMicroblogsEntryId(long receiverMicroblogsEntryId) {
 		_receiverMicroblogsEntryId = receiverMicroblogsEntryId;
+
+		if (_microblogsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _microblogsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setReceiverMicroblogsEntryId",
+						long.class);
+
+				method.invoke(_microblogsEntryRemoteModel,
+					receiverMicroblogsEntryId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public int getSocialRelationType() {
 		return _socialRelationType;
 	}
 
+	@Override
 	public void setSocialRelationType(int socialRelationType) {
 		_socialRelationType = socialRelationType;
+
+		if (_microblogsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _microblogsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setSocialRelationType",
+						int.class);
+
+				method.invoke(_microblogsEntryRemoteModel, socialRelationType);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	public BaseModel<?> getMicroblogsEntryRemoteModel() {
+		return _microblogsEntryRemoteModel;
+	}
+
+	public void setMicroblogsEntryRemoteModel(
+		BaseModel<?> microblogsEntryRemoteModel) {
+		_microblogsEntryRemoteModel = microblogsEntryRemoteModel;
+	}
+
+	public Object invokeOnRemoteModel(String methodName,
+		Class<?>[] parameterTypes, Object[] parameterValues)
+		throws Exception {
+		Object[] remoteParameterValues = new Object[parameterValues.length];
+
+		for (int i = 0; i < parameterValues.length; i++) {
+			if (parameterValues[i] != null) {
+				remoteParameterValues[i] = ClpSerializer.translateInput(parameterValues[i]);
+			}
+		}
+
+		Class<?> remoteModelClass = _microblogsEntryRemoteModel.getClass();
+
+		ClassLoader remoteModelClassLoader = remoteModelClass.getClassLoader();
+
+		Class<?>[] remoteParameterTypes = new Class[parameterTypes.length];
+
+		for (int i = 0; i < parameterTypes.length; i++) {
+			if (parameterTypes[i].isPrimitive()) {
+				remoteParameterTypes[i] = parameterTypes[i];
+			}
+			else {
+				String parameterTypeName = parameterTypes[i].getName();
+
+				remoteParameterTypes[i] = remoteModelClassLoader.loadClass(parameterTypeName);
+			}
+		}
+
+		Method method = remoteModelClass.getMethod(methodName,
+				remoteParameterTypes);
+
+		Object returnValue = method.invoke(_microblogsEntryRemoteModel,
+				remoteParameterValues);
+
+		if (returnValue != null) {
+			returnValue = ClpSerializer.translateOutput(returnValue);
+		}
+
+		return returnValue;
+	}
+
+	@Override
 	public void persist() throws SystemException {
 		if (this.isNew()) {
 			MicroblogsEntryLocalServiceUtil.addMicroblogsEntry(this);
@@ -177,7 +503,7 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 
 	@Override
 	public MicroblogsEntry toEscapedModel() {
-		return (MicroblogsEntry)Proxy.newProxyInstance(MicroblogsEntry.class.getClassLoader(),
+		return (MicroblogsEntry)ProxyUtil.newProxyInstance(MicroblogsEntry.class.getClassLoader(),
 			new Class[] { MicroblogsEntry.class },
 			new AutoEscapeBeanHandler(this));
 	}
@@ -201,6 +527,7 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 		return clone;
 	}
 
+	@Override
 	public int compareTo(MicroblogsEntry microblogsEntry) {
 		int value = 0;
 
@@ -218,18 +545,15 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof MicroblogsEntryClp)) {
 			return false;
 		}
 
-		MicroblogsEntryClp microblogsEntry = null;
-
-		try {
-			microblogsEntry = (MicroblogsEntryClp)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		MicroblogsEntryClp microblogsEntry = (MicroblogsEntryClp)obj;
 
 		long primaryKey = microblogsEntry.getPrimaryKey();
 
@@ -277,6 +601,7 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(37);
 
@@ -347,4 +672,5 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 	private String _receiverUserUuid;
 	private long _receiverMicroblogsEntryId;
 	private int _socialRelationType;
+	private BaseModel<?> _microblogsEntryRemoteModel;
 }

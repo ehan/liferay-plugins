@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,16 +15,16 @@
 package com.liferay.knowledgebase.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableService;
 
 /**
- * The utility for the k b article remote service. This utility wraps {@link com.liferay.knowledgebase.service.impl.KBArticleServiceImpl} and is the primary access point for service operations in application layer code running on a remote server.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
+ * Provides the remote service utility for KBArticle. This utility wraps
+ * {@link com.liferay.knowledgebase.service.impl.KBArticleServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on a remote server. Methods of this service are expected to have security
+ * checks based on the propagated JAAS credentials because this service can be
+ * accessed remotely.
  *
  * @author Brian Wing Shun Chan
  * @see KBArticleService
@@ -38,6 +38,31 @@ public class KBArticleServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.knowledgebase.service.impl.KBArticleServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
 	public static void addAttachment(java.lang.String portletId,
 		long resourcePrimKey, java.lang.String dirName,
 		java.lang.String shortFileName, java.io.InputStream inputStream,
@@ -72,10 +97,11 @@ public class KBArticleServiceUtil {
 			fileName);
 	}
 
-	public static void deleteKBArticle(long resourcePrimKey)
+	public static com.liferay.knowledgebase.model.KBArticle deleteKBArticle(
+		long resourcePrimKey)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteKBArticle(resourcePrimKey);
+		return getService().deleteKBArticle(resourcePrimKey);
 	}
 
 	public static void deleteKBArticles(long groupId, long[] resourcePrimKeys)
@@ -136,6 +162,15 @@ public class KBArticleServiceUtil {
 			rssDisplayStyle, rssFormat, themeDisplay);
 	}
 
+	public static java.util.List<com.liferay.knowledgebase.model.KBArticle> getKBArticles(
+		long groupId, long[] resourcePrimKeys, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getKBArticles(groupId, resourcePrimKeys, status,
+			orderByComparator);
+	}
+
 	public static com.liferay.knowledgebase.model.KBArticleSearchDisplay getKBArticleSearchDisplay(
 		long groupId, java.lang.String title, java.lang.String content,
 		int status, java.util.Date startDate, java.util.Date endDate,
@@ -163,15 +198,6 @@ public class KBArticleServiceUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .getKBArticleVersionsCount(groupId, resourcePrimKey, status);
-	}
-
-	public static java.util.List<com.liferay.knowledgebase.model.KBArticle> getKBArticles(
-		long groupId, long[] resourcePrimKeys, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getKBArticles(groupId, resourcePrimKeys, status,
-			orderByComparator);
 	}
 
 	public static com.liferay.knowledgebase.model.KBArticle getLatestKBArticle(
@@ -286,34 +312,27 @@ public class KBArticleServiceUtil {
 
 	public static KBArticleService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableService invokableService = (InvokableService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					KBArticleService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					KBArticleService.class.getName(), portletClassLoader);
-
-			_service = new KBArticleServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableService instanceof KBArticleService) {
+				_service = (KBArticleService)invokableService;
+			}
+			else {
+				_service = new KBArticleServiceClp(invokableService);
+			}
 
 			ReferenceRegistry.registerReference(KBArticleServiceUtil.class,
 				"_service");
-			MethodCache.remove(KBArticleService.class);
 		}
 
 		return _service;
 	}
 
+	/**
+	 * @deprecated As of 6.2.0
+	 */
 	public void setService(KBArticleService service) {
-		MethodCache.remove(KBArticleService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(KBArticleServiceUtil.class,
-			"_service");
-		MethodCache.remove(KBArticleService.class);
 	}
 
 	private static KBArticleService _service;

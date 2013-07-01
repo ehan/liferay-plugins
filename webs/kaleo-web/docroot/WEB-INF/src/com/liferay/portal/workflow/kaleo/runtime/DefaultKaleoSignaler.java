@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.workflow.kaleo.BaseKaleoBean;
-import com.liferay.portal.workflow.kaleo.definition.NodeType;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoNode;
 import com.liferay.portal.workflow.kaleo.runtime.graph.PathElement;
@@ -54,6 +53,7 @@ public class DefaultKaleoSignaler
 		_singleDestinationMessageSender = singleDestinationMessageSender;
 	}
 
+	@Override
 	public void signalEntry(
 			String transitionName, ExecutionContext executionContext)
 		throws PortalException, SystemException {
@@ -69,6 +69,7 @@ public class DefaultKaleoSignaler
 		_singleDestinationMessageSender.send(startPathElement);
 	}
 
+	@Override
 	@Transactional(
 		isolation = Isolation.PORTAL, propagation = Propagation.REQUIRED,
 		rollbackFor = {Exception.class})
@@ -77,7 +78,7 @@ public class DefaultKaleoSignaler
 		throws PortalException, SystemException {
 
 		NodeExecutor nodeExecutor = NodeExecutorFactory.getNodeExecutor(
-			NodeType.valueOf(currentKaleoNode.getType()));
+			currentKaleoNode.getType());
 
 		List<PathElement> remainingPathElements = new ArrayList<PathElement>();
 
@@ -92,8 +93,9 @@ public class DefaultKaleoSignaler
 
 	}
 
+	@Override
 	public void signalExit(
-		String transitionName, ExecutionContext executionContext)
+			String transitionName, ExecutionContext executionContext)
 		throws PortalException, SystemException {
 
 		KaleoInstanceToken kaleoInstanceToken =

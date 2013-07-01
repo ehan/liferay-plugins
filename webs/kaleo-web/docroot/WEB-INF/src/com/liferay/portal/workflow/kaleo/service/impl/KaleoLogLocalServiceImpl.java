@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,6 +17,7 @@ package com.liferay.portal.workflow.kaleo.service.impl;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Junction;
+import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -49,6 +50,7 @@ import java.util.Map;
  */
 public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 
+	@Override
 	public KaleoLog addActionExecutionKaleoLog(
 			KaleoInstanceToken kaleoInstanceToken, KaleoAction kaleoAction,
 			long startTime, long endTime, String comment,
@@ -67,11 +69,12 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 		kaleoLog.setEndDate(new Date(endTime));
 		kaleoLog.setDuration(endTime - startTime);
 
-		kaleoLogPersistence.update(kaleoLog, false);
+		kaleoLogPersistence.update(kaleoLog);
 
 		return kaleoLog;
 	}
 
+	@Override
 	public KaleoLog addNodeEntryKaleoLog(
 			KaleoInstanceToken kaleoInstanceToken, KaleoNode sourceKaleoNode,
 			KaleoNode targetKaleoNode, ServiceContext serviceContext)
@@ -93,11 +96,12 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 
 		kaleoLog.setStartDate(kaleoLog.getCreateDate());
 
-		kaleoLogPersistence.update(kaleoLog, false);
+		kaleoLogPersistence.update(kaleoLog);
 
 		return kaleoLog;
 	}
 
+	@Override
 	public KaleoLog addNodeExitKaleoLog(
 			KaleoInstanceToken kaleoInstanceToken, KaleoNode departingKaleoNode,
 			ServiceContext serviceContext)
@@ -126,11 +130,12 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 		catch (NoSuchLogException nsle) {
 		}
 
-		kaleoLogPersistence.update(kaleoLog, false);
+		kaleoLogPersistence.update(kaleoLog);
 
 		return kaleoLog;
 	}
 
+	@Override
 	public KaleoLog addTaskAssignmentKaleoLog(
 			List<KaleoTaskAssignmentInstance>
 			previousKaleoTaskAssignmentInstances,
@@ -184,14 +189,15 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 		kaleoLog.setWorkflowContext(
 			WorkflowContextUtil.convert(workflowContext));
 
-		kaleoLogPersistence.update(kaleoLog, false);
+		kaleoLogPersistence.update(kaleoLog);
 
 		return kaleoLog;
 	}
 
+	@Override
 	public KaleoLog addTaskCompletionKaleoLog(
-			KaleoTaskInstanceToken kaleoTaskInstanceToken,
-			String comment, Map<String, Serializable> workflowContext,
+			KaleoTaskInstanceToken kaleoTaskInstanceToken, String comment,
+			Map<String, Serializable> workflowContext,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
@@ -228,11 +234,12 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 		kaleoLog.setWorkflowContext(
 			WorkflowContextUtil.convert(workflowContext));
 
-		kaleoLogPersistence.update(kaleoLog, false);
+		kaleoLogPersistence.update(kaleoLog);
 
 		return kaleoLog;
 	}
 
+	@Override
 	public KaleoLog addTaskUpdateKaleoLog(
 			KaleoTaskInstanceToken kaleoTaskInstanceToken, String comment,
 			Map<String, Serializable> workflowContext,
@@ -262,11 +269,12 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 		kaleoLog.setWorkflowContext(
 			WorkflowContextUtil.convert(workflowContext));
 
-		kaleoLogPersistence.update(kaleoLog, false);
+		kaleoLogPersistence.update(kaleoLog);
 
 		return kaleoLog;
 	}
 
+	@Override
 	public KaleoLog addWorkflowInstanceEndKaleoLog(
 			KaleoInstanceToken kaleoInstanceToken,
 			ServiceContext serviceContext)
@@ -290,11 +298,12 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 		catch (NoSuchLogException nsle) {
 		}
 
-		kaleoLogPersistence.update(kaleoLog, false);
+		kaleoLogPersistence.update(kaleoLog);
 
 		return kaleoLog;
 	}
 
+	@Override
 	public KaleoLog addWorkflowInstanceStartKaleoLog(
 			KaleoInstanceToken kaleoInstanceToken,
 			ServiceContext serviceContext)
@@ -310,27 +319,31 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 
 		kaleoLog.setWorkflowContext(kaleoInstance.getWorkflowContext());
 
-		kaleoLogPersistence.update(kaleoLog, false);
+		kaleoLogPersistence.update(kaleoLog);
 
 		return kaleoLog;
 	}
 
+	@Override
 	public void deleteCompanyKaleoLogs(long companyId) throws SystemException {
 		kaleoLogPersistence.removeByCompanyId(companyId);
 	}
 
+	@Override
 	public void deleteKaleoDefinitionKaleoLogs(long kaleoDefinitionId)
 		throws SystemException {
 
 		kaleoLogPersistence.removeByKaleoDefinitionId(kaleoDefinitionId);
 	}
 
+	@Override
 	public void deleteKaleoInstanceKaleoLogs(long kaleoInstanceId)
 		throws SystemException {
 
 		kaleoLogPersistence.removeByKaleoInstanceId(kaleoInstanceId);
 	}
 
+	@Override
 	public List<KaleoLog> getKaleoInstanceKaleoLogs(
 			long kaleoInstanceId, List<Integer> logTypes, int start, int end,
 			OrderByComparator orderByComparator)
@@ -348,6 +361,7 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 		}
 	}
 
+	@Override
 	public int getKaleoInstanceKaleoLogsCount(
 			long kaleoInstanceId, List<Integer> logTypes)
 		throws SystemException {
@@ -363,6 +377,7 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 		}
 	}
 
+	@Override
 	public List<KaleoLog> getKaleoTaskInstanceTokenKaleoLogs(
 			long kaleoTaskInstanceTokenId, List<Integer> logTypes, int start,
 			int end, OrderByComparator orderByComparator)
@@ -380,6 +395,7 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 		}
 	}
 
+	@Override
 	public int getKaleoTaskInstanceTokenKaleoLogsCount(
 			long kaleoTaskInstanceTokenId, List<Integer> logTypes)
 		throws SystemException {
@@ -404,10 +420,13 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 		for (Integer logType : logTypes) {
 			String logTypeString = KaleoLogUtil.convert(logType);
 
-			if (Validator.isNotNull(logTypeString)) {
-				junction.add(
-					PropertyFactoryUtil.forName("type").eq(logTypeString));
+			if (Validator.isNull(logTypeString)) {
+				continue;
 			}
+
+			Property property = PropertyFactoryUtil.forName("type");
+
+			junction.add(property.eq(logTypeString));
 		}
 
 		dynamicQuery.add(junction);
@@ -417,10 +436,11 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 		long kaleoInstanceId, List<Integer> logTypes) {
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			KaleoLog.class, getClass().getClassLoader());
+			KaleoLog.class, getClassLoader());
 
-		dynamicQuery.add(
-			PropertyFactoryUtil.forName("kaleoInstanceId").eq(kaleoInstanceId));
+		Property property = PropertyFactoryUtil.forName("kaleoInstanceId");
+
+		dynamicQuery.add(property.eq(kaleoInstanceId));
 
 		addLogTypesJunction(dynamicQuery, logTypes);
 
@@ -431,11 +451,12 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 		long kaleoTaskId, List<Integer> logTypes) {
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			KaleoLog.class, getClass().getClassLoader());
+			KaleoLog.class, getClassLoader());
 
-		dynamicQuery.add(
-			PropertyFactoryUtil.forName("kaleoTaskInstanceTokenId").eq(
-				kaleoTaskId));
+		Property property = PropertyFactoryUtil.forName(
+			"kaleoTaskInstanceTokenId");
+
+		dynamicQuery.add(property.eq(kaleoTaskId));
 
 		addLogTypesJunction(dynamicQuery, logTypes);
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -37,7 +37,8 @@ import java.util.List;
 public abstract class BaseNodeExecutor
 	extends BaseKaleoBean implements NodeExecutor {
 
-	public void enter(
+	@Override
+	public boolean enter(
 			KaleoNode currentKaleoNode, ExecutionContext executionContext)
 		throws PortalException, SystemException {
 
@@ -46,7 +47,7 @@ public abstract class BaseNodeExecutor
 
 		kaleoInstanceToken.setCurrentKaleoNode(currentKaleoNode);
 
-		doEnter(currentKaleoNode, executionContext);
+		boolean performExecute = doEnter(currentKaleoNode, executionContext);
 
 		ActionExecutorUtil.executeKaleoActions(
 			KaleoNode.class.getName(), currentKaleoNode.getKaleoNodeId(),
@@ -61,11 +62,14 @@ public abstract class BaseNodeExecutor
 
 		kaleoTimerInstanceTokenLocalService.addKaleoTimerInstanceTokens(
 			executionContext.getKaleoInstanceToken(),
-			executionContext.getKaleoTaskInstanceToken(),
-			kaleoTimers, executionContext.getWorkflowContext(),
+			executionContext.getKaleoTaskInstanceToken(), kaleoTimers,
+			executionContext.getWorkflowContext(),
 			executionContext.getServiceContext());
+
+		return performExecute;
 	}
 
+	@Override
 	public void execute(
 			KaleoNode currentKaleoNode, ExecutionContext executionContext,
 			List<PathElement> remainingPathElements)
@@ -78,9 +82,9 @@ public abstract class BaseNodeExecutor
 		doExecute(currentKaleoNode, executionContext, remainingPathElements);
 	}
 
+	@Override
 	public void executeTimer(
-			KaleoNode currentKaleoNode,
-			ExecutionContext executionContext)
+			KaleoNode currentKaleoNode, ExecutionContext executionContext)
 		throws PortalException, SystemException {
 
 		ServiceContext serviceContext = executionContext.getServiceContext();
@@ -107,6 +111,7 @@ public abstract class BaseNodeExecutor
 		}
 	}
 
+	@Override
 	public void exit(
 			KaleoNode currentKaleoNode, ExecutionContext executionContext,
 			List<PathElement> remainingPathElements)
@@ -125,7 +130,7 @@ public abstract class BaseNodeExecutor
 			ExecutionType.ON_EXIT, executionContext);
 	}
 
-	protected abstract void doEnter(
+	protected abstract boolean doEnter(
 			KaleoNode currentKaleoNode, ExecutionContext executionContext)
 		throws PortalException, SystemException;
 

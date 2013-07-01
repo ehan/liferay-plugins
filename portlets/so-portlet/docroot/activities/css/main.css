@@ -1,56 +1,204 @@
-/**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
- *
- * This file is part of Liferay Social Office. Liferay Social Office is free
- * software: you can redistribute it and/or modify it under the terms of the GNU
- * Affero General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
- *
- * Liferay Social Office is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License
- * for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
- */
+@import "compass";
 
-.so-portlet-activities .activity-item {
-	min-height: 38px;
-	margin-bottom: .5em;
+.so-portlet-activities {
+	.activity-item {
+		border-bottom: 1px solid #E7E7E7;
+		min-height: 45px;
+		padding: 1em;
+	}
+
+	.user-portrait {
+		float: left;
+		height: 45px;
+		position: relative;
+		width: 45px;
+
+		.avatar {
+			display: block;
+			height: 45px;
+			overflow: hidden;
+
+			img {
+				max-width: 45px;
+			}
+		}
+	}
+
+	.activity-data {
+		margin-left: 55px;
+		overflow: hidden;
+	}
+
+	.activity-header {
+		margin-bottom: .4em;
+
+		a {
+			font-weight: bold;
+		}
+	}
+
+	.activity-time {
+		color: #999;
+		float: right;
+		font-size: .9em;
+		line-height: .9em;
+		margin-left: 1em;
+	}
+
+	.activity-action {
+		color: #333333;
+	}
+
+	.activity-body, .grouped-activity-body-container {
+		border: 1px solid #E7E7E7;
+
+		span {
+			display: inline-block;
+			line-height: 1em;
+			padding-right: 10px;
+			vertical-align: middle;
+		}
+
+		.icon {
+			height: 16px;
+			width: 16px;
+		}
+
+		.title {
+			border-right-width: 0;
+			display: block;
+			font-weight: bold;
+			overflow: hidden;
+			padding-bottom: .4em;
+
+			.event-title {
+				float: left;
+				line-height: 1.5em;
+			}
+
+			.date {
+				float: right;
+				line-height: 1.5em;
+				padding-right: 0;
+			}
+		}
+	}
+
+	.activity-body {
+		margin: .8em 0 0;
+		padding: .6em .9em;
+
+		&.document {
+			min-height: 75px;
+			padding: 0;
+			position: relative;
+
+			.document-thumbnail {
+				overflow: hidden;
+				padding-right: 0;
+				position: absolute;
+				width: 75px;
+
+				img {
+					height: 75px;
+				}
+			}
+
+			.document-container {
+				margin: .6em .9em .6em 85px;
+			}
+
+			.title {
+				float: left;
+			}
+
+			.version {
+				color: #8F0920;
+				float: right;
+			}
+
+			.document-content {
+				clear: both;
+			}
+		}
+	}
+
+	.grouped-activity-body-container {
+		max-height: 93px;
+		overflow: hidden;
+
+		.activity-subentry {
+			border-bottom: 1px solid #E7E7E7;
+			height: 2.5em;
+			line-height: 2.5em;
+			overflow: hidden;
+			padding: 0 .9em;
+
+			&:last-child {
+				border-bottom-width: 0;
+			}
+		}
+
+		.activity-subentry-body, .activity-subentry-title {
+			display: inline;
+			line-height: 2.5em;
+			overflow: hidden;
+		}
+	}
+
+	.tasks {
+		&.low {
+			border-left: 6px solid #E7E7E7;
+		}
+
+		&.normal {
+			border-left: 6px solid #008C00;
+		}
+
+		&.high {
+			border-left: 6px solid #B20000;
+		}
+
+		.activity-body {
+			border-left-width: 0;
+		}
+	}
+
+	.activity-footer-toolbar {
+		background: #EAEAEA;
+		padding: 0 1em;
+
+		span {
+			border-left: 1px solid #2571AD;
+			line-height: 2.5em;
+			padding: 0 .5em 0 .6em;
+
+			&:first-child {
+				border-left-width: 0;
+				padding-left: 0;
+			}
+		}
+
+		a {
+			font-size: .9em;
+		}
+	}
+
+	.toggler-content-collapsed .activity-footer-toolbar {
+		border-top: 1px solid #EFEFEF;
+		margin-top: -2px;
+	}
 }
 
-.ie .so-portlet-activities .activity-item {
-	height: 38px;
-}
+/* ---------- Internet Explorer ---------- */
 
-.so-portlet-activities .user-portrait {
+.ie7 .so-portlet-activities .grouped-activity-body-container .activity-subentry-title {
 	float: left;
-	height: 38px;
-	position: relative;
-	width: 38px;
+	margin: 7px 0;
 }
 
-.so-portlet-activities .user-portrait .avatar img {
-	max-width: 30px;
-}
+/* ---------- Extras ---------- */
 
-.ie .so-portlet-activities .user-portrait .avatar img {
-	width: 30px;
-}
-
-.so-portlet-activities .user-portrait .avatar {
-	display: block;
-	height: 30px;
-	overflow: hidden;
-}
-
-.so-portlet-activities .user-portrait .icon {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-}
-
-.so-portlet-activities .activity-data {
-	margin-left: 45px;
+.so-portlet-activities .toggler-content-collapsed .activity-footer-toolbar {
+	@include box-shadow(0 -1px 15px -5px rgba(0, 0, 0, .8));
 }

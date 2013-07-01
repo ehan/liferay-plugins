@@ -1,100 +1,132 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * This file is part of Liferay Social Office. Liferay Social Office is free
+ * software: you can redistribute it and/or modify it under the terms of the GNU
+ * Affero General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ * Liferay Social Office is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 
 package com.liferay.privatemessaging.util;
 
+import com.liferay.portal.NoSuchRoleException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.comparator.UserFirstNameComparator;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.messageboards.util.comparator.MessageCreateDateComparator;
+import com.liferay.portlet.sites.util.SitesUtil;
 import com.liferay.portlet.social.model.SocialRelationConstants;
 import com.liferay.privatemessaging.NoSuchUserThreadException;
 import com.liferay.privatemessaging.model.UserThread;
 import com.liferay.privatemessaging.service.UserThreadLocalServiceUtil;
-import com.liferay.util.portlet.PortletProps;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Scott Lee
+ * @author Eudaldo Alonso
  */
 public class PrivateMessagingUtil {
 
-	public static JSONArray getJSONRecipients(long userId)
+	public static JSONObject getJSONRecipients(
+			long userId, String type, String keywords, int start, int end)
 		throws PortalException, SystemException {
 
-		Set<User> users = new HashSet<User>();
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
-		String autocompleteRecipientType = PortletProps.get(
-			"autocomplete.recipient.type");
+		User user = UserLocalServiceUtil.getUser(userId);
 
-		if (autocompleteRecipientType.equals("all")) {
-			users.addAll(
-				UserLocalServiceUtil.getUsers(
-					QueryUtil.ALL_POS, QueryUtil.ALL_POS));
-		}
-		else if (autocompleteRecipientType.equals("site")) {
+		LinkedHashMap<String, Object> params =
+			new LinkedHashMap<String, Object>();
+
+		if (type.equals("site")) {
+			params.put("inherit", Boolean.TRUE);
+
 			List<Group> groups = GroupLocalServiceUtil.getUserGroups(
 				userId, true);
 
-			for (Group group : groups) {
-				users.addAll(
-					UserLocalServiceUtil.getGroupUsers(group.getGroupId()));
+			params.put(
+				"usersGroups",
+				SitesUtil.filterGroups(
+					groups,
+					PortletPropsValues.AUTOCOMPLETE_RECIPIENT_SITE_EXCLUDES));
+		}
+		else if (!type.equals("all")) {
+			params.put(
+				"socialRelationType",
+				new Long[] {
+					userId, new Long(SocialRelationConstants.TYPE_BI_CONNECTION)
+				});
+		}
+
+		try {
+			Role role = RoleLocalServiceUtil.getRole(
+				user.getCompanyId(), RoleConstants.SOCIAL_OFFICE_USER);
+
+			if (role != null) {
+				params.put("usersRoles", new Long(role.getRoleId()));
 			}
 		}
-		else {
-			users.addAll(
-				UserLocalServiceUtil.getSocialUsers(
-					userId, SocialRelationConstants.TYPE_BI_CONNECTION,
-					QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-					new UserFirstNameComparator(true)));
+		catch (NoSuchRoleException nsre) {
 		}
+
+		int total = UserLocalServiceUtil.searchCount(
+			user.getCompanyId(), keywords, WorkflowConstants.STATUS_APPROVED,
+			params);
+
+		jsonObject.put("total", total);
+
+		List<User> users = UserLocalServiceUtil.search(
+			user.getCompanyId(), keywords, WorkflowConstants.STATUS_APPROVED,
+			params, start, end, new UserFirstNameComparator(true));
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
-		for (User user : users) {
-			if (user.isDefaultUser() || (userId == user.getUserId())) {
-				continue;
-			}
+		for (User curUser : users) {
+			JSONObject userJSONObject = JSONFactoryUtil.createJSONObject();
 
-			StringBuilder sb = new StringBuilder();
+			StringBundler sb = new StringBundler(5);
 
-			sb.append(user.getFullName());
+			sb.append(curUser.getFullName());
 			sb.append(CharPool.SPACE);
 			sb.append(CharPool.LESS_THAN);
-			sb.append(user.getScreenName());
+			sb.append(curUser.getScreenName());
 			sb.append(CharPool.GREATER_THAN);
 
-			jsonArray.put(sb.toString());
+			userJSONObject.put("name", sb.toString());
+
+			jsonArray.put(userJSONObject);
 		}
 
-		return jsonArray;
+		jsonObject.put("users", jsonArray);
+
+		return jsonObject;
 	}
 
 	public static MBMessage getLastThreadMessage(long userId, long mbThreadId)
@@ -213,7 +245,14 @@ public class PrivateMessagingUtil {
 				continue;
 			}
 
-			User user = UserLocalServiceUtil.getUser(mbMessage.getUserId());
+			User user = UserLocalServiceUtil.fetchUser(mbMessage.getUserId());
+
+			if (user == null) {
+				user = UserLocalServiceUtil.createUser(mbMessage.getUserId());
+
+				user.setFirstName(mbMessage.getUserName());
+				user.setStatus(WorkflowConstants.STATUS_INACTIVE);
+			}
 
 			if (!users.contains(user)) {
 				users.add(user);
@@ -230,7 +269,14 @@ public class PrivateMessagingUtil {
 				continue;
 			}
 
-			User user = UserLocalServiceUtil.getUser(userThread.getUserId());
+			User user = UserLocalServiceUtil.fetchUser(userThread.getUserId());
+
+			if (user == null) {
+				user = UserLocalServiceUtil.createUser(userThread.getUserId());
+
+				user.setFirstName(userThread.getUserName());
+				user.setStatus(WorkflowConstants.STATUS_INACTIVE);
+			}
 
 			if (!users.contains(user)) {
 				users.add(user);

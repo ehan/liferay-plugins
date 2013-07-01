@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,7 +18,11 @@ import com.liferay.mail.model.Account;
 import com.liferay.mail.model.Folder;
 import com.liferay.mail.model.Message;
 import com.liferay.mail.service.MessageLocalServiceUtil;
+import com.liferay.mail.service.persistence.MessageActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.BooleanQueryFactoryUtil;
@@ -26,7 +30,6 @@ import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.DocumentImpl;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
-import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
@@ -38,7 +41,6 @@ import com.liferay.portlet.expando.util.ExpandoBridgeIndexerUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 
 import javax.portlet.PortletURL;
@@ -52,10 +54,12 @@ public class MessageIndexer extends BaseIndexer {
 
 	public static final String PORTLET_ID = PortletKeys.MAIL;
 
+	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
 	}
 
+	@Override
 	public String getPortletId() {
 		return PORTLET_ID;
 	}
@@ -64,7 +68,7 @@ public class MessageIndexer extends BaseIndexer {
 	protected void doDelete(Object obj) throws Exception {
 		SearchContext searchContext = new SearchContext();
 
-		searchContext.setSearchEngineId(SearchEngineUtil.SYSTEM_ENGINE_ID);
+		searchContext.setSearchEngineId(getSearchEngineId());
 
 		if (obj instanceof Account) {
 			Account account = (Account)obj;
@@ -77,14 +81,15 @@ public class MessageIndexer extends BaseIndexer {
 			booleanQuery.addRequiredTerm("accountId", account.getAccountId());
 
 			Hits hits = SearchEngineUtil.search(
-				account.getCompanyId(), booleanQuery, QueryUtil.ALL_POS,
-				QueryUtil.ALL_POS);
+				getSearchEngineId(), account.getCompanyId(), booleanQuery,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
 			for (int i = 0; i < hits.getLength(); i++) {
 				Document document = hits.doc(i);
 
 				SearchEngineUtil.deleteDocument(
-					account.getCompanyId(), document.get(Field.UID));
+					getSearchEngineId(), account.getCompanyId(),
+					document.get(Field.UID));
 			}
 		}
 		else if (obj instanceof Folder) {
@@ -98,14 +103,15 @@ public class MessageIndexer extends BaseIndexer {
 			booleanQuery.addRequiredTerm("folderId", folder.getFolderId());
 
 			Hits hits = SearchEngineUtil.search(
-				folder.getCompanyId(), booleanQuery, QueryUtil.ALL_POS,
-				QueryUtil.ALL_POS);
+				getSearchEngineId(), folder.getCompanyId(), booleanQuery,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
 			for (int i = 0; i < hits.getLength(); i++) {
 				Document document = hits.doc(i);
 
 				SearchEngineUtil.deleteDocument(
-					folder.getCompanyId(), document.get(Field.UID));
+					getSearchEngineId(), folder.getCompanyId(),
+					document.get(Field.UID));
 			}
 		}
 		else if (obj instanceof Message) {
@@ -116,7 +122,8 @@ public class MessageIndexer extends BaseIndexer {
 			document.addUID(PORTLET_ID, message.getMessageId());
 
 			SearchEngineUtil.deleteDocument(
-				message.getCompanyId(), document.get(Field.UID));
+				getSearchEngineId(), message.getCompanyId(),
+				document.get(Field.UID));
 		}
 	}
 
@@ -154,7 +161,8 @@ public class MessageIndexer extends BaseIndexer {
 
 		Document document = getDocument(message);
 
-		SearchEngineUtil.updateDocument(message.getCompanyId(), document);
+		SearchEngineUtil.updateDocument(
+			getSearchEngineId(), message.getCompanyId(), document);
 	}
 
 	@Override
@@ -176,38 +184,31 @@ public class MessageIndexer extends BaseIndexer {
 		return PORTLET_ID;
 	}
 
-	protected void reindexMessages(long companyId) throws Exception {
-		int count = MessageLocalServiceUtil.getCompanyMessagesCount(companyId);
+	protected void reindexMessages(long companyId)
+		throws PortalException, SystemException {
 
-		int pages = count / Indexer.DEFAULT_INTERVAL;
+		final Collection<Document> documents = new ArrayList<Document>();
 
-		for (int i = 0; i <= pages; i++) {
-			int start = (i * Indexer.DEFAULT_INTERVAL);
-			int end = start + Indexer.DEFAULT_INTERVAL;
+		ActionableDynamicQuery actionableDynamicQuery =
+			new MessageActionableDynamicQuery() {
 
-			reindexMessages(companyId, start, end);
-		}
-	}
+			@Override
+			protected void performAction(Object object) throws PortalException {
+				Message message = (Message)object;
 
-	protected void reindexMessages(long companyId, int start, int end)
-		throws Exception {
+				Document document = getDocument(message);
 
-		List<Message> messages = MessageLocalServiceUtil.getCompanyMessages(
-			companyId, start, end);
+				documents.add(document);
+			}
 
-		if (messages.isEmpty()) {
-			return;
-		}
+		};
 
-		Collection<Document> documents = new ArrayList<Document>();
+		actionableDynamicQuery.setCompanyId(companyId);
 
-		for (Message message : messages) {
-			Document document = getDocument(message);
+		actionableDynamicQuery.performActions();
 
-			documents.add(document);
-		}
-
-		SearchEngineUtil.updateDocuments(companyId, documents);
+		SearchEngineUtil.updateDocuments(
+			getSearchEngineId(), companyId, documents);
 	}
 
 }

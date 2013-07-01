@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -35,6 +35,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the KaleoTransition service. Represents a row in the &quot;KaleoTransition&quot; database table, with each column mapped to a property of this class.
@@ -96,58 +98,196 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 	public static long KALEODEFINITIONID_COLUMN_BITMASK = 4L;
 	public static long KALEONODEID_COLUMN_BITMASK = 8L;
 	public static long NAME_COLUMN_BITMASK = 16L;
+	public static long KALEOTRANSITIONID_COLUMN_BITMASK = 32L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoTransition"));
 
 	public KaleoTransitionModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _kaleoTransitionId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setKaleoTransitionId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_kaleoTransitionId);
+		return _kaleoTransitionId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return KaleoTransition.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return KaleoTransition.class.getName();
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("kaleoTransitionId", getKaleoTransitionId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("kaleoDefinitionId", getKaleoDefinitionId());
+		attributes.put("kaleoNodeId", getKaleoNodeId());
+		attributes.put("name", getName());
+		attributes.put("description", getDescription());
+		attributes.put("sourceKaleoNodeId", getSourceKaleoNodeId());
+		attributes.put("sourceKaleoNodeName", getSourceKaleoNodeName());
+		attributes.put("targetKaleoNodeId", getTargetKaleoNodeId());
+		attributes.put("targetKaleoNodeName", getTargetKaleoNodeName());
+		attributes.put("defaultTransition", getDefaultTransition());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long kaleoTransitionId = (Long)attributes.get("kaleoTransitionId");
+
+		if (kaleoTransitionId != null) {
+			setKaleoTransitionId(kaleoTransitionId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long kaleoDefinitionId = (Long)attributes.get("kaleoDefinitionId");
+
+		if (kaleoDefinitionId != null) {
+			setKaleoDefinitionId(kaleoDefinitionId);
+		}
+
+		Long kaleoNodeId = (Long)attributes.get("kaleoNodeId");
+
+		if (kaleoNodeId != null) {
+			setKaleoNodeId(kaleoNodeId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		Long sourceKaleoNodeId = (Long)attributes.get("sourceKaleoNodeId");
+
+		if (sourceKaleoNodeId != null) {
+			setSourceKaleoNodeId(sourceKaleoNodeId);
+		}
+
+		String sourceKaleoNodeName = (String)attributes.get(
+				"sourceKaleoNodeName");
+
+		if (sourceKaleoNodeName != null) {
+			setSourceKaleoNodeName(sourceKaleoNodeName);
+		}
+
+		Long targetKaleoNodeId = (Long)attributes.get("targetKaleoNodeId");
+
+		if (targetKaleoNodeId != null) {
+			setTargetKaleoNodeId(targetKaleoNodeId);
+		}
+
+		String targetKaleoNodeName = (String)attributes.get(
+				"targetKaleoNodeName");
+
+		if (targetKaleoNodeName != null) {
+			setTargetKaleoNodeName(targetKaleoNodeName);
+		}
+
+		Boolean defaultTransition = (Boolean)attributes.get("defaultTransition");
+
+		if (defaultTransition != null) {
+			setDefaultTransition(defaultTransition);
+		}
+	}
+
+	@Override
 	public long getKaleoTransitionId() {
 		return _kaleoTransitionId;
 	}
 
+	@Override
 	public void setKaleoTransitionId(long kaleoTransitionId) {
 		_columnBitmask = -1L;
 
 		_kaleoTransitionId = kaleoTransitionId;
 	}
 
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_groupId = groupId;
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -164,22 +304,27 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 		return _originalCompanyId;
 	}
 
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -189,30 +334,37 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	public long getKaleoDefinitionId() {
 		return _kaleoDefinitionId;
 	}
 
+	@Override
 	public void setKaleoDefinitionId(long kaleoDefinitionId) {
 		_columnBitmask |= KALEODEFINITIONID_COLUMN_BITMASK;
 
@@ -229,10 +381,12 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 		return _originalKaleoDefinitionId;
 	}
 
+	@Override
 	public long getKaleoNodeId() {
 		return _kaleoNodeId;
 	}
 
+	@Override
 	public void setKaleoNodeId(long kaleoNodeId) {
 		_columnBitmask |= KALEONODEID_COLUMN_BITMASK;
 
@@ -249,6 +403,7 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 		return _originalKaleoNodeId;
 	}
 
+	@Override
 	public String getName() {
 		if (_name == null) {
 			return StringPool.BLANK;
@@ -258,6 +413,7 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 		}
 	}
 
+	@Override
 	public void setName(String name) {
 		_columnBitmask |= NAME_COLUMN_BITMASK;
 
@@ -272,6 +428,7 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 		return GetterUtil.getString(_originalName);
 	}
 
+	@Override
 	public String getDescription() {
 		if (_description == null) {
 			return StringPool.BLANK;
@@ -281,18 +438,22 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 		}
 	}
 
+	@Override
 	public void setDescription(String description) {
 		_description = description;
 	}
 
+	@Override
 	public long getSourceKaleoNodeId() {
 		return _sourceKaleoNodeId;
 	}
 
+	@Override
 	public void setSourceKaleoNodeId(long sourceKaleoNodeId) {
 		_sourceKaleoNodeId = sourceKaleoNodeId;
 	}
 
+	@Override
 	public String getSourceKaleoNodeName() {
 		if (_sourceKaleoNodeName == null) {
 			return StringPool.BLANK;
@@ -302,18 +463,22 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 		}
 	}
 
+	@Override
 	public void setSourceKaleoNodeName(String sourceKaleoNodeName) {
 		_sourceKaleoNodeName = sourceKaleoNodeName;
 	}
 
+	@Override
 	public long getTargetKaleoNodeId() {
 		return _targetKaleoNodeId;
 	}
 
+	@Override
 	public void setTargetKaleoNodeId(long targetKaleoNodeId) {
 		_targetKaleoNodeId = targetKaleoNodeId;
 	}
 
+	@Override
 	public String getTargetKaleoNodeName() {
 		if (_targetKaleoNodeName == null) {
 			return StringPool.BLANK;
@@ -323,18 +488,22 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 		}
 	}
 
+	@Override
 	public void setTargetKaleoNodeName(String targetKaleoNodeName) {
 		_targetKaleoNodeName = targetKaleoNodeName;
 	}
 
+	@Override
 	public boolean getDefaultTransition() {
 		return _defaultTransition;
 	}
 
+	@Override
 	public boolean isDefaultTransition() {
 		return _defaultTransition;
 	}
 
+	@Override
 	public void setDefaultTransition(boolean defaultTransition) {
 		_columnBitmask |= DEFAULTTRANSITION_COLUMN_BITMASK;
 
@@ -356,29 +525,26 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 	}
 
 	@Override
-	public KaleoTransition toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (KaleoTransition)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
-					KaleoTransition.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
+			KaleoTransition.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public KaleoTransition toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (KaleoTransition)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -407,6 +573,7 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 		return kaleoTransitionImpl;
 	}
 
+	@Override
 	public int compareTo(KaleoTransition kaleoTransition) {
 		int value = 0;
 
@@ -429,18 +596,15 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof KaleoTransition)) {
 			return false;
 		}
 
-		KaleoTransition kaleoTransition = null;
-
-		try {
-			kaleoTransition = (KaleoTransition)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		KaleoTransition kaleoTransition = (KaleoTransition)obj;
 
 		long primaryKey = kaleoTransition.getPrimaryKey();
 
@@ -608,6 +772,7 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(52);
 
@@ -686,7 +851,7 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 	}
 
 	private static ClassLoader _classLoader = KaleoTransition.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			KaleoTransition.class
 		};
 	private long _kaleoTransitionId;
@@ -715,7 +880,6 @@ public class KaleoTransitionModelImpl extends BaseModelImpl<KaleoTransition>
 	private boolean _defaultTransition;
 	private boolean _originalDefaultTransition;
 	private boolean _setOriginalDefaultTransition;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
-	private KaleoTransition _escapedModelProxy;
+	private KaleoTransition _escapedModel;
 }

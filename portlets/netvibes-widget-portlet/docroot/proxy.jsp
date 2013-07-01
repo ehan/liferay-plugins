@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,8 +19,8 @@
 <html>
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<script type="text/javascript" src="http://www.netvibes.com/js/UWA/Utils/ifproxy.js"></script>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+	<script src="http://www.netvibes.com/js/UWA/Utils/ifproxy.js" type="text/javascript"></script>
 	<title>UWA Container Proxy</title>
 </head>
 

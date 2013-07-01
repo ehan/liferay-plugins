@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -28,7 +28,7 @@ else if (displayStyle.equals("vertical")) {
 %>
 
 <liferay-util:html-bottom outputKey="taglib_ui_social_bookmark_linkedin">
-	<script type="text/javascript" src="http://platform.linkedin.com/in.js"></script>
+	<script src="<%= HttpUtil.getProtocol(request) %>://platform.linkedin.com/in.js" type="text/javascript"></script>
 </liferay-util:html-bottom>
 
 <script <%= linkedinDisplayStyle %> data-url="<%= url %>" type="in/share"></script>

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 
 <workflow-definition
-	xmlns="urn:liferay.com:liferay-workflow_6.1.0"
+	xmlns="urn:liferay.com:liferay-workflow_6.2.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="urn:liferay.com:liferay-workflow_6.1.0 http://www.liferay.com/dtd/liferay-workflow-definition_6_2_0.xsd"
+	xsi:schemaLocation="urn:liferay.com:liferay-workflow_6.2.0 http://www.liferay.com/dtd/liferay-workflow-definition_6_2_0.xsd"
 >
 	<name>Scripted Single Approver</name>
 	<description>A single approver can approve a workflow content.</description>
@@ -11,7 +11,7 @@
 	<state>
 		<name>created</name>
 		<metadata>
-			<![CDATA[{"xy":[38,187]}]]>
+			<![CDATA[{"xy":[36,51]}]]>
 		</metadata>
 		<initial>true</initial>
 		<transitions>
@@ -25,14 +25,15 @@
 	<task>
 		<name>update</name>
 		<metadata>
-			<![CDATA[{"xy":[348,9]}]]>
+			<![CDATA[{"transitions":{"resubmit":{"bendpoints":[[303,140]]}},"xy":[328,199]}]]>
 		</metadata>
 		<actions>
 			<notification>
 				<name>Creator Modification Notification</name>
-				<template>Your submission was rejected by a reviewer, please modify and resubmit.</template>
-				<template-language>text</template-language>
+				<template>Your submission was rejected by ${userName}, please modify and resubmit.</template>
+				<template-language>freemarker</template-language>
 				<notification-type>email</notification-type>
+				<notification-type>user-notification</notification-type>
 				<execution-type>onAssignment</execution-type>
 			</notification>
 		</actions>
@@ -50,14 +51,26 @@
 	<task>
 		<name>review</name>
 		<metadata>
-			<![CDATA[{"xy":[171,174]}]]>
+			<![CDATA[{"xy":[168,36]}]]>
 		</metadata>
 		<actions>
 			<notification>
-				<name>Review Notification</name>
-				<template>You have a new submission waiting for your review in the workflow.</template>
-				<template-language>text</template-language>
+				<name>Review Completion Notification</name>
+				<template>
+					Your submission was reviewed and the reviewer has applied the following ${taskComments}.</template>
+				<template-language>freemarker</template-language>
 				<notification-type>email</notification-type>
+				<recipients>
+					<user />
+				</recipients>
+				<execution-type>onExit</execution-type>
+			</notification>
+			<notification>
+				<name>Review Notification</name>
+				<template>${userName} sent you a ${entryType} for review in the workflow.</template>
+				<template-language>freemarker</template-language>
+				<notification-type>email</notification-type>
+				<notification-type>user-notification</notification-type>
 				<execution-type>onAssignment</execution-type>
 			</notification>
 		</actions>
@@ -117,17 +130,22 @@
 	<state>
 		<name>approved</name>
 		<metadata>
-			<![CDATA[{"xy":[370,187]}]]>
+			<![CDATA[
+				{"xy":[380,51]}
+			]]>
 		</metadata>
 		<actions>
 			<action>
 				<name>approve</name>
 				<script>
 					<![CDATA[
-						Packages.com.liferay.portal.kernel.workflow.WorkflowStatusManagerUtil.updateStatus(Packages.com.liferay.portal.kernel.workflow.WorkflowConstants.toStatus("approved"), workflowContext);
+						import com.liferay.portal.kernel.workflow.WorkflowStatusManagerUtil;
+						import com.liferay.portal.kernel.workflow.WorkflowConstants;
+
+						WorkflowStatusManagerUtil.updateStatus(WorkflowConstants.toStatus("approved"), workflowContext);
 					]]>
 				</script>
-				<script-language>javascript</script-language>
+				<script-language>groovy</script-language>
 				<execution-type>onEntry</execution-type>
 			</action>
 		</actions>

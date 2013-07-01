@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -40,6 +40,7 @@ import java.util.Map;
 public class KaleoTaskAssignmentInstanceLocalServiceImpl
 	extends KaleoTaskAssignmentInstanceLocalServiceBaseImpl {
 
+	@Override
 	public KaleoTaskAssignmentInstance addKaleoTaskAssignmentInstance(
 			long groupId, KaleoTaskInstanceToken kaleoTaskInstanceToken,
 			String assigneeClassName, long assigneeClassPK,
@@ -91,11 +92,12 @@ public class KaleoTaskAssignmentInstanceLocalServiceImpl
 		kaleoTaskAssignmentInstance.setCompleted(false);
 
 		kaleoTaskAssignmentInstancePersistence.update(
-			kaleoTaskAssignmentInstance, false);
+			kaleoTaskAssignmentInstance);
 
 		return kaleoTaskAssignmentInstance;
 	}
 
+	@Override
 	public List<KaleoTaskAssignmentInstance> addTaskAssignmentInstances(
 			KaleoTaskInstanceToken kaleoTaskInstanceToken,
 			Collection<KaleoTaskAssignment> kaleoTaskAssignments,
@@ -126,6 +128,7 @@ public class KaleoTaskAssignmentInstanceLocalServiceImpl
 		return kaleoTaskAssignmentInstances;
 	}
 
+	@Override
 	public KaleoTaskAssignmentInstance assignKaleoTaskAssignmentInstance(
 			KaleoTaskInstanceToken kaleoTaskInstanceToken,
 			String assigneeClassName, long assigneeClassPK,
@@ -142,6 +145,7 @@ public class KaleoTaskAssignmentInstanceLocalServiceImpl
 		return kaleoTaskAssignmentInstance;
 	}
 
+	@Override
 	public KaleoTaskAssignmentInstance completeKaleoTaskInstanceToken(
 			long kaleoTaskInstanceTokenId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -163,17 +167,19 @@ public class KaleoTaskAssignmentInstanceLocalServiceImpl
 		kaleoTaskAssignmentInstance.setCompletionDate(new Date());
 
 		kaleoTaskAssignmentInstancePersistence.update(
-			kaleoTaskAssignmentInstance, false);
+			kaleoTaskAssignmentInstance);
 
 		return kaleoTaskAssignmentInstance;
 	}
 
+	@Override
 	public void deleteCompanyKaleoTaskAssignmentInstances(long companyId)
 		throws SystemException {
 
 		kaleoTaskAssignmentInstancePersistence.removeByCompanyId(companyId);
 	}
 
+	@Override
 	public void deleteKaleoDefinitionKaleoTaskAssignmentInstances(
 			long kaleoDefintionId)
 		throws SystemException {
@@ -182,6 +188,7 @@ public class KaleoTaskAssignmentInstanceLocalServiceImpl
 			kaleoDefintionId);
 	}
 
+	@Override
 	public void deleteKaleoInstanceKaleoTaskAssignmentInstances(
 			long kaleoInstanceId)
 		throws SystemException {
@@ -190,6 +197,7 @@ public class KaleoTaskAssignmentInstanceLocalServiceImpl
 			kaleoInstanceId);
 	}
 
+	@Override
 	public void deleteKaleoTaskAssignmentInstances(
 			KaleoTaskInstanceToken kaleoTaskInstanceToken)
 		throws SystemException {
@@ -207,6 +215,7 @@ public class KaleoTaskAssignmentInstanceLocalServiceImpl
 		}
 	}
 
+	@Override
 	public List<KaleoTaskAssignmentInstance> getKaleoTaskAssignmentInstances(
 			long kaleoTaskInstanceTokenId)
 		throws SystemException {

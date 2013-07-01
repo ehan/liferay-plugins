@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -32,7 +32,7 @@ import com.liferay.wsrp.model.WSRPProducer;
 import com.liferay.wsrp.service.WSRPConsumerLocalServiceUtil;
 import com.liferay.wsrp.service.WSRPConsumerPortletLocalServiceUtil;
 import com.liferay.wsrp.service.WSRPProducerLocalServiceUtil;
-import com.liferay.wsrp.util.WSRPConsumerManager;
+import com.liferay.wsrp.util.MarkupCharacterSetsUtil;
 import com.liferay.wsrp.util.WebKeys;
 
 import javax.portlet.ActionRequest;
@@ -48,8 +48,6 @@ public class AdminPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		checkPermissions(actionRequest);
-
 		long wsrpConsumerId = ParamUtil.getLong(
 			actionRequest, "wsrpConsumerId");
 
@@ -59,8 +57,6 @@ public class AdminPortlet extends MVCPortlet {
 	public void deleteWSRPConsumerPortlet(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
-
-		checkPermissions(actionRequest);
 
 		long wsrpConsumerPortletId = ParamUtil.getLong(
 			actionRequest, "wsrpConsumerPortletId");
@@ -73,8 +69,6 @@ public class AdminPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		checkPermissions(actionRequest);
-
 		long wsrpProducerId = ParamUtil.getLong(
 			actionRequest, "wsrpProducerId");
 
@@ -85,25 +79,23 @@ public class AdminPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		long wsrpConsumerId = ParamUtil.getLong(
-			actionRequest, "wsrpConsumerId");
-
-		String userToken = WSRPConsumerManager.getUserToken(actionRequest);
-
-		WSRPConsumerLocalServiceUtil.restartConsumer(wsrpConsumerId, userToken);
+		try {
+			doRestartConsumer(actionRequest, actionResponse);
+		}
+		catch (PortalException pe) {
+			SessionErrors.add(actionRequest, "restartConsumer");
+		}
 	}
 
 	public void updateServiceDescription(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		checkPermissions(actionRequest);
-
 		try {
 			doUpdateServiceDescription(actionRequest, actionResponse);
 		}
 		catch (PortalException pe) {
-			SessionErrors.add(actionRequest, pe.getClass().getName());
+			SessionErrors.add(actionRequest, "updateServiceDescription");
 		}
 	}
 
@@ -111,13 +103,11 @@ public class AdminPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		checkPermissions(actionRequest);
-
 		try {
 			doUpdateWSRPConsumer(actionRequest, actionResponse);
 		}
 		catch (PortalException pe) {
-			SessionErrors.add(actionRequest, pe.getClass().getName());
+			SessionErrors.add(actionRequest, pe.getClass());
 		}
 	}
 
@@ -125,13 +115,11 @@ public class AdminPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		checkPermissions(actionRequest);
-
 		try {
 			doUpdateWSRPConsumerPortlet(actionRequest, actionResponse);
 		}
 		catch (PortalException pe) {
-			SessionErrors.add(actionRequest, pe.getClass().getName());
+			SessionErrors.add(actionRequest, pe.getClass());
 		}
 	}
 
@@ -139,13 +127,11 @@ public class AdminPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		checkPermissions(actionRequest);
-
 		try {
 			doUpdateWSRPConsumerRegistration(actionRequest, actionResponse);
 		}
 		catch (PortalException pe) {
-			SessionErrors.add(actionRequest, pe.getClass().getName());
+			SessionErrors.add(actionRequest, pe.getClass());
 		}
 	}
 
@@ -153,16 +139,15 @@ public class AdminPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		checkPermissions(actionRequest);
-
 		try {
 			doUpdateWSRPProducer(actionRequest, actionResponse);
 		}
 		catch (PortalException pe) {
-			SessionErrors.add(actionRequest, pe.getClass().getName());
+			SessionErrors.add(actionRequest, pe.getClass());
 		}
 	}
 
+	@Override
 	protected void checkPermissions(PortletRequest portletRequest)
 		throws Exception {
 
@@ -177,17 +162,24 @@ public class AdminPortlet extends MVCPortlet {
 		}
 	}
 
-	protected void doUpdateServiceDescription(
-		ActionRequest actionRequest, ActionResponse actionResponse)
+	protected void doRestartConsumer(
+			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		long wsrpConsumerId = ParamUtil.getLong(
 			actionRequest, "wsrpConsumerId");
 
-		String userToken = WSRPConsumerManager.getUserToken(actionRequest);
+		WSRPConsumerLocalServiceUtil.restartConsumer(wsrpConsumerId);
+	}
 
-		WSRPConsumerLocalServiceUtil.updateServiceDescription(
-			wsrpConsumerId, userToken);
+	protected void doUpdateServiceDescription(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		long wsrpConsumerId = ParamUtil.getLong(
+			actionRequest, "wsrpConsumerId");
+
+		WSRPConsumerLocalServiceUtil.updateServiceDescription(wsrpConsumerId);
 	}
 
 	protected void doUpdateWSRPConsumer(
@@ -205,8 +197,11 @@ public class AdminPortlet extends MVCPortlet {
 		String url = ParamUtil.getString(actionRequest, "url");
 		String forwardCookies = ParamUtil.getString(
 			actionRequest, "forwardCookies");
-
-		String userToken = WSRPConsumerManager.getUserToken(actionRequest);
+		String forwardHeaders = ParamUtil.getString(
+			actionRequest, "forwardHeaders");
+		String markupCharacterSets =
+			MarkupCharacterSetsUtil.getSupportedMarkupCharacterSets(
+				ParamUtil.getString(actionRequest, "markupCharacterSets"));
 
 		if (wsrpConsumerId <= 0) {
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
@@ -214,12 +209,13 @@ public class AdminPortlet extends MVCPortlet {
 
 			WSRPConsumerLocalServiceUtil.addWSRPConsumer(
 				themeDisplay.getCompanyId(), adminPortletId, name, url,
-				forwardCookies, userToken, serviceContext);
+				forwardCookies, forwardHeaders, markupCharacterSets,
+				serviceContext);
 		}
 		else {
 			WSRPConsumerLocalServiceUtil.updateWSRPConsumer(
 				wsrpConsumerId, adminPortletId, name, url, forwardCookies,
-				userToken);
+				forwardHeaders, markupCharacterSets);
 		}
 	}
 
@@ -236,14 +232,12 @@ public class AdminPortlet extends MVCPortlet {
 		String portletHandle = ParamUtil.getString(
 			actionRequest, "portletHandle");
 
-		String userToken = WSRPConsumerManager.getUserToken(actionRequest);
-
 		if (wsrpConsumerPortletId <= 0) {
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
 				WSRPConsumerPortlet.class.getName(), actionRequest);
 
 			WSRPConsumerPortletLocalServiceUtil.addWSRPConsumerPortlet(
-				wsrpConsumerId, name, portletHandle, userToken, serviceContext);
+				wsrpConsumerId, name, portletHandle, serviceContext);
 		}
 		else {
 			WSRPConsumerPortletLocalServiceUtil.updateWSRPConsumerPortlet(
@@ -287,11 +281,9 @@ public class AdminPortlet extends MVCPortlet {
 		String registrationHandle = ParamUtil.getString(
 			actionRequest, "registrationHandle");
 
-		String userToken = WSRPConsumerManager.getUserToken(actionRequest);
-
 		WSRPConsumerLocalServiceUtil.registerWSRPConsumer(
 			wsrpConsumerId, adminPortletId, registrationProperties,
-			registrationHandle, userToken);
+			registrationHandle);
 	}
 
 	protected void doUpdateWSRPProducer(

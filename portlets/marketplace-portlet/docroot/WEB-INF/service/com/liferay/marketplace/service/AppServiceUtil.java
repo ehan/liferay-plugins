@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,16 +15,16 @@
 package com.liferay.marketplace.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableService;
 
 /**
- * The utility for the app remote service. This utility wraps {@link com.liferay.marketplace.service.impl.AppServiceImpl} and is the primary access point for service operations in application layer code running on a remote server.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
+ * Provides the remote service utility for App. This utility wraps
+ * {@link com.liferay.marketplace.service.impl.AppServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on a remote server. Methods of this service are expected to have security
+ * checks based on the propagated JAAS credentials because this service can be
+ * accessed remotely.
  *
  * @author Ryan Park
  * @see AppService
@@ -38,17 +38,35 @@ public class AppServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.marketplace.service.impl.AppServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
-	public static com.liferay.marketplace.model.App addApp(long remoteAppId,
-		java.lang.String version, java.io.InputStream inputStream)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().addApp(remoteAppId, version, inputStream);
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
 	}
 
-	public static void deleteApp(long appId)
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
+	public static com.liferay.marketplace.model.App deleteApp(long appId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteApp(appId);
+		return getService().deleteApp(appId);
 	}
 
 	public static void installApp(long remoteAppId)
@@ -63,11 +81,11 @@ public class AppServiceUtil {
 		getService().uninstallApp(remoteAppId);
 	}
 
-	public static com.liferay.marketplace.model.App updateApp(long appId,
-		java.lang.String version, java.io.InputStream inputStream)
+	public static com.liferay.marketplace.model.App updateApp(
+		long remoteAppId, java.lang.String version, java.io.File file)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getService().updateApp(appId, version, inputStream);
+		return getService().updateApp(remoteAppId, version, file);
 	}
 
 	public static void clearService() {
@@ -76,32 +94,26 @@ public class AppServiceUtil {
 
 	public static AppService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableService invokableService = (InvokableService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					AppService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					AppService.class.getName(), portletClassLoader);
-
-			_service = new AppServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableService instanceof AppService) {
+				_service = (AppService)invokableService;
+			}
+			else {
+				_service = new AppServiceClp(invokableService);
+			}
 
 			ReferenceRegistry.registerReference(AppServiceUtil.class, "_service");
-			MethodCache.remove(AppService.class);
 		}
 
 		return _service;
 	}
 
+	/**
+	 * @deprecated As of 6.2.0
+	 */
 	public void setService(AppService service) {
-		MethodCache.remove(AppService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(AppServiceUtil.class, "_service");
-		MethodCache.remove(AppService.class);
 	}
 
 	private static AppService _service;

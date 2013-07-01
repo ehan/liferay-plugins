@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -77,7 +77,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		message.setSize(getSize(messageId, body));
 		message.setRemoteMessageId(remoteMessageId);
 
-		messagePersistence.update(message, false);
+		messagePersistence.update(message);
 
 		// Indexer
 
@@ -89,16 +89,16 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 	}
 
 	@Override
-	public void deleteMessage(long messageId)
+	public Message deleteMessage(long messageId)
 		throws PortalException, SystemException {
 
 		Message message = messagePersistence.findByPrimaryKey(messageId);
 
-		deleteMessage(message);
+		return deleteMessage(message);
 	}
 
 	@Override
-	public void deleteMessage(Message message)
+	public Message deleteMessage(Message message)
 		throws PortalException, SystemException {
 
 		// Message
@@ -115,6 +115,8 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		Indexer indexer = IndexerRegistryUtil.getIndexer(Message.class);
 
 		indexer.delete(message);
+
+		return message;
 	}
 
 	public void deleteMessages(long folderId)
@@ -131,7 +133,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		throws SystemException {
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Message.class, getClass().getClassLoader());
+			Message.class, getClassLoader());
 
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("accountId", accountId));
 		dynamicQuery.add(
@@ -166,7 +168,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		throws SystemException {
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Message.class, getClass().getClassLoader());
+			Message.class, getClassLoader());
 
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("folderId", folderId));
 		dynamicQuery.add(
@@ -187,7 +189,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Message.class, getClass().getClassLoader());
+			Message.class, getClassLoader());
 
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("folderId", folderId));
 		dynamicQuery.add(
@@ -216,15 +218,16 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 			String orderByType)
 		throws SystemException {
 
-		DynamicQuery countQuery = DynamicQueryFactoryUtil.forClass(
-			Message.class, getClass().getClassLoader());
+		DynamicQuery countDynamicQuery = DynamicQueryFactoryUtil.forClass(
+			Message.class, getClassLoader());
 
-		DynamicQuery messageQuery = DynamicQueryFactoryUtil.forClass(
-			Message.class, getClass().getClassLoader());
+		countDynamicQuery.add(RestrictionsFactoryUtil.eq("folderId", folderId));
 
-		countQuery.add(RestrictionsFactoryUtil.eq("folderId", folderId));
+		DynamicQuery messageDynamicQuery = DynamicQueryFactoryUtil.forClass(
+			Message.class, getClassLoader());
 
-		messageQuery.add(RestrictionsFactoryUtil.eq("folderId", folderId));
+		messageDynamicQuery.add(
+			RestrictionsFactoryUtil.eq("folderId", folderId));
 
 		if (Validator.isNotNull(keywords)) {
 			String value = "%" + keywords + "%";
@@ -234,25 +237,26 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 			disjunction.add(RestrictionsFactoryUtil.ilike("subject", value));
 			disjunction.add(RestrictionsFactoryUtil.ilike("body", value));
 
-			countQuery.add(disjunction);
+			countDynamicQuery.add(disjunction);
 
-			messageQuery.add(disjunction);
+			messageDynamicQuery.add(disjunction);
 		}
 
 		if (orderByType.equals("desc")) {
-			messageQuery.addOrder(OrderFactoryUtil.desc(orderByField));
+			messageDynamicQuery.addOrder(OrderFactoryUtil.desc(orderByField));
 		}
 		else {
-			messageQuery.addOrder(OrderFactoryUtil.asc(orderByField));
+			messageDynamicQuery.addOrder(OrderFactoryUtil.asc(orderByField));
 		}
 
 		int start = messagesPerPage * (pageNumber - 1);
 		int end = messagesPerPage * pageNumber;
 
 		messages.addAll(
-			messagePersistence.findWithDynamicQuery(messageQuery, start, end));
+			messagePersistence.findWithDynamicQuery(
+				messageDynamicQuery, start, end));
 
-		return (int)dynamicQueryCount(countQuery);
+		return (int)dynamicQueryCount(countDynamicQuery);
 	}
 
 	public Message updateContent(long messageId, String body, String flags)
@@ -266,7 +270,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		message.setFlags(flags);
 		message.setSize(getSize(messageId, body));
 
-		messagePersistence.update(message, false);
+		messagePersistence.update(message);
 
 		return message;
 	}
@@ -287,7 +291,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 			message.setFlags(StringUtil.remove(flags, flagString));
 		}
 
-		return messagePersistence.update(message, false);
+		return messagePersistence.update(message);
 	}
 
 	public Message updateMessage(
@@ -314,7 +318,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		message.setSize(getSize(messageId, body));
 		message.setRemoteMessageId(remoteMessageId);
 
-		messagePersistence.update(message, false);
+		messagePersistence.update(message);
 
 		// Indexer
 
@@ -341,9 +345,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		return StringUtil.shorten(HtmlContentUtil.getPlainText(body), 50);
 	}
 
-	protected long getSize(long messageId, String body)
-		throws SystemException {
-
+	protected long getSize(long messageId, String body) throws SystemException {
 		if (Validator.isNull(body)) {
 			return 0;
 		}

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,16 +15,16 @@
 package com.liferay.so.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
- * The utility for the member request local service. This utility wraps {@link com.liferay.so.service.impl.MemberRequestLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for MemberRequest. This utility wraps
+ * {@link com.liferay.so.service.impl.MemberRequestLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see MemberRequestLocalService
@@ -67,25 +67,32 @@ public class MemberRequestLocalServiceUtil {
 	* Deletes the member request with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param memberRequestId the primary key of the member request
+	* @return the member request that was removed
 	* @throws PortalException if a member request with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deleteMemberRequest(long memberRequestId)
+	public static com.liferay.so.model.MemberRequest deleteMemberRequest(
+		long memberRequestId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteMemberRequest(memberRequestId);
+		return getService().deleteMemberRequest(memberRequestId);
 	}
 
 	/**
 	* Deletes the member request from the database. Also notifies the appropriate model listeners.
 	*
 	* @param memberRequest the member request
+	* @return the member request that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deleteMemberRequest(
+	public static com.liferay.so.model.MemberRequest deleteMemberRequest(
 		com.liferay.so.model.MemberRequest memberRequest)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteMemberRequest(memberRequest);
+		return getService().deleteMemberRequest(memberRequest);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
 	}
 
 	/**
@@ -106,7 +113,7 @@ public class MemberRequestLocalServiceUtil {
 	* Performs a dynamic query on the database and returns a range of the matching rows.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.so.model.impl.MemberRequestModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param dynamicQuery the dynamic query
@@ -126,7 +133,7 @@ public class MemberRequestLocalServiceUtil {
 	* Performs a dynamic query on the database and returns an ordered range of the matching rows.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.so.model.impl.MemberRequestModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param dynamicQuery the dynamic query
@@ -157,6 +164,21 @@ public class MemberRequestLocalServiceUtil {
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().dynamicQueryCount(dynamicQuery);
+	}
+
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	public static long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
 	public static com.liferay.so.model.MemberRequest fetchMemberRequest(
@@ -191,7 +213,7 @@ public class MemberRequestLocalServiceUtil {
 	* Returns a range of all the member requests.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.so.model.impl.MemberRequestModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of member requests
@@ -230,20 +252,6 @@ public class MemberRequestLocalServiceUtil {
 	}
 
 	/**
-	* Updates the member request in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param memberRequest the member request
-	* @param merge whether to merge the member request with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
-	* @return the member request that was updated
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest updateMemberRequest(
-		com.liferay.so.model.MemberRequest memberRequest, boolean merge)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().updateMemberRequest(memberRequest, merge);
-	}
-
-	/**
 	* Returns the Spring bean ID for this bean.
 	*
 	* @return the Spring bean ID for this bean
@@ -261,35 +269,43 @@ public class MemberRequestLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
 	public static com.liferay.so.model.MemberRequest addMemberRequest(
 		long userId, long groupId, long receiverUserId,
 		java.lang.String receiverEmailAddress, long invitedRoleId,
-		long invitedTeamId, com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		long invitedTeamId,
+		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .addMemberRequest(userId, groupId, receiverUserId,
-			receiverEmailAddress, invitedRoleId, invitedTeamId, themeDisplay);
+			receiverEmailAddress, invitedRoleId, invitedTeamId, serviceContext);
 	}
 
 	public static void addMemberRequests(long userId, long groupId,
 		long[] receiverUserIds, long invitedRoleId, long invitedTeamId,
-		com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		getService()
 			.addMemberRequests(userId, groupId, receiverUserIds, invitedRoleId,
-			invitedTeamId, themeDisplay);
+			invitedTeamId, serviceContext);
 	}
 
 	public static void addMemberRequests(long userId, long groupId,
 		java.lang.String[] emailAddresses, long invitedRoleId,
-		long invitedTeamId, com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		long invitedTeamId,
+		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		getService()
 			.addMemberRequests(userId, groupId, emailAddresses, invitedRoleId,
-			invitedTeamId, themeDisplay);
+			invitedTeamId, serviceContext);
 	}
 
 	public static com.liferay.so.model.MemberRequest getMemberRequest(
@@ -349,35 +365,27 @@ public class MemberRequestLocalServiceUtil {
 
 	public static MemberRequestLocalService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					MemberRequestLocalService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					MemberRequestLocalService.class.getName(),
-					portletClassLoader);
-
-			_service = new MemberRequestLocalServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableLocalService instanceof MemberRequestLocalService) {
+				_service = (MemberRequestLocalService)invokableLocalService;
+			}
+			else {
+				_service = new MemberRequestLocalServiceClp(invokableLocalService);
+			}
 
 			ReferenceRegistry.registerReference(MemberRequestLocalServiceUtil.class,
 				"_service");
-			MethodCache.remove(MemberRequestLocalService.class);
 		}
 
 		return _service;
 	}
 
+	/**
+	 * @deprecated As of 6.2.0
+	 */
 	public void setService(MemberRequestLocalService service) {
-		MethodCache.remove(MemberRequestLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(MemberRequestLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(MemberRequestLocalService.class);
 	}
 
 	private static MemberRequestLocalService _service;

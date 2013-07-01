@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,15 +14,20 @@
 
 package com.liferay.knowledgebase.model;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
  * This class is a wrapper for {@link KBTemplate}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       KBTemplate
+ * @author Brian Wing Shun Chan
+ * @see KBTemplate
  * @generated
  */
 public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
@@ -30,12 +35,95 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 		_kbTemplate = kbTemplate;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return KBTemplate.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return KBTemplate.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("uuid", getUuid());
+		attributes.put("kbTemplateId", getKbTemplateId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("title", getTitle());
+		attributes.put("content", getContent());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
+		Long kbTemplateId = (Long)attributes.get("kbTemplateId");
+
+		if (kbTemplateId != null) {
+			setKbTemplateId(kbTemplateId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String title = (String)attributes.get("title");
+
+		if (title != null) {
+			setTitle(title);
+		}
+
+		String content = (String)attributes.get("content");
+
+		if (content != null) {
+			setContent(content);
+		}
 	}
 
 	/**
@@ -43,6 +131,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @return the primary key of this k b template
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _kbTemplate.getPrimaryKey();
 	}
@@ -52,6 +141,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @param primaryKey the primary key of this k b template
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_kbTemplate.setPrimaryKey(primaryKey);
 	}
@@ -61,6 +151,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @return the uuid of this k b template
 	*/
+	@Override
 	public java.lang.String getUuid() {
 		return _kbTemplate.getUuid();
 	}
@@ -70,6 +161,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @param uuid the uuid of this k b template
 	*/
+	@Override
 	public void setUuid(java.lang.String uuid) {
 		_kbTemplate.setUuid(uuid);
 	}
@@ -79,6 +171,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @return the kb template ID of this k b template
 	*/
+	@Override
 	public long getKbTemplateId() {
 		return _kbTemplate.getKbTemplateId();
 	}
@@ -88,6 +181,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @param kbTemplateId the kb template ID of this k b template
 	*/
+	@Override
 	public void setKbTemplateId(long kbTemplateId) {
 		_kbTemplate.setKbTemplateId(kbTemplateId);
 	}
@@ -97,6 +191,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @return the group ID of this k b template
 	*/
+	@Override
 	public long getGroupId() {
 		return _kbTemplate.getGroupId();
 	}
@@ -106,6 +201,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @param groupId the group ID of this k b template
 	*/
+	@Override
 	public void setGroupId(long groupId) {
 		_kbTemplate.setGroupId(groupId);
 	}
@@ -115,6 +211,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @return the company ID of this k b template
 	*/
+	@Override
 	public long getCompanyId() {
 		return _kbTemplate.getCompanyId();
 	}
@@ -124,6 +221,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @param companyId the company ID of this k b template
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_kbTemplate.setCompanyId(companyId);
 	}
@@ -133,6 +231,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @return the user ID of this k b template
 	*/
+	@Override
 	public long getUserId() {
 		return _kbTemplate.getUserId();
 	}
@@ -142,6 +241,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @param userId the user ID of this k b template
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_kbTemplate.setUserId(userId);
 	}
@@ -152,6 +252,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	* @return the user uuid of this k b template
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _kbTemplate.getUserUuid();
@@ -162,6 +263,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @param userUuid the user uuid of this k b template
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_kbTemplate.setUserUuid(userUuid);
 	}
@@ -171,6 +273,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @return the user name of this k b template
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _kbTemplate.getUserName();
 	}
@@ -180,6 +283,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @param userName the user name of this k b template
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_kbTemplate.setUserName(userName);
 	}
@@ -189,6 +293,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @return the create date of this k b template
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _kbTemplate.getCreateDate();
 	}
@@ -198,6 +303,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @param createDate the create date of this k b template
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_kbTemplate.setCreateDate(createDate);
 	}
@@ -207,6 +313,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @return the modified date of this k b template
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _kbTemplate.getModifiedDate();
 	}
@@ -216,6 +323,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @param modifiedDate the modified date of this k b template
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_kbTemplate.setModifiedDate(modifiedDate);
 	}
@@ -225,6 +333,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @return the title of this k b template
 	*/
+	@Override
 	public java.lang.String getTitle() {
 		return _kbTemplate.getTitle();
 	}
@@ -234,6 +343,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @param title the title of this k b template
 	*/
+	@Override
 	public void setTitle(java.lang.String title) {
 		_kbTemplate.setTitle(title);
 	}
@@ -243,6 +353,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @return the content of this k b template
 	*/
+	@Override
 	public java.lang.String getContent() {
 		return _kbTemplate.getContent();
 	}
@@ -252,42 +363,64 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 	*
 	* @param content the content of this k b template
 	*/
+	@Override
 	public void setContent(java.lang.String content) {
 		_kbTemplate.setContent(content);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _kbTemplate.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_kbTemplate.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _kbTemplate.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_kbTemplate.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _kbTemplate.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _kbTemplate.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_kbTemplate.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _kbTemplate.getExpandoBridge();
 	}
 
+	@Override
+	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_kbTemplate.setExpandoBridgeAttributes(baseModel);
+	}
+
+	@Override
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_kbTemplate.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_kbTemplate.setExpandoBridgeAttributes(serviceContext);
@@ -298,6 +431,7 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 		return new KBTemplateWrapper((KBTemplate)_kbTemplate.clone());
 	}
 
+	@Override
 	public int compareTo(com.liferay.knowledgebase.model.KBTemplate kbTemplate) {
 		return _kbTemplate.compareTo(kbTemplate);
 	}
@@ -307,12 +441,19 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 		return _kbTemplate.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.knowledgebase.model.KBTemplate> toCacheModel() {
 		return _kbTemplate.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.knowledgebase.model.KBTemplate toEscapedModel() {
 		return new KBTemplateWrapper(_kbTemplate.toEscapedModel());
+	}
+
+	@Override
+	public com.liferay.knowledgebase.model.KBTemplate toUnescapedModel() {
+		return new KBTemplateWrapper(_kbTemplate.toUnescapedModel());
 	}
 
 	@Override
@@ -320,26 +461,49 @@ public class KBTemplateWrapper implements KBTemplate, ModelWrapper<KBTemplate> {
 		return _kbTemplate.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _kbTemplate.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_kbTemplate.persist();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof KBTemplateWrapper)) {
+			return false;
+		}
+
+		KBTemplateWrapper kbTemplateWrapper = (KBTemplateWrapper)obj;
+
+		if (Validator.equals(_kbTemplate, kbTemplateWrapper._kbTemplate)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public KBTemplate getWrappedKBTemplate() {
 		return _kbTemplate;
 	}
 
+	@Override
 	public KBTemplate getWrappedModel() {
 		return _kbTemplate;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_kbTemplate.resetOriginalValues();
 	}

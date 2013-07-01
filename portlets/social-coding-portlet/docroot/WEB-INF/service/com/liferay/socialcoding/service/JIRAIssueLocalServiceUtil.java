@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,16 +15,16 @@
 package com.liferay.socialcoding.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
- * The utility for the j i r a issue local service. This utility wraps {@link com.liferay.socialcoding.service.impl.JIRAIssueLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for JIRAIssue. This utility wraps
+ * {@link com.liferay.socialcoding.service.impl.JIRAIssueLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see JIRAIssueLocalService
@@ -67,25 +67,32 @@ public class JIRAIssueLocalServiceUtil {
 	* Deletes the j i r a issue with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param jiraIssueId the primary key of the j i r a issue
+	* @return the j i r a issue that was removed
 	* @throws PortalException if a j i r a issue with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deleteJIRAIssue(long jiraIssueId)
+	public static com.liferay.socialcoding.model.JIRAIssue deleteJIRAIssue(
+		long jiraIssueId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteJIRAIssue(jiraIssueId);
+		return getService().deleteJIRAIssue(jiraIssueId);
 	}
 
 	/**
 	* Deletes the j i r a issue from the database. Also notifies the appropriate model listeners.
 	*
 	* @param jiraIssue the j i r a issue
+	* @return the j i r a issue that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deleteJIRAIssue(
+	public static com.liferay.socialcoding.model.JIRAIssue deleteJIRAIssue(
 		com.liferay.socialcoding.model.JIRAIssue jiraIssue)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteJIRAIssue(jiraIssue);
+		return getService().deleteJIRAIssue(jiraIssue);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
 	}
 
 	/**
@@ -106,7 +113,7 @@ public class JIRAIssueLocalServiceUtil {
 	* Performs a dynamic query on the database and returns a range of the matching rows.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param dynamicQuery the dynamic query
@@ -126,7 +133,7 @@ public class JIRAIssueLocalServiceUtil {
 	* Performs a dynamic query on the database and returns an ordered range of the matching rows.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param dynamicQuery the dynamic query
@@ -157,6 +164,21 @@ public class JIRAIssueLocalServiceUtil {
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().dynamicQueryCount(dynamicQuery);
+	}
+
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	public static long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
 	public static com.liferay.socialcoding.model.JIRAIssue fetchJIRAIssue(
@@ -191,7 +213,7 @@ public class JIRAIssueLocalServiceUtil {
 	* Returns a range of all the j i r a issues.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of j i r a issues
@@ -230,20 +252,6 @@ public class JIRAIssueLocalServiceUtil {
 	}
 
 	/**
-	* Updates the j i r a issue in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param jiraIssue the j i r a issue
-	* @param merge whether to merge the j i r a issue with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
-	* @return the j i r a issue that was updated
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.socialcoding.model.JIRAIssue updateJIRAIssue(
-		com.liferay.socialcoding.model.JIRAIssue jiraIssue, boolean merge)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().updateJIRAIssue(jiraIssue, merge);
-	}
-
-	/**
 	* Returns the Spring bean ID for this bean.
 	*
 	* @return the Spring bean ID for this bean
@@ -261,12 +269,10 @@ public class JIRAIssueLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
-		long projectId, java.lang.String assigneeJiraUserId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getAssigneeJIRAIssues(projectId, assigneeJiraUserId, start,
-			end);
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
 	public static java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
@@ -279,6 +285,14 @@ public class JIRAIssueLocalServiceUtil {
 	}
 
 	public static java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
+		long projectId, java.lang.String assigneeJiraUserId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getAssigneeJIRAIssues(projectId, assigneeJiraUserId, start,
+			end);
+	}
+
+	public static java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
 		long projectId, java.lang.String assigneeJiraUserId,
 		java.lang.String status, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -287,19 +301,19 @@ public class JIRAIssueLocalServiceUtil {
 			status, start, end);
 	}
 
-	public static int getAssigneeJIRAIssuesCount(long projectId,
-		java.lang.String assigneeJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getAssigneeJIRAIssuesCount(projectId, assigneeJiraUserId);
-	}
-
 	public static int getAssigneeJIRAIssuesCount(java.util.Date modifiedDate,
 		long projectId, java.lang.String assigneeJiraUserId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .getAssigneeJIRAIssuesCount(modifiedDate, projectId,
 			assigneeJiraUserId);
+	}
+
+	public static int getAssigneeJIRAIssuesCount(long projectId,
+		java.lang.String assigneeJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getAssigneeJIRAIssuesCount(projectId, assigneeJiraUserId);
 	}
 
 	public static int getAssigneeJIRAIssuesCount(long projectId,
@@ -350,20 +364,20 @@ public class JIRAIssueLocalServiceUtil {
 	}
 
 	public static java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
-		long projectId, java.lang.String reporterJiraUserId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getReporterJIRAIssues(projectId, reporterJiraUserId, start,
-			end);
-	}
-
-	public static java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
 		java.util.Date modifiedDate, long projectId,
 		java.lang.String reporterJiraUserId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .getReporterJIRAIssues(modifiedDate, projectId,
 			reporterJiraUserId, start, end);
+	}
+
+	public static java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
+		long projectId, java.lang.String reporterJiraUserId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getReporterJIRAIssues(projectId, reporterJiraUserId, start,
+			end);
 	}
 
 	public static java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
@@ -375,19 +389,19 @@ public class JIRAIssueLocalServiceUtil {
 			status, start, end);
 	}
 
-	public static int getReporterJIRAIssuesCount(long projectId,
-		java.lang.String reporterJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getReporterJIRAIssuesCount(projectId, reporterJiraUserId);
-	}
-
 	public static int getReporterJIRAIssuesCount(java.util.Date modifiedDate,
 		long projectId, java.lang.String reporterJiraUserId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .getReporterJIRAIssuesCount(modifiedDate, projectId,
 			reporterJiraUserId);
+	}
+
+	public static int getReporterJIRAIssuesCount(long projectId,
+		java.lang.String reporterJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getReporterJIRAIssuesCount(projectId, reporterJiraUserId);
 	}
 
 	public static int getReporterJIRAIssuesCount(long projectId,
@@ -410,34 +424,27 @@ public class JIRAIssueLocalServiceUtil {
 
 	public static JIRAIssueLocalService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					JIRAIssueLocalService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					JIRAIssueLocalService.class.getName(), portletClassLoader);
-
-			_service = new JIRAIssueLocalServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableLocalService instanceof JIRAIssueLocalService) {
+				_service = (JIRAIssueLocalService)invokableLocalService;
+			}
+			else {
+				_service = new JIRAIssueLocalServiceClp(invokableLocalService);
+			}
 
 			ReferenceRegistry.registerReference(JIRAIssueLocalServiceUtil.class,
 				"_service");
-			MethodCache.remove(JIRAIssueLocalService.class);
 		}
 
 		return _service;
 	}
 
+	/**
+	 * @deprecated As of 6.2.0
+	 */
 	public void setService(JIRAIssueLocalService service) {
-		MethodCache.remove(JIRAIssueLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(JIRAIssueLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(JIRAIssueLocalService.class);
 	}
 
 	private static JIRAIssueLocalService _service;

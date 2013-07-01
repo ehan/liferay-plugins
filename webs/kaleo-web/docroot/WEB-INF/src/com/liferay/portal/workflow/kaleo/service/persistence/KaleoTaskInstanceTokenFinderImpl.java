@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,15 +21,20 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.CalendarUtil;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserGroup;
+import com.liferay.portal.model.UserGroupGroupRole;
 import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.UserGroupGroupRoleLocalServiceUtil;
+import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -51,12 +56,13 @@ public class KaleoTaskInstanceTokenFinderImpl
 	extends BasePersistenceImpl<KaleoTaskInstanceToken>
 	implements KaleoTaskInstanceTokenFinder {
 
-	public static String COUNT_BY_C_KTAI =
+	public static final String COUNT_BY_C_KTAI =
 		KaleoTaskInstanceTokenFinder.class.getName() + ".countByC_KTAI";
 
-	public static String FIND_BY_C_KTAI =
+	public static final String FIND_BY_C_KTAI =
 		KaleoTaskInstanceTokenFinder.class.getName() + ".findByC_KTAI";
 
+	@Override
 	public int countKaleoTaskInstanceTokens(
 			KaleoTaskInstanceTokenQuery kaleoTaskInstanceTokenQuery)
 		throws SystemException {
@@ -89,6 +95,7 @@ public class KaleoTaskInstanceTokenFinderImpl
 		}
 	}
 
+	@Override
 	public List<KaleoTaskInstanceToken> findKaleoTaskInstanceTokens(
 			KaleoTaskInstanceTokenQuery kaleoTaskInstanceTokenQuery)
 		throws SystemException {
@@ -252,6 +259,26 @@ public class KaleoTaskInstanceTokenFinderImpl
 				kaleoTaskInstanceTokenQuery.getOrderByComparator());
 
 			sql = sb.toString();
+
+			OrderByComparator obc =
+				kaleoTaskInstanceTokenQuery.getOrderByComparator();
+
+			String[] orderByFields = obc.getOrderByFields();
+
+			sb = new StringBundler(orderByFields.length * 3 + 1);
+
+			sb.append(
+				"DISTINCT KaleoTaskInstanceToken.kaleoTaskInstanceTokenId");
+
+			for (String orderByField : orderByFields) {
+				sb.append(", ");
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByField);
+			}
+
+			sql = sql.replace(
+				"DISTINCT KaleoTaskInstanceToken.kaleoTaskInstanceTokenId",
+				sb.toString());
 		}
 
 		SQLQuery q = session.createSQLQuery(sql);
@@ -532,7 +559,12 @@ public class KaleoTaskInstanceTokenFinderImpl
 				UserGroupRoleLocalServiceUtil.getUserGroupRoles(
 					kaleoTaskInstanceTokenQuery.getUserId());
 
-			if (roleIds.isEmpty() && userGroupRoles.isEmpty()) {
+			List<UserGroupGroupRole> userGroupGroupRoles =
+				getUserGroupGroupRoles(kaleoTaskInstanceTokenQuery.getUserId());
+
+			if (roleIds.isEmpty() && userGroupRoles.isEmpty() &&
+				userGroupGroupRoles.isEmpty()) {
+
 				return StringPool.BLANK;
 			}
 
@@ -544,31 +576,29 @@ public class KaleoTaskInstanceTokenFinderImpl
 
 			for (int i = 0; i < roleIds.size(); i++) {
 				sb.append("(KaleoTaskAssignmentInstance.assigneeClassPK = ?)");
-
-				if ((i + 1) < roleIds.size()) {
-					sb.append(" OR ");
-				}
-			}
-
-			if (!roleIds.isEmpty() && !userGroupRoles.isEmpty()) {
 				sb.append(" OR ");
 			}
 
 			for (int i = 0; i < userGroupRoles.size(); i++) {
 				sb.append("((KaleoTaskAssignmentInstance.groupId = ?) AND ");
 				sb.append("(KaleoTaskAssignmentInstance.assigneeClassPK = ?))");
-
-				if ((i + 1) < userGroupRoles.size()) {
-					sb.append(" OR ");
-				}
+				sb.append(" OR ");
 			}
+
+			for (int i = 0; i < userGroupGroupRoles.size(); i++) {
+				sb.append("((KaleoTaskAssignmentInstance.groupId = ?) AND ");
+				sb.append("(KaleoTaskAssignmentInstance.assigneeClassPK = ?))");
+				sb.append(" OR ");
+			}
+
+			sb.setIndex(sb.index() - 1);
 
 			sb.append("))");
 
 			return sb.toString();
 		}
 		else {
-			StringBundler sb = new StringBundler(4);
+			StringBundler sb = new StringBundler(3);
 
 			sb.append("AND ((");
 			sb.append("KaleoTaskAssignmentInstance.assigneeClassName = ?) ");
@@ -604,7 +634,8 @@ public class KaleoTaskInstanceTokenFinderImpl
 		}
 
 		for (int i = 0; i < taskNames.length; i++) {
-			sb.append("(KaleoTaskInstanceToken.kaleoTaskName LIKE ?)");
+			sb.append(
+				"(lower(KaleoTaskInstanceToken.kaleoTaskName) LIKE lower(?))");
 
 			if ((i + 1) < taskNames.length) {
 				sb.append(" OR ");
@@ -615,6 +646,24 @@ public class KaleoTaskInstanceTokenFinderImpl
 		}
 
 		return sb.toString();
+	}
+
+	protected List<UserGroupGroupRole> getUserGroupGroupRoles(long userId)
+		throws Exception {
+
+		List<UserGroupGroupRole> userGroupGroupRoles =
+			new ArrayList<UserGroupGroupRole>();
+
+		List<UserGroup> userGroups =
+			UserGroupLocalServiceUtil.getUserUserGroups(userId);
+
+		for (UserGroup userGroup : userGroups) {
+			userGroupGroupRoles.addAll(
+				UserGroupGroupRoleLocalServiceUtil.getUserGroupGroupRoles(
+					userGroup.getUserGroupId()));
+		}
+
+		return userGroupGroupRoles;
 	}
 
 	protected void setAssetPrimaryKey(
@@ -769,21 +818,25 @@ public class KaleoTaskInstanceTokenFinderImpl
 			List<Long> roleIds = getSearchByUserRoleIds(
 				kaleoTaskInstanceTokenQuery);
 
-			List<UserGroupRole> userGroupRoles =
-				UserGroupRoleLocalServiceUtil.getUserGroupRoles(
-					kaleoTaskInstanceTokenQuery.getUserId());
-
-			if (roleIds.isEmpty() && userGroupRoles.isEmpty()) {
-				return;
-			}
-
 			for (Long roleId : roleIds) {
 				qPos.add(roleId);
 			}
 
+			List<UserGroupRole> userGroupRoles =
+				UserGroupRoleLocalServiceUtil.getUserGroupRoles(
+					kaleoTaskInstanceTokenQuery.getUserId());
+
 			for (UserGroupRole userGroupRole : userGroupRoles) {
 				qPos.add(userGroupRole.getGroupId());
 				qPos.add(userGroupRole.getRoleId());
+			}
+
+			List<UserGroupGroupRole> userGroupGroupRoles =
+				getUserGroupGroupRoles(kaleoTaskInstanceTokenQuery.getUserId());
+
+			for (UserGroupGroupRole userGroupGroupRole : userGroupGroupRoles) {
+				qPos.add(userGroupGroupRole.getGroupId());
+				qPos.add(userGroupGroupRole.getRoleId());
 			}
 		}
 		else {

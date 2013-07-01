@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -33,6 +33,7 @@ import java.util.List;
 public class KaleoTransitionLocalServiceImpl
 	extends KaleoTransitionLocalServiceBaseImpl {
 
+	@Override
 	public KaleoTransition addKaleoTransition(
 			long kaleoDefinitionId, long kaleoNodeId, Transition transition,
 			KaleoNode sourceKaleoNode, KaleoNode targetKaleoNode,
@@ -64,7 +65,7 @@ public class KaleoTransitionLocalServiceImpl
 		kaleoTransition.setTargetKaleoNodeName(targetKaleoNode.getName());
 		kaleoTransition.setDefaultTransition(transition.isDefault());
 
-		kaleoTransitionPersistence.update(kaleoTransition, false);
+		kaleoTransitionPersistence.update(kaleoTransition);
 
 		// Kaleo timer
 
@@ -79,36 +80,51 @@ public class KaleoTransitionLocalServiceImpl
 		return kaleoTransition;
 	}
 
+	@Override
 	public void deleteCompanyKaleoTransitions(long companyId)
 		throws SystemException {
 
 		kaleoTransitionPersistence.removeByCompanyId(companyId);
 	}
 
+	@Override
 	public void deleteKaleoDefinitionKaleoTransitions(long kaleoDefinitionId)
 		throws SystemException {
 
 		kaleoTransitionPersistence.removeByKaleoDefinitionId(kaleoDefinitionId);
 	}
 
+	@Override
 	public KaleoTransition getDefaultKaleoTransition(long kaleoNodeId)
 		throws PortalException, SystemException {
 
 		return kaleoTransitionPersistence.findByKNI_DT(kaleoNodeId, true);
 	}
 
+	@Override
+	public List<KaleoTransition> getKaleoDefinitionKaleoTransitions(
+			long kaleoDefinitionId)
+		throws SystemException {
+
+		return kaleoTransitionPersistence.findByKaleoDefinitionId(
+			kaleoDefinitionId);
+	}
+
+	@Override
 	public KaleoTransition getKaleoTransition(long kaleoNodeId, String name)
 		throws PortalException, SystemException {
 
 		return kaleoTransitionPersistence.findByKNI_N(kaleoNodeId, name);
 	}
 
+	@Override
 	public List<KaleoTransition> getKaleoTransitions(long kaleoNodeId)
 		throws SystemException {
 
 		return kaleoTransitionPersistence.findByKaleoNodeId(kaleoNodeId);
 	}
 
+	@Override
 	public int getKaleoTransitionsCount(long kaleoNodeId)
 		throws SystemException {
 
