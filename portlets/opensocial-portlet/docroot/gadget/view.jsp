@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -43,6 +43,10 @@ Map<String, Feature> features = modulePrefs.getFeatures();
 boolean requiresPubsub = features.containsKey("pubsub-2");
 
 String secureToken = ShindigUtil.createSecurityToken(ownerId, themeDisplay.getUserId(), gadgetKey, PortalUtil.getPortalURL(themeDisplay), gadget.getUrl(), moduleId, currentURL);
+
+String userPrefsKey = ShindigUtil.getColumnUserPrefs(renderResponse.getNamespace(), themeDisplay);
+
+JSONObject userPrefsJSONObject = ExpandoValueServiceUtil.getJSONData(themeDisplay.getCompanyId(), Layout.class.getName(), ShindigUtil.getTableOpenSocial(), userPrefsKey, themeDisplay.getPlid());
 %>
 
 <div class="gadgets-gadget-chrome" id="<portlet:namespace />gadget"></div>
@@ -52,8 +56,10 @@ String secureToken = ShindigUtil.createSecurityToken(ownerId, themeDisplay.getUs
 		{
 			appId: '<%= gadget.getUrl() %>',
 			checksum: '<%= gadgetSpec.getChecksum() %>',
+			country: '<%= locale.getCountry() %>',
 			debug: <%= PortletPropsValues.SHINDIG_JS_DEBUG %>,
 			height: <%= modulePrefs.getHeight() %>,
+			language: '<%= _getLanguage(locale) %>',
 			moduleId: '<%= moduleId %>',
 			nocache: <%= PortletPropsValues.SHINDIG_NO_CACHE %>,
 			portletId: '<%= portletDisplay.getId() %>',
@@ -65,11 +71,26 @@ String secureToken = ShindigUtil.createSecurityToken(ownerId, themeDisplay.getUs
 			specUrl: '<%= gadget.getUrl() %>',
 			store: new Liferay.OpenSocial.Store.Expando(
 				{
-					userPrefsKey: '<%= ShindigUtil.getColumnUserPrefs(renderResponse.getNamespace(), themeDisplay) %>'
+					userPrefsKey: '<%= userPrefsKey %>'
 				}
 			),
+			userPrefs: A.JSON.parse('<%= String.valueOf(userPrefsJSONObject) %>'),
 			view: '<%= view %>',
 			viewParams: '<%= ParamUtil.getString(renderRequest, "viewParams") %>'
 		}
 	).render('#<portlet:namespace />gadget');
 </aui:script>
+
+<%!
+private String _getLanguage(Locale locale) {
+	String language = locale.getLanguage();
+
+	// See http://docs.opensocial.org/display/OSREF/Gadgets+XML+Reference
+
+	if (language.equals(Locale.CHINESE.getLanguage())) {
+		language = language + StringPool.DASH + locale.getCountry();
+	}
+
+	return language;
+}
+%>

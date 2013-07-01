@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -28,7 +28,7 @@ Group group = GroupLocalServiceUtil.getGroup(scopeGroupId);
 		<liferay-ui:message key="this-application-will-only-function-when-placed-on-a-site-page" />
 	</c:when>
 	<c:when test="<%= GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.UPDATE) %>">
-		<portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" var="inviteURL">
+		<portlet:renderURL var="inviteURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 			<portlet:param name="mvcPath" value="/invite_members/view_invite.jsp" />
 		</portlet:renderURL>
 
@@ -50,16 +50,18 @@ Group group = GroupLocalServiceUtil.getGroup(scopeGroupId);
 						title = titleNode.get('innerHTML');
 					}
 
-					var viewportRegion = A.getBody().get('viewportRegion');
-
 					var dialog = new A.Dialog(
 						{
+							align: {
+								node: null,
+								points: ['tc', 'tc']
+							},
 							cssClass: 'so-portlet-invite-members',
 							destroyOnClose: true,
+							modal: true,
 							resizable: false,
 							title: title,
-							width: 700,
-							xy: [viewportRegion.left + 20, viewportRegion.top + 20]
+							width: 700
 						}
 					).plug(
 						A.Plugin.IO,
@@ -83,4 +85,13 @@ Group group = GroupLocalServiceUtil.getGroup(scopeGroupId);
 			);
 		</aui:script>
 	</c:when>
+	<c:otherwise>
+		<aui:script use="aui-base">
+			var portlet = A.one('#p_p_id<portlet:namespace />');
+
+			if (portlet) {
+				portlet.hide();
+			}
+		</aui:script>
+	</c:otherwise>
 </c:choose>

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,15 +14,19 @@
 
 package com.liferay.chat.model;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
  * This class is a wrapper for {@link Status}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       Status
+ * @author Brian Wing Shun Chan
+ * @see Status
  * @generated
  */
 public class StatusWrapper implements Status, ModelWrapper<Status> {
@@ -30,12 +34,81 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 		_status = status;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Status.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Status.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("statusId", getStatusId());
+		attributes.put("userId", getUserId());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("online", getOnline());
+		attributes.put("awake", getAwake());
+		attributes.put("activePanelIds", getActivePanelIds());
+		attributes.put("message", getMessage());
+		attributes.put("playSound", getPlaySound());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long statusId = (Long)attributes.get("statusId");
+
+		if (statusId != null) {
+			setStatusId(statusId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		Long modifiedDate = (Long)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Boolean online = (Boolean)attributes.get("online");
+
+		if (online != null) {
+			setOnline(online);
+		}
+
+		Boolean awake = (Boolean)attributes.get("awake");
+
+		if (awake != null) {
+			setAwake(awake);
+		}
+
+		String activePanelIds = (String)attributes.get("activePanelIds");
+
+		if (activePanelIds != null) {
+			setActivePanelIds(activePanelIds);
+		}
+
+		String message = (String)attributes.get("message");
+
+		if (message != null) {
+			setMessage(message);
+		}
+
+		Boolean playSound = (Boolean)attributes.get("playSound");
+
+		if (playSound != null) {
+			setPlaySound(playSound);
+		}
 	}
 
 	/**
@@ -43,6 +116,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @return the primary key of this status
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _status.getPrimaryKey();
 	}
@@ -52,6 +126,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @param primaryKey the primary key of this status
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_status.setPrimaryKey(primaryKey);
 	}
@@ -61,6 +136,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @return the status ID of this status
 	*/
+	@Override
 	public long getStatusId() {
 		return _status.getStatusId();
 	}
@@ -70,6 +146,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @param statusId the status ID of this status
 	*/
+	@Override
 	public void setStatusId(long statusId) {
 		_status.setStatusId(statusId);
 	}
@@ -79,6 +156,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @return the user ID of this status
 	*/
+	@Override
 	public long getUserId() {
 		return _status.getUserId();
 	}
@@ -88,6 +166,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @param userId the user ID of this status
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_status.setUserId(userId);
 	}
@@ -98,6 +177,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	* @return the user uuid of this status
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _status.getUserUuid();
@@ -108,6 +188,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @param userUuid the user uuid of this status
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_status.setUserUuid(userUuid);
 	}
@@ -117,6 +198,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @return the modified date of this status
 	*/
+	@Override
 	public long getModifiedDate() {
 		return _status.getModifiedDate();
 	}
@@ -126,6 +208,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @param modifiedDate the modified date of this status
 	*/
+	@Override
 	public void setModifiedDate(long modifiedDate) {
 		_status.setModifiedDate(modifiedDate);
 	}
@@ -135,6 +218,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @return the online of this status
 	*/
+	@Override
 	public boolean getOnline() {
 		return _status.getOnline();
 	}
@@ -144,6 +228,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @return <code>true</code> if this status is online; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isOnline() {
 		return _status.isOnline();
 	}
@@ -153,6 +238,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @param online the online of this status
 	*/
+	@Override
 	public void setOnline(boolean online) {
 		_status.setOnline(online);
 	}
@@ -162,6 +248,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @return the awake of this status
 	*/
+	@Override
 	public boolean getAwake() {
 		return _status.getAwake();
 	}
@@ -171,6 +258,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @return <code>true</code> if this status is awake; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isAwake() {
 		return _status.isAwake();
 	}
@@ -180,26 +268,29 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @param awake the awake of this status
 	*/
+	@Override
 	public void setAwake(boolean awake) {
 		_status.setAwake(awake);
 	}
 
 	/**
-	* Returns the active panel ID of this status.
+	* Returns the active panel IDs of this status.
 	*
-	* @return the active panel ID of this status
+	* @return the active panel IDs of this status
 	*/
-	public java.lang.String getActivePanelId() {
-		return _status.getActivePanelId();
+	@Override
+	public java.lang.String getActivePanelIds() {
+		return _status.getActivePanelIds();
 	}
 
 	/**
-	* Sets the active panel ID of this status.
+	* Sets the active panel IDs of this status.
 	*
-	* @param activePanelId the active panel ID of this status
+	* @param activePanelIds the active panel IDs of this status
 	*/
-	public void setActivePanelId(java.lang.String activePanelId) {
-		_status.setActivePanelId(activePanelId);
+	@Override
+	public void setActivePanelIds(java.lang.String activePanelIds) {
+		_status.setActivePanelIds(activePanelIds);
 	}
 
 	/**
@@ -207,6 +298,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @return the message of this status
 	*/
+	@Override
 	public java.lang.String getMessage() {
 		return _status.getMessage();
 	}
@@ -216,6 +308,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @param message the message of this status
 	*/
+	@Override
 	public void setMessage(java.lang.String message) {
 		_status.setMessage(message);
 	}
@@ -225,6 +318,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @return the play sound of this status
 	*/
+	@Override
 	public boolean getPlaySound() {
 		return _status.getPlaySound();
 	}
@@ -234,6 +328,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @return <code>true</code> if this status is play sound; <code>false</code> otherwise
 	*/
+	@Override
 	public boolean isPlaySound() {
 		return _status.isPlaySound();
 	}
@@ -243,42 +338,64 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 	*
 	* @param playSound the play sound of this status
 	*/
+	@Override
 	public void setPlaySound(boolean playSound) {
 		_status.setPlaySound(playSound);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _status.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_status.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _status.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_status.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _status.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _status.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_status.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _status.getExpandoBridge();
 	}
 
+	@Override
+	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_status.setExpandoBridgeAttributes(baseModel);
+	}
+
+	@Override
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_status.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_status.setExpandoBridgeAttributes(serviceContext);
@@ -289,6 +406,7 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 		return new StatusWrapper((Status)_status.clone());
 	}
 
+	@Override
 	public int compareTo(com.liferay.chat.model.Status status) {
 		return _status.compareTo(status);
 	}
@@ -298,12 +416,19 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 		return _status.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.chat.model.Status> toCacheModel() {
 		return _status.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.chat.model.Status toEscapedModel() {
 		return new StatusWrapper(_status.toEscapedModel());
+	}
+
+	@Override
+	public com.liferay.chat.model.Status toUnescapedModel() {
+		return new StatusWrapper(_status.toUnescapedModel());
 	}
 
 	@Override
@@ -311,26 +436,49 @@ public class StatusWrapper implements Status, ModelWrapper<Status> {
 		return _status.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _status.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_status.persist();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof StatusWrapper)) {
+			return false;
+		}
+
+		StatusWrapper statusWrapper = (StatusWrapper)obj;
+
+		if (Validator.equals(_status, statusWrapper._status)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public Status getWrappedStatus() {
 		return _status;
 	}
 
+	@Override
 	public Status getWrappedModel() {
 		return _status;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_status.resetOriginalValues();
 	}

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -51,14 +51,14 @@ private URL _getURL(String remoteUser, String serviceName) throws Exception {
 
 	// Unathenticated url
 
-	String url = "http://localhost:8080/tunnel-web/axis/" + serviceName;
+	String url = "http://localhost:8080/api/axis/" + serviceName;
 
 	// Authenticated url
 
-	if (true) {
+	if (false) {
 		String password = "test";
 
-		url = "http://" + remoteUser + ":" + password + "@localhost:8080/tunnel-web/secure/axis/" + serviceName;
+		url = "http://" + remoteUser + ":" + password + "@localhost:8080/api/axis/" + serviceName;
 	}
 
 	return new URL(url);

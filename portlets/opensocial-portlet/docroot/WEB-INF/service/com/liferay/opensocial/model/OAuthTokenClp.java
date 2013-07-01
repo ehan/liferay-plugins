@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,19 +14,24 @@
 
 package com.liferay.opensocial.model;
 
+import com.liferay.opensocial.service.ClpSerializer;
 import com.liferay.opensocial.service.OAuthTokenLocalServiceUtil;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
 import java.io.Serializable;
 
-import java.lang.reflect.Proxy;
+import java.lang.reflect.Method;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Brian Wing Shun Chan
@@ -36,150 +41,527 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 	public OAuthTokenClp() {
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return OAuthToken.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return OAuthToken.class.getName();
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _oAuthTokenId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setOAuthTokenId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_oAuthTokenId);
+		return _oAuthTokenId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("oAuthTokenId", getOAuthTokenId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("gadgetKey", getGadgetKey());
+		attributes.put("serviceName", getServiceName());
+		attributes.put("moduleId", getModuleId());
+		attributes.put("accessToken", getAccessToken());
+		attributes.put("tokenName", getTokenName());
+		attributes.put("tokenSecret", getTokenSecret());
+		attributes.put("sessionHandle", getSessionHandle());
+		attributes.put("expiration", getExpiration());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long oAuthTokenId = (Long)attributes.get("oAuthTokenId");
+
+		if (oAuthTokenId != null) {
+			setOAuthTokenId(oAuthTokenId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String gadgetKey = (String)attributes.get("gadgetKey");
+
+		if (gadgetKey != null) {
+			setGadgetKey(gadgetKey);
+		}
+
+		String serviceName = (String)attributes.get("serviceName");
+
+		if (serviceName != null) {
+			setServiceName(serviceName);
+		}
+
+		Long moduleId = (Long)attributes.get("moduleId");
+
+		if (moduleId != null) {
+			setModuleId(moduleId);
+		}
+
+		String accessToken = (String)attributes.get("accessToken");
+
+		if (accessToken != null) {
+			setAccessToken(accessToken);
+		}
+
+		String tokenName = (String)attributes.get("tokenName");
+
+		if (tokenName != null) {
+			setTokenName(tokenName);
+		}
+
+		String tokenSecret = (String)attributes.get("tokenSecret");
+
+		if (tokenSecret != null) {
+			setTokenSecret(tokenSecret);
+		}
+
+		String sessionHandle = (String)attributes.get("sessionHandle");
+
+		if (sessionHandle != null) {
+			setSessionHandle(sessionHandle);
+		}
+
+		Long expiration = (Long)attributes.get("expiration");
+
+		if (expiration != null) {
+			setExpiration(expiration);
+		}
+	}
+
+	@Override
 	public long getOAuthTokenId() {
 		return _oAuthTokenId;
 	}
 
+	@Override
 	public void setOAuthTokenId(long oAuthTokenId) {
 		_oAuthTokenId = oAuthTokenId;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setOAuthTokenId", long.class);
+
+				method.invoke(_oAuthTokenRemoteModel, oAuthTokenId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCompanyId", long.class);
+
+				method.invoke(_oAuthTokenRemoteModel, companyId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserId", long.class);
+
+				method.invoke(_oAuthTokenRemoteModel, userId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
+	@Override
 	public String getUserName() {
 		return _userName;
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserName", String.class);
+
+				method.invoke(_oAuthTokenRemoteModel, userName);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCreateDate", Date.class);
+
+				method.invoke(_oAuthTokenRemoteModel, createDate);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setModifiedDate", Date.class);
+
+				method.invoke(_oAuthTokenRemoteModel, modifiedDate);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getGadgetKey() {
 		return _gadgetKey;
 	}
 
+	@Override
 	public void setGadgetKey(String gadgetKey) {
 		_gadgetKey = gadgetKey;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setGadgetKey", String.class);
+
+				method.invoke(_oAuthTokenRemoteModel, gadgetKey);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getServiceName() {
 		return _serviceName;
 	}
 
+	@Override
 	public void setServiceName(String serviceName) {
 		_serviceName = serviceName;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setServiceName", String.class);
+
+				method.invoke(_oAuthTokenRemoteModel, serviceName);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getModuleId() {
 		return _moduleId;
 	}
 
+	@Override
 	public void setModuleId(long moduleId) {
 		_moduleId = moduleId;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setModuleId", long.class);
+
+				method.invoke(_oAuthTokenRemoteModel, moduleId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getAccessToken() {
 		return _accessToken;
 	}
 
+	@Override
 	public void setAccessToken(String accessToken) {
 		_accessToken = accessToken;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setAccessToken", String.class);
+
+				method.invoke(_oAuthTokenRemoteModel, accessToken);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getTokenName() {
 		return _tokenName;
 	}
 
+	@Override
 	public void setTokenName(String tokenName) {
 		_tokenName = tokenName;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setTokenName", String.class);
+
+				method.invoke(_oAuthTokenRemoteModel, tokenName);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getTokenSecret() {
 		return _tokenSecret;
 	}
 
+	@Override
 	public void setTokenSecret(String tokenSecret) {
 		_tokenSecret = tokenSecret;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setTokenSecret", String.class);
+
+				method.invoke(_oAuthTokenRemoteModel, tokenSecret);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getSessionHandle() {
 		return _sessionHandle;
 	}
 
+	@Override
 	public void setSessionHandle(String sessionHandle) {
 		_sessionHandle = sessionHandle;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setSessionHandle", String.class);
+
+				method.invoke(_oAuthTokenRemoteModel, sessionHandle);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getExpiration() {
 		return _expiration;
 	}
 
+	@Override
 	public void setExpiration(long expiration) {
 		_expiration = expiration;
+
+		if (_oAuthTokenRemoteModel != null) {
+			try {
+				Class<?> clazz = _oAuthTokenRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setExpiration", long.class);
+
+				method.invoke(_oAuthTokenRemoteModel, expiration);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	public BaseModel<?> getOAuthTokenRemoteModel() {
+		return _oAuthTokenRemoteModel;
+	}
+
+	public void setOAuthTokenRemoteModel(BaseModel<?> oAuthTokenRemoteModel) {
+		_oAuthTokenRemoteModel = oAuthTokenRemoteModel;
+	}
+
+	public Object invokeOnRemoteModel(String methodName,
+		Class<?>[] parameterTypes, Object[] parameterValues)
+		throws Exception {
+		Object[] remoteParameterValues = new Object[parameterValues.length];
+
+		for (int i = 0; i < parameterValues.length; i++) {
+			if (parameterValues[i] != null) {
+				remoteParameterValues[i] = ClpSerializer.translateInput(parameterValues[i]);
+			}
+		}
+
+		Class<?> remoteModelClass = _oAuthTokenRemoteModel.getClass();
+
+		ClassLoader remoteModelClassLoader = remoteModelClass.getClassLoader();
+
+		Class<?>[] remoteParameterTypes = new Class[parameterTypes.length];
+
+		for (int i = 0; i < parameterTypes.length; i++) {
+			if (parameterTypes[i].isPrimitive()) {
+				remoteParameterTypes[i] = parameterTypes[i];
+			}
+			else {
+				String parameterTypeName = parameterTypes[i].getName();
+
+				remoteParameterTypes[i] = remoteModelClassLoader.loadClass(parameterTypeName);
+			}
+		}
+
+		Method method = remoteModelClass.getMethod(methodName,
+				remoteParameterTypes);
+
+		Object returnValue = method.invoke(_oAuthTokenRemoteModel,
+				remoteParameterValues);
+
+		if (returnValue != null) {
+			returnValue = ClpSerializer.translateOutput(returnValue);
+		}
+
+		return returnValue;
+	}
+
+	@Override
 	public void persist() throws SystemException {
 		if (this.isNew()) {
 			OAuthTokenLocalServiceUtil.addOAuthToken(this);
@@ -191,7 +573,7 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 
 	@Override
 	public OAuthToken toEscapedModel() {
-		return (OAuthToken)Proxy.newProxyInstance(OAuthToken.class.getClassLoader(),
+		return (OAuthToken)ProxyUtil.newProxyInstance(OAuthToken.class.getClassLoader(),
 			new Class[] { OAuthToken.class }, new AutoEscapeBeanHandler(this));
 	}
 
@@ -217,6 +599,7 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 		return clone;
 	}
 
+	@Override
 	public int compareTo(OAuthToken oAuthToken) {
 		long primaryKey = oAuthToken.getPrimaryKey();
 
@@ -233,18 +616,15 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof OAuthTokenClp)) {
 			return false;
 		}
 
-		OAuthTokenClp oAuthToken = null;
-
-		try {
-			oAuthToken = (OAuthTokenClp)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		OAuthTokenClp oAuthToken = (OAuthTokenClp)obj;
 
 		long primaryKey = oAuthToken.getPrimaryKey();
 
@@ -298,6 +678,7 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(46);
 
@@ -382,4 +763,5 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 	private String _tokenSecret;
 	private String _sessionHandle;
 	private long _expiration;
+	private BaseModel<?> _oAuthTokenRemoteModel;
 }

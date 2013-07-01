@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -66,7 +66,7 @@ public class AttachmentLocalServiceImpl extends AttachmentLocalServiceBaseImpl {
 		attachment.setFileName(fileName);
 		attachment.setSize(size);
 
-		attachmentPersistence.update(attachment, false);
+		attachmentPersistence.update(attachment);
 
 		// File
 
@@ -101,7 +101,7 @@ public class AttachmentLocalServiceImpl extends AttachmentLocalServiceBaseImpl {
 	}
 
 	@Override
-	public void deleteAttachment(long attachmentId)
+	public Attachment deleteAttachment(long attachmentId)
 		throws PortalException, SystemException {
 
 		// Attachment
@@ -130,6 +130,8 @@ public class AttachmentLocalServiceImpl extends AttachmentLocalServiceBaseImpl {
 				_log.debug(nsfe, nsfe);
 			}
 		}
+
+		return attachment;
 	}
 
 	public void deleteAttachments(long companyId, long messageId)

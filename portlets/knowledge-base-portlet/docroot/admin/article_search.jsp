@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -55,9 +55,9 @@ KBArticleDisplayTerms displayTerms = (KBArticleDisplayTerms)searchContainer.getD
 					monthParam="<%= displayTerms.START_DATE_MONTH %>"
 					monthValue="<%= displayTerms.getStartDateMonth() %>"
 					yearParam="<%= displayTerms.START_DATE_YEAR %>"
-					yearValue="<%= displayTerms.getStartDateYear() %>"
-					yearRangeStart="<%= displayTerms.getYearRangeStart() %>"
 					yearRangeEnd="<%= displayTerms.getYearRangeEnd() %>"
+					yearRangeStart="<%= displayTerms.getYearRangeStart() %>"
+					yearValue="<%= displayTerms.getStartDateYear() %>"
 				/>
 
 				<liferay-ui:input-date
@@ -67,9 +67,9 @@ KBArticleDisplayTerms displayTerms = (KBArticleDisplayTerms)searchContainer.getD
 					monthParam="<%= displayTerms.END_DATE_MONTH %>"
 					monthValue="<%= displayTerms.getEndDateMonth() %>"
 					yearParam="<%= displayTerms.END_DATE_YEAR %>"
-					yearValue="<%= displayTerms.getEndDateYear() %>"
-					yearRangeStart="<%= displayTerms.getYearRangeStart() %>"
 					yearRangeEnd="<%= displayTerms.getYearRangeEnd() %>"
+					yearRangeStart="<%= displayTerms.getYearRangeStart() %>"
+					yearValue="<%= displayTerms.getEndDateYear() %>"
 				/>
 			</span>
 		</aui:field-wrapper>

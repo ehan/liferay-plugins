@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,17 +17,22 @@ package com.liferay.so.model;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
+import com.liferay.so.service.ClpSerializer;
 import com.liferay.so.service.ProjectsEntryLocalServiceUtil;
 
 import java.io.Serializable;
 
-import java.lang.reflect.Proxy;
+import java.lang.reflect.Method;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Brian Wing Shun Chan
@@ -37,126 +42,438 @@ public class ProjectsEntryClp extends BaseModelImpl<ProjectsEntry>
 	public ProjectsEntryClp() {
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return ProjectsEntry.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return ProjectsEntry.class.getName();
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _projectsEntryId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setProjectsEntryId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_projectsEntryId);
+		return _projectsEntryId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("projectsEntryId", getProjectsEntryId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("title", getTitle());
+		attributes.put("description", getDescription());
+		attributes.put("startDate", getStartDate());
+		attributes.put("endDate", getEndDate());
+		attributes.put("data", getData());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long projectsEntryId = (Long)attributes.get("projectsEntryId");
+
+		if (projectsEntryId != null) {
+			setProjectsEntryId(projectsEntryId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String title = (String)attributes.get("title");
+
+		if (title != null) {
+			setTitle(title);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		Date startDate = (Date)attributes.get("startDate");
+
+		if (startDate != null) {
+			setStartDate(startDate);
+		}
+
+		Date endDate = (Date)attributes.get("endDate");
+
+		if (endDate != null) {
+			setEndDate(endDate);
+		}
+
+		String data = (String)attributes.get("data");
+
+		if (data != null) {
+			setData(data);
+		}
+	}
+
+	@Override
 	public long getProjectsEntryId() {
 		return _projectsEntryId;
 	}
 
+	@Override
 	public void setProjectsEntryId(long projectsEntryId) {
 		_projectsEntryId = projectsEntryId;
+
+		if (_projectsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setProjectsEntryId", long.class);
+
+				method.invoke(_projectsEntryRemoteModel, projectsEntryId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
+
+		if (_projectsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCompanyId", long.class);
+
+				method.invoke(_projectsEntryRemoteModel, companyId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
+
+		if (_projectsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserId", long.class);
+
+				method.invoke(_projectsEntryRemoteModel, userId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
+	@Override
 	public String getUserName() {
 		return _userName;
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
+
+		if (_projectsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserName", String.class);
+
+				method.invoke(_projectsEntryRemoteModel, userName);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
+
+		if (_projectsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCreateDate", Date.class);
+
+				method.invoke(_projectsEntryRemoteModel, createDate);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
+
+		if (_projectsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setModifiedDate", Date.class);
+
+				method.invoke(_projectsEntryRemoteModel, modifiedDate);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getTitle() {
 		return _title;
 	}
 
+	@Override
 	public void setTitle(String title) {
 		_title = title;
+
+		if (_projectsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setTitle", String.class);
+
+				method.invoke(_projectsEntryRemoteModel, title);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getDescription() {
 		return _description;
 	}
 
+	@Override
 	public void setDescription(String description) {
 		_description = description;
+
+		if (_projectsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setDescription", String.class);
+
+				method.invoke(_projectsEntryRemoteModel, description);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public Date getStartDate() {
 		return _startDate;
 	}
 
+	@Override
 	public void setStartDate(Date startDate) {
 		_startDate = startDate;
+
+		if (_projectsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setStartDate", Date.class);
+
+				method.invoke(_projectsEntryRemoteModel, startDate);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public Date getEndDate() {
 		return _endDate;
 	}
 
+	@Override
 	public void setEndDate(Date endDate) {
 		_endDate = endDate;
+
+		if (_projectsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setEndDate", Date.class);
+
+				method.invoke(_projectsEntryRemoteModel, endDate);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getData() {
 		return _data;
 	}
 
+	@Override
 	public void setData(String data) {
 		_data = data;
+
+		if (_projectsEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectsEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setData", String.class);
+
+				method.invoke(_projectsEntryRemoteModel, data);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	public BaseModel<?> getProjectsEntryRemoteModel() {
+		return _projectsEntryRemoteModel;
+	}
+
+	public void setProjectsEntryRemoteModel(
+		BaseModel<?> projectsEntryRemoteModel) {
+		_projectsEntryRemoteModel = projectsEntryRemoteModel;
+	}
+
+	public Object invokeOnRemoteModel(String methodName,
+		Class<?>[] parameterTypes, Object[] parameterValues)
+		throws Exception {
+		Object[] remoteParameterValues = new Object[parameterValues.length];
+
+		for (int i = 0; i < parameterValues.length; i++) {
+			if (parameterValues[i] != null) {
+				remoteParameterValues[i] = ClpSerializer.translateInput(parameterValues[i]);
+			}
+		}
+
+		Class<?> remoteModelClass = _projectsEntryRemoteModel.getClass();
+
+		ClassLoader remoteModelClassLoader = remoteModelClass.getClassLoader();
+
+		Class<?>[] remoteParameterTypes = new Class[parameterTypes.length];
+
+		for (int i = 0; i < parameterTypes.length; i++) {
+			if (parameterTypes[i].isPrimitive()) {
+				remoteParameterTypes[i] = parameterTypes[i];
+			}
+			else {
+				String parameterTypeName = parameterTypes[i].getName();
+
+				remoteParameterTypes[i] = remoteModelClassLoader.loadClass(parameterTypeName);
+			}
+		}
+
+		Method method = remoteModelClass.getMethod(methodName,
+				remoteParameterTypes);
+
+		Object returnValue = method.invoke(_projectsEntryRemoteModel,
+				remoteParameterValues);
+
+		if (returnValue != null) {
+			returnValue = ClpSerializer.translateOutput(returnValue);
+		}
+
+		return returnValue;
+	}
+
+	@Override
 	public void persist() throws SystemException {
 		if (this.isNew()) {
 			ProjectsEntryLocalServiceUtil.addProjectsEntry(this);
@@ -168,7 +485,7 @@ public class ProjectsEntryClp extends BaseModelImpl<ProjectsEntry>
 
 	@Override
 	public ProjectsEntry toEscapedModel() {
-		return (ProjectsEntry)Proxy.newProxyInstance(ProjectsEntry.class.getClassLoader(),
+		return (ProjectsEntry)ProxyUtil.newProxyInstance(ProjectsEntry.class.getClassLoader(),
 			new Class[] { ProjectsEntry.class }, new AutoEscapeBeanHandler(this));
 	}
 
@@ -191,6 +508,7 @@ public class ProjectsEntryClp extends BaseModelImpl<ProjectsEntry>
 		return clone;
 	}
 
+	@Override
 	public int compareTo(ProjectsEntry projectsEntry) {
 		int value = 0;
 
@@ -205,18 +523,15 @@ public class ProjectsEntryClp extends BaseModelImpl<ProjectsEntry>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof ProjectsEntryClp)) {
 			return false;
 		}
 
-		ProjectsEntryClp projectsEntry = null;
-
-		try {
-			projectsEntry = (ProjectsEntryClp)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		ProjectsEntryClp projectsEntry = (ProjectsEntryClp)obj;
 
 		long primaryKey = projectsEntry.getPrimaryKey();
 
@@ -264,6 +579,7 @@ public class ProjectsEntryClp extends BaseModelImpl<ProjectsEntry>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(37);
 
@@ -333,4 +649,5 @@ public class ProjectsEntryClp extends BaseModelImpl<ProjectsEntry>
 	private Date _startDate;
 	private Date _endDate;
 	private String _data;
+	private BaseModel<?> _projectsEntryRemoteModel;
 }

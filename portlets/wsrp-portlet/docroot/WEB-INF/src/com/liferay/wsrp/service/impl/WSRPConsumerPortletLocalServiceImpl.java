@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -49,7 +49,7 @@ import com.liferay.wsrp.model.WSRPConsumer;
 import com.liferay.wsrp.model.WSRPConsumerPortlet;
 import com.liferay.wsrp.service.ClpSerializer;
 import com.liferay.wsrp.service.base.WSRPConsumerPortletLocalServiceBaseImpl;
-import com.liferay.wsrp.util.ExtensionUtil;
+import com.liferay.wsrp.util.ExtensionHelperUtil;
 import com.liferay.wsrp.util.LocalizedStringUtil;
 import com.liferay.wsrp.util.WSRPConsumerManager;
 import com.liferay.wsrp.util.WSRPConsumerManagerFactory;
@@ -77,7 +77,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 
 	public WSRPConsumerPortlet addWSRPConsumerPortlet(
 			long wsrpConsumerId, String name, String portletHandle,
-			String userToken, ServiceContext serviceContext)
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		WSRPConsumer wsrpConsumer = wsrpConsumerPersistence.findByPrimaryKey(
@@ -99,37 +99,38 @@ public class WSRPConsumerPortletLocalServiceImpl
 		wsrpConsumerPortlet.setName(name);
 		wsrpConsumerPortlet.setPortletHandle(portletHandle);
 
-		wsrpConsumerPortletPersistence.update(wsrpConsumerPortlet, false);
+		wsrpConsumerPortletPersistence.update(wsrpConsumerPortlet);
 
 		wsrpConsumerPortletLocalService.initWSRPConsumerPortlet(
 			wsrpConsumer.getCompanyId(), wsrpConsumerId, wsrpConsumerPortletId,
-			wsrpConsumerPortlet.getUuid(), name, portletHandle, userToken);
+			wsrpConsumerPortlet.getUuid(), name, portletHandle);
 
 		return wsrpConsumerPortlet;
 	}
 
 	public WSRPConsumerPortlet addWSRPConsumerPortlet(
 			String wsrpConsumerUuid, String name, String portletHandle,
-			String userToken, ServiceContext serviceContext)
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		WSRPConsumer wsrpConsumer = wsrpConsumerLocalService.getWSRPConsumer(
 			wsrpConsumerUuid);
 
 		return addWSRPConsumerPortlet(
-			wsrpConsumer.getWsrpConsumerId(), name, portletHandle, userToken,
+			wsrpConsumer.getWsrpConsumerId(), name, portletHandle,
 			serviceContext);
 	}
 
 	@Override
-	public void deleteWSRPConsumerPortlet(long wsrpConsumerPortletId)
+	public WSRPConsumerPortlet deleteWSRPConsumerPortlet(
+			long wsrpConsumerPortletId)
 		throws PortalException, SystemException {
 
 		WSRPConsumerPortlet wsrpConsumerPortlet =
 			wsrpConsumerPortletPersistence.findByPrimaryKey(
 				wsrpConsumerPortletId);
 
-		deleteWSRPConsumerPortlet(wsrpConsumerPortlet);
+		return deleteWSRPConsumerPortlet(wsrpConsumerPortlet);
 	}
 
 	public void deleteWSRPConsumerPortlet(String wsrpConsumerPortletUuid)
@@ -144,7 +145,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 	}
 
 	@Override
-	public void deleteWSRPConsumerPortlet(
+	public WSRPConsumerPortlet deleteWSRPConsumerPortlet(
 			WSRPConsumerPortlet wsrpConsumerPortlet)
 		throws PortalException, SystemException {
 
@@ -156,6 +157,8 @@ public class WSRPConsumerPortletLocalServiceImpl
 		wsrpConsumerPortletLocalService.destroyWSRPConsumerPortlet(
 			wsrpConsumerPortlet.getWsrpConsumerPortletId(),
 			wsrpConsumerPortlet.getUuid(), wsrpConsumer.getUrl());
+
+		return wsrpConsumerPortlet;
 	}
 
 	public void deleteWSRPConsumerPortlets(long wsrpConsumerId)
@@ -178,14 +181,20 @@ public class WSRPConsumerPortletLocalServiceImpl
 			Portlet portlet = _portletsPool.remove(wsrpConsumerPortletUuid);
 
 			if (portlet == null) {
-				return;
+				WSRPConsumerPortlet wsrpConsumerPortlet =
+					getWSRPConsumerPortlet(wsrpConsumerPortletId);
+
+				portlet = PortletLocalServiceUtil.getPortletById(
+					wsrpConsumerPortlet.getCompanyId(),
+					getPortletId(wsrpConsumerPortletUuid));
+			}
+			else {
+				WSRPConsumerManagerFactory.destroyWSRPConsumerManager(url);
+
+				_failedWSRPConsumerPortlets.remove(wsrpConsumerPortletId);
 			}
 
-			WSRPConsumerManagerFactory.destroyWSRPConsumerManager(url);
-
 			PortletInstanceFactoryUtil.destroy(portlet);
-
-			_failedWSRPConsumerPortlets.remove(wsrpConsumerPortletId);
 		}
 		catch (Exception e) {
 			_log.error(
@@ -266,13 +275,12 @@ public class WSRPConsumerPortletLocalServiceImpl
 				String wsrpConsumerPortletUuid = (String)tuple.getObject(2);
 				String name = (String)tuple.getObject(3);
 				String portletHandle = (String)tuple.getObject(4);
-				String userToken = (String)tuple.getObject(5);
 
 				_failedWSRPConsumerPortlets.remove(wsrpConsumerPortletId);
 
 				initWSRPConsumerPortlet(
 					companyId, wsrpConsumerId, wsrpConsumerPortletId,
-					wsrpConsumerPortletUuid, name, portletHandle, userToken);
+					wsrpConsumerPortletUuid, name, portletHandle);
 			}
 			catch (Exception e) {
 				_log.error(
@@ -287,8 +295,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public void initWSRPConsumerPortlet(
 			long companyId, long wsrpConsumerId, long wsrpConsumerPortletId,
-			String wsrpConsumerPortletUuid, String name, String portletHandle,
-			String userToken)
+			String wsrpConsumerPortletUuid, String name, String portletHandle)
 		throws PortalException, SystemException {
 
 		boolean initializationFailed = false;
@@ -296,7 +303,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 		try {
 			Portlet portlet = getPortlet(
 				companyId, wsrpConsumerId, wsrpConsumerPortletUuid, name,
-				portletHandle, userToken);
+				portletHandle);
 
 			if (!portlet.isActive()) {
 				initializationFailed = true;
@@ -324,7 +331,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 			if (initializationFailed) {
 				Tuple tuple = new Tuple(
 					companyId, wsrpConsumerId, wsrpConsumerPortletUuid, name,
-					portletHandle, userToken);
+					portletHandle);
 
 				_failedWSRPConsumerPortlets.put(wsrpConsumerPortletId, tuple);
 			}
@@ -343,7 +350,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 					wsrpConsumerPortlet.getWsrpConsumerPortletId(),
 					wsrpConsumerPortlet.getUuid(),
 					wsrpConsumerPortlet.getName(),
-					wsrpConsumerPortlet.getPortletHandle(), null);
+					wsrpConsumerPortlet.getPortletHandle());
 			}
 			catch (Exception e) {
 				_log.error(
@@ -367,7 +374,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 		wsrpConsumerPortlet.setModifiedDate(new Date());
 		wsrpConsumerPortlet.setName(name);
 
-		wsrpConsumerPortletPersistence.update(wsrpConsumerPortlet, false);
+		wsrpConsumerPortletPersistence.update(wsrpConsumerPortlet);
 
 		return wsrpConsumerPortlet;
 	}
@@ -467,8 +474,9 @@ public class WSRPConsumerPortletLocalServiceImpl
 			}
 		}
 
-		MessageElement[] messageElements = ExtensionUtil.getMessageElements(
-			portletDescription.getExtensions());
+		MessageElement[] messageElements =
+			ExtensionHelperUtil.getMessageElements(
+				portletDescription.getExtensions());
 
 		if (messageElements != null) {
 			for (MessageElement messageElement : messageElements) {
@@ -481,7 +489,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 		throws Exception {
 
 		if (_consumerPortletClass == null) {
-			ClassLoader classLoader = getClass().getClassLoader();
+			ClassLoader classLoader = getClassLoader();
 
 			_consumerPortletClass =
 				(Class<ConsumerPortlet>)classLoader.loadClass(
@@ -493,7 +501,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 
 	protected Portlet getPortlet(
 			long companyId, long wsrpConsumerId, String wsrpConsumerPortletUuid,
-			String name, String portletHandle, String userToken)
+			String name, String portletHandle)
 		throws Exception {
 
 		Portlet portlet = _portletsPool.get(wsrpConsumerPortletUuid);
@@ -502,11 +510,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 			return portlet;
 		}
 
-		String portletId =
-			ConsumerPortlet.PORTLET_NAME_PREFIX.concat(wsrpConsumerPortletUuid);
-
-		portletId = PortalUtil.getJsSafePortletId(
-			PortalUUIDUtil.toJsSafeUuid(portletId));
+		String portletId = getPortletId(wsrpConsumerPortletUuid);
 
 		portlet = PortletLocalServiceUtil.clonePortlet(_CONSUMER_PORTLET_ID);
 
@@ -534,8 +538,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 
 		try {
 			WSRPConsumerManager wsrpConsumerManager =
-				WSRPConsumerManagerFactory.getWSRPConsumerManager(
-					wsrpConsumer, userToken);
+				WSRPConsumerManagerFactory.getWSRPConsumerManager(wsrpConsumer);
 
 			portletDescription = wsrpConsumerManager.getPortletDescription(
 				portletHandle);
@@ -579,6 +582,16 @@ public class WSRPConsumerPortletLocalServiceImpl
 		return portlet;
 	}
 
+	protected String getPortletId(String wsrpConsumerPortletUuid) {
+		String portletId = ConsumerPortlet.PORTLET_NAME_PREFIX.concat(
+			wsrpConsumerPortletUuid);
+
+		portletId = PortalUtil.getJsSafePortletId(
+			PortalUUIDUtil.toJsSafeUuid(portletId));
+
+		return portletId;
+	}
+
 	protected String getProxyURL(String url) {
 		return "/proxy?url=" + HttpUtil.encodeURL(url);
 	}
@@ -597,8 +610,18 @@ public class WSRPConsumerPortletLocalServiceImpl
 	protected void setExtension(
 		Portlet portlet, MessageElement messageElement) {
 
-		String name = ExtensionUtil.getNameAttribute(messageElement);
+		String name = ExtensionHelperUtil.getNameAttribute(messageElement);
 		String value = messageElement.getValue();
+
+		if (Validator.isNull(name)) {
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					"Message element " + messageElement.toString() +
+						" has a null name");
+			}
+
+			return;
+		}
 
 		if (name.equals("css-class-wrapper")) {
 			portlet.setCssClassWrapper(value);

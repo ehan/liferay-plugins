@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,104 +14,140 @@
 
 package com.liferay.portal.workflow.kaleo.service;
 
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodHandler;
-import com.liferay.portal.kernel.util.MethodKey;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
-	public KaleoNodeLocalServiceClp(ClassLoaderProxy classLoaderProxy) {
-		_classLoaderProxy = classLoaderProxy;
+	public KaleoNodeLocalServiceClp(InvokableLocalService invokableLocalService) {
+		_invokableLocalService = invokableLocalService;
 
-		_addKaleoNodeMethodKey0 = new MethodKey(_classLoaderProxy.getClassName(),
-				"addKaleoNode",
-				com.liferay.portal.workflow.kaleo.model.KaleoNode.class);
+		_methodName0 = "addKaleoNode";
 
-		_createKaleoNodeMethodKey1 = new MethodKey(_classLoaderProxy.getClassName(),
-				"createKaleoNode", long.class);
+		_methodParameterTypes0 = new String[] {
+				"com.liferay.portal.workflow.kaleo.model.KaleoNode"
+			};
 
-		_deleteKaleoNodeMethodKey2 = new MethodKey(_classLoaderProxy.getClassName(),
-				"deleteKaleoNode", long.class);
+		_methodName1 = "createKaleoNode";
 
-		_deleteKaleoNodeMethodKey3 = new MethodKey(_classLoaderProxy.getClassName(),
-				"deleteKaleoNode",
-				com.liferay.portal.workflow.kaleo.model.KaleoNode.class);
+		_methodParameterTypes1 = new String[] { "long" };
 
-		_dynamicQueryMethodKey4 = new MethodKey(_classLoaderProxy.getClassName(),
-				"dynamicQuery",
-				com.liferay.portal.kernel.dao.orm.DynamicQuery.class);
+		_methodName2 = "deleteKaleoNode";
 
-		_dynamicQueryMethodKey5 = new MethodKey(_classLoaderProxy.getClassName(),
-				"dynamicQuery",
-				com.liferay.portal.kernel.dao.orm.DynamicQuery.class,
-				int.class, int.class);
+		_methodParameterTypes2 = new String[] { "long" };
 
-		_dynamicQueryMethodKey6 = new MethodKey(_classLoaderProxy.getClassName(),
-				"dynamicQuery",
-				com.liferay.portal.kernel.dao.orm.DynamicQuery.class,
-				int.class, int.class,
-				com.liferay.portal.kernel.util.OrderByComparator.class);
+		_methodName3 = "deleteKaleoNode";
 
-		_dynamicQueryCountMethodKey7 = new MethodKey(_classLoaderProxy.getClassName(),
-				"dynamicQueryCount",
-				com.liferay.portal.kernel.dao.orm.DynamicQuery.class);
+		_methodParameterTypes3 = new String[] {
+				"com.liferay.portal.workflow.kaleo.model.KaleoNode"
+			};
 
-		_fetchKaleoNodeMethodKey8 = new MethodKey(_classLoaderProxy.getClassName(),
-				"fetchKaleoNode", long.class);
+		_methodName4 = "dynamicQuery";
 
-		_getKaleoNodeMethodKey9 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getKaleoNode", long.class);
+		_methodParameterTypes4 = new String[] {  };
 
-		_getPersistedModelMethodKey10 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getPersistedModel", java.io.Serializable.class);
+		_methodName5 = "dynamicQuery";
 
-		_getKaleoNodesMethodKey11 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getKaleoNodes", int.class, int.class);
+		_methodParameterTypes5 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
+			};
 
-		_getKaleoNodesCountMethodKey12 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getKaleoNodesCount");
+		_methodName6 = "dynamicQuery";
 
-		_updateKaleoNodeMethodKey13 = new MethodKey(_classLoaderProxy.getClassName(),
-				"updateKaleoNode",
-				com.liferay.portal.workflow.kaleo.model.KaleoNode.class);
+		_methodParameterTypes6 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int"
+			};
 
-		_updateKaleoNodeMethodKey14 = new MethodKey(_classLoaderProxy.getClassName(),
-				"updateKaleoNode",
-				com.liferay.portal.workflow.kaleo.model.KaleoNode.class,
-				boolean.class);
+		_methodName7 = "dynamicQuery";
 
-		_getBeanIdentifierMethodKey15 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getBeanIdentifier");
+		_methodParameterTypes7 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
 
-		_setBeanIdentifierMethodKey16 = new MethodKey(_classLoaderProxy.getClassName(),
-				"setBeanIdentifier", java.lang.String.class);
+		_methodName8 = "dynamicQueryCount";
 
-		_addKaleoNodeMethodKey17 = new MethodKey(_classLoaderProxy.getClassName(),
-				"addKaleoNode", long.class,
-				com.liferay.portal.workflow.kaleo.definition.Node.class,
-				com.liferay.portal.service.ServiceContext.class);
+		_methodParameterTypes8 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
+			};
 
-		_deleteCompanyKaleoNodesMethodKey18 = new MethodKey(_classLoaderProxy.getClassName(),
-				"deleteCompanyKaleoNodes", long.class);
+		_methodName9 = "dynamicQueryCount";
 
-		_deleteKaleoDefinitionKaleoNodesMethodKey19 = new MethodKey(_classLoaderProxy.getClassName(),
-				"deleteKaleoDefinitionKaleoNodes", long.class);
+		_methodParameterTypes9 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery",
+				"com.liferay.portal.kernel.dao.orm.Projection"
+			};
+
+		_methodName10 = "fetchKaleoNode";
+
+		_methodParameterTypes10 = new String[] { "long" };
+
+		_methodName11 = "getKaleoNode";
+
+		_methodParameterTypes11 = new String[] { "long" };
+
+		_methodName12 = "getPersistedModel";
+
+		_methodParameterTypes12 = new String[] { "java.io.Serializable" };
+
+		_methodName13 = "getKaleoNodes";
+
+		_methodParameterTypes13 = new String[] { "int", "int" };
+
+		_methodName14 = "getKaleoNodesCount";
+
+		_methodParameterTypes14 = new String[] {  };
+
+		_methodName15 = "updateKaleoNode";
+
+		_methodParameterTypes15 = new String[] {
+				"com.liferay.portal.workflow.kaleo.model.KaleoNode"
+			};
+
+		_methodName16 = "getBeanIdentifier";
+
+		_methodParameterTypes16 = new String[] {  };
+
+		_methodName17 = "setBeanIdentifier";
+
+		_methodParameterTypes17 = new String[] { "java.lang.String" };
+
+		_methodName19 = "addKaleoNode";
+
+		_methodParameterTypes19 = new String[] {
+				"long", "com.liferay.portal.workflow.kaleo.definition.Node",
+				"com.liferay.portal.service.ServiceContext"
+			};
+
+		_methodName20 = "deleteCompanyKaleoNodes";
+
+		_methodParameterTypes20 = new String[] { "long" };
+
+		_methodName21 = "deleteKaleoDefinitionKaleoNodes";
+
+		_methodParameterTypes21 = new String[] { "long" };
+
+		_methodName22 = "getKaleoDefinitionKaleoNodes";
+
+		_methodParameterTypes22 = new String[] { "long" };
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoNode addKaleoNode(
 		com.liferay.portal.workflow.kaleo.model.KaleoNode kaleoNode)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_addKaleoNodeMethodKey0,
-				ClpSerializer.translateInput(kaleoNode));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName0,
+					_methodParameterTypes0,
+					new Object[] { ClpSerializer.translateInput(kaleoNode) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -128,17 +164,18 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return (com.liferay.portal.workflow.kaleo.model.KaleoNode)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoNode createKaleoNode(
 		long kaleoNodeId) {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_createKaleoNodeMethodKey1,
-				kaleoNodeId);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName1,
+					_methodParameterTypes1, new Object[] { kaleoNodeId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -151,16 +188,20 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return (com.liferay.portal.workflow.kaleo.model.KaleoNode)ClpSerializer.translateOutput(returnObj);
 	}
 
-	public void deleteKaleoNode(long kaleoNodeId)
+	@Override
+	public com.liferay.portal.workflow.kaleo.model.KaleoNode deleteKaleoNode(
+		long kaleoNodeId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		MethodHandler methodHandler = new MethodHandler(_deleteKaleoNodeMethodKey2,
-				kaleoNodeId);
+		Object returnObj = null;
 
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName2,
+					_methodParameterTypes2, new Object[] { kaleoNodeId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -177,18 +218,24 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 					" is not a valid exception");
 			}
 		}
+
+		return (com.liferay.portal.workflow.kaleo.model.KaleoNode)ClpSerializer.translateOutput(returnObj);
 	}
 
-	public void deleteKaleoNode(
+	@Override
+	public com.liferay.portal.workflow.kaleo.model.KaleoNode deleteKaleoNode(
 		com.liferay.portal.workflow.kaleo.model.KaleoNode kaleoNode)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		MethodHandler methodHandler = new MethodHandler(_deleteKaleoNodeMethodKey3,
-				ClpSerializer.translateInput(kaleoNode));
+		Object returnObj = null;
 
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName3,
+					_methodParameterTypes3,
+					new Object[] { ClpSerializer.translateInput(kaleoNode) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -201,21 +248,48 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 					" is not a valid exception");
 			}
 		}
+
+		return (com.liferay.portal.workflow.kaleo.model.KaleoNode)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName4,
+					_methodParameterTypes4, new Object[] {  });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_dynamicQueryMethodKey4,
-				ClpSerializer.translateInput(dynamicQuery));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName5,
+					_methodParameterTypes5,
+					new Object[] { ClpSerializer.translateInput(dynamicQuery) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -232,19 +306,27 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_dynamicQueryMethodKey5,
-				ClpSerializer.translateInput(dynamicQuery), start, end);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName6,
+					_methodParameterTypes6,
+					new Object[] {
+						ClpSerializer.translateInput(dynamicQuery),
+						
+					start,
+						
+					end
+					});
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -261,6 +343,7 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -269,14 +352,22 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_dynamicQueryMethodKey6,
-				ClpSerializer.translateInput(dynamicQuery), start, end,
-				ClpSerializer.translateInput(orderByComparator));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName7,
+					_methodParameterTypes7,
+					new Object[] {
+						ClpSerializer.translateInput(dynamicQuery),
+						
+					start,
+						
+					end,
+						
+					ClpSerializer.translateInput(orderByComparator)
+					});
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -293,18 +384,20 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_dynamicQueryCountMethodKey7,
-				ClpSerializer.translateInput(dynamicQuery));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName8,
+					_methodParameterTypes8,
+					new Object[] { ClpSerializer.translateInput(dynamicQuery) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -321,18 +414,54 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName9,
+					_methodParameterTypes9,
+					new Object[] {
+						ClpSerializer.translateInput(dynamicQuery),
+						
+					ClpSerializer.translateInput(projection)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Long)returnObj).longValue();
+	}
+
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoNode fetchKaleoNode(
 		long kaleoNodeId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_fetchKaleoNodeMethodKey8,
-				kaleoNodeId);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName10,
+					_methodParameterTypes10, new Object[] { kaleoNodeId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -349,19 +478,20 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return (com.liferay.portal.workflow.kaleo.model.KaleoNode)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoNode getKaleoNode(
 		long kaleoNodeId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getKaleoNodeMethodKey9,
-				kaleoNodeId);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName11,
+					_methodParameterTypes11, new Object[] { kaleoNodeId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -382,19 +512,21 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return (com.liferay.portal.workflow.kaleo.model.KaleoNode)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getPersistedModelMethodKey10,
-				ClpSerializer.translateInput(primaryKeyObj));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName12,
+					_methodParameterTypes12,
+					new Object[] { ClpSerializer.translateInput(primaryKeyObj) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -415,18 +547,19 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoNode> getKaleoNodes(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getKaleoNodesMethodKey11,
-				start, end);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName13,
+					_methodParameterTypes13, new Object[] { start, end });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -443,16 +576,18 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return (java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoNode>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getKaleoNodesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getKaleoNodesCountMethodKey12);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName14,
+					_methodParameterTypes14, new Object[] {  });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -469,18 +604,20 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoNode updateKaleoNode(
 		com.liferay.portal.workflow.kaleo.model.KaleoNode kaleoNode)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_updateKaleoNodeMethodKey13,
-				ClpSerializer.translateInput(kaleoNode));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName15,
+					_methodParameterTypes15,
+					new Object[] { ClpSerializer.translateInput(kaleoNode) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -497,44 +634,17 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return (com.liferay.portal.workflow.kaleo.model.KaleoNode)ClpSerializer.translateOutput(returnObj);
 	}
 
-	public com.liferay.portal.workflow.kaleo.model.KaleoNode updateKaleoNode(
-		com.liferay.portal.workflow.kaleo.model.KaleoNode kaleoNode,
-		boolean merge)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		MethodHandler methodHandler = new MethodHandler(_updateKaleoNodeMethodKey14,
-				ClpSerializer.translateInput(kaleoNode), merge);
-
-		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
-		}
-		catch (Throwable t) {
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (com.liferay.portal.workflow.kaleo.model.KaleoNode)ClpSerializer.translateOutput(returnObj);
-	}
-
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getBeanIdentifierMethodKey15);
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName16,
+					_methodParameterTypes16, new Object[] {  });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -547,14 +657,16 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		MethodHandler methodHandler = new MethodHandler(_setBeanIdentifierMethodKey16,
-				ClpSerializer.translateInput(beanIdentifier));
-
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			_invokableLocalService.invokeMethod(_methodName17,
+				_methodParameterTypes17,
+				new Object[] { ClpSerializer.translateInput(beanIdentifier) });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -565,6 +677,14 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		}
 	}
 
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoNode addKaleoNode(
 		long kaleoDefinitionId,
 		com.liferay.portal.workflow.kaleo.definition.Node node,
@@ -573,14 +693,20 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_addKaleoNodeMethodKey17,
-				kaleoDefinitionId, ClpSerializer.translateInput(node),
-				ClpSerializer.translateInput(serviceContext));
-
 		try {
-			returnObj = _classLoaderProxy.invoke(methodHandler);
+			returnObj = _invokableLocalService.invokeMethod(_methodName19,
+					_methodParameterTypes19,
+					new Object[] {
+						kaleoDefinitionId,
+						
+					ClpSerializer.translateInput(node),
+						
+					ClpSerializer.translateInput(serviceContext)
+					});
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
@@ -601,15 +727,16 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		return (com.liferay.portal.workflow.kaleo.model.KaleoNode)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void deleteCompanyKaleoNodes(long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		MethodHandler methodHandler = new MethodHandler(_deleteCompanyKaleoNodesMethodKey18,
-				companyId);
-
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			_invokableLocalService.invokeMethod(_methodName20,
+				_methodParameterTypes20, new Object[] { companyId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -624,15 +751,16 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		}
 	}
 
+	@Override
 	public void deleteKaleoDefinitionKaleoNodes(long kaleoDefinitionId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		MethodHandler methodHandler = new MethodHandler(_deleteKaleoDefinitionKaleoNodesMethodKey19,
-				kaleoDefinitionId);
-
 		try {
-			_classLoaderProxy.invoke(methodHandler);
+			_invokableLocalService.invokeMethod(_methodName21,
+				_methodParameterTypes21, new Object[] { kaleoDefinitionId });
 		}
 		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -647,29 +775,78 @@ public class KaleoNodeLocalServiceClp implements KaleoNodeLocalService {
 		}
 	}
 
-	public ClassLoaderProxy getClassLoaderProxy() {
-		return _classLoaderProxy;
+	@Override
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoNode> getKaleoDefinitionKaleoNodes(
+		long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName22,
+					_methodParameterTypes22, new Object[] { kaleoDefinitionId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoNode>)ClpSerializer.translateOutput(returnObj);
 	}
 
-	private ClassLoaderProxy _classLoaderProxy;
-	private MethodKey _addKaleoNodeMethodKey0;
-	private MethodKey _createKaleoNodeMethodKey1;
-	private MethodKey _deleteKaleoNodeMethodKey2;
-	private MethodKey _deleteKaleoNodeMethodKey3;
-	private MethodKey _dynamicQueryMethodKey4;
-	private MethodKey _dynamicQueryMethodKey5;
-	private MethodKey _dynamicQueryMethodKey6;
-	private MethodKey _dynamicQueryCountMethodKey7;
-	private MethodKey _fetchKaleoNodeMethodKey8;
-	private MethodKey _getKaleoNodeMethodKey9;
-	private MethodKey _getPersistedModelMethodKey10;
-	private MethodKey _getKaleoNodesMethodKey11;
-	private MethodKey _getKaleoNodesCountMethodKey12;
-	private MethodKey _updateKaleoNodeMethodKey13;
-	private MethodKey _updateKaleoNodeMethodKey14;
-	private MethodKey _getBeanIdentifierMethodKey15;
-	private MethodKey _setBeanIdentifierMethodKey16;
-	private MethodKey _addKaleoNodeMethodKey17;
-	private MethodKey _deleteCompanyKaleoNodesMethodKey18;
-	private MethodKey _deleteKaleoDefinitionKaleoNodesMethodKey19;
+	private InvokableLocalService _invokableLocalService;
+	private String _methodName0;
+	private String[] _methodParameterTypes0;
+	private String _methodName1;
+	private String[] _methodParameterTypes1;
+	private String _methodName2;
+	private String[] _methodParameterTypes2;
+	private String _methodName3;
+	private String[] _methodParameterTypes3;
+	private String _methodName4;
+	private String[] _methodParameterTypes4;
+	private String _methodName5;
+	private String[] _methodParameterTypes5;
+	private String _methodName6;
+	private String[] _methodParameterTypes6;
+	private String _methodName7;
+	private String[] _methodParameterTypes7;
+	private String _methodName8;
+	private String[] _methodParameterTypes8;
+	private String _methodName9;
+	private String[] _methodParameterTypes9;
+	private String _methodName10;
+	private String[] _methodParameterTypes10;
+	private String _methodName11;
+	private String[] _methodParameterTypes11;
+	private String _methodName12;
+	private String[] _methodParameterTypes12;
+	private String _methodName13;
+	private String[] _methodParameterTypes13;
+	private String _methodName14;
+	private String[] _methodParameterTypes14;
+	private String _methodName15;
+	private String[] _methodParameterTypes15;
+	private String _methodName16;
+	private String[] _methodParameterTypes16;
+	private String _methodName17;
+	private String[] _methodParameterTypes17;
+	private String _methodName19;
+	private String[] _methodParameterTypes19;
+	private String _methodName20;
+	private String[] _methodParameterTypes20;
+	private String _methodName21;
+	private String[] _methodParameterTypes21;
+	private String _methodName22;
+	private String[] _methodParameterTypes22;
 }

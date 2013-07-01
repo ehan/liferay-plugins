@@ -1,19 +1,24 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * This file is part of Liferay Social Office. Liferay Social Office is free
+ * software: you can redistribute it and/or modify it under the terms of the GNU
+ * Affero General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ * Liferay Social Office is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 
 package com.liferay.contacts.util;
 
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -34,12 +39,47 @@ import com.liferay.portal.service.PhoneLocalServiceUtil;
 import com.liferay.portal.service.RegionServiceUtil;
 import com.liferay.portal.service.WebsiteLocalServiceUtil;
 
+import java.lang.reflect.Field;
+
 import java.util.List;
 
 /**
  * @author Ryan Park
+ * @author Jonathan Lee
  */
 public class ContactsUtil {
+
+	public static long getGroupId(String filterBy) {
+		String groupIdString = filterBy.substring(
+			ContactsConstants.FILTER_BY_GROUP.length());
+
+		return GetterUtil.getLong(groupIdString);
+	}
+
+	public static String[] getPortalPropsValue(String key) {
+		try {
+			ClassLoader portalClassLoader =
+				PortalClassLoaderUtil.getClassLoader();
+
+			Class<?> targetClass = portalClassLoader.loadClass(
+				"com.liferay.portal.util.PropsValues");
+
+			Field field = targetClass.getField(key);
+
+			return (String[])field.get((Object)null);
+		}
+		catch (Exception e) {
+		}
+
+		return null;
+	}
+
+	public static long getSocialRelationType(String filterBy) {
+		String socialRelationTypeString = filterBy.substring(
+			ContactsConstants.FILTER_BY_TYPE.length());
+
+		return GetterUtil.getLong(socialRelationTypeString);
+	}
 
 	public static String getVCard(User user) throws Exception {
 		StringBundler sb = new StringBundler();
@@ -72,12 +112,11 @@ public class ContactsUtil {
 
 	private static String _getAddresses(User user) throws Exception {
 		List<Address> addresses = AddressLocalServiceUtil.getAddresses(
-			user.getCompanyId(), Contact.class.getName(),
-			user.getContactId());
+			user.getCompanyId(), Contact.class.getName(), user.getContactId());
 
 		StringBundler sb = new StringBundler(addresses.size() * 19);
 
-		for (Address address: addresses) {
+		for (Address address : addresses) {
 			sb.append("ADR;TYPE=");
 
 			ListType listType = address.getType();
@@ -268,8 +307,7 @@ public class ContactsUtil {
 
 	private static String _getPhones(User user) throws Exception {
 		List<Phone> phones = PhoneLocalServiceUtil.getPhones(
-			user.getCompanyId(), Contact.class.getName(),
-			user.getContactId());
+			user.getCompanyId(), Contact.class.getName(), user.getContactId());
 
 		StringBundler sb = new StringBundler(phones.size() * 7);
 
@@ -292,12 +330,11 @@ public class ContactsUtil {
 
 	private static String _getWebsites(User user) throws Exception {
 		List<Website> websites = WebsiteLocalServiceUtil.getWebsites(
-			user.getCompanyId(), Contact.class.getName(),
-			user.getContactId());
+			user.getCompanyId(), Contact.class.getName(), user.getContactId());
 
 		StringBundler sb = new StringBundler(websites.size() * 5);
 
-		for (Website website: websites) {
+		for (Website website : websites) {
 			sb.append("URL;TYPE=");
 
 			ListType listType = website.getType();

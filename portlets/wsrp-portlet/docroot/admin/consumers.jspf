@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,6 +14,9 @@
  */
 --%>
 
+<liferay-ui:error key="restartConsumer" message="the-consumer-is-not-available" />
+<liferay-ui:error key="updateServiceDescription" message="unable-to-update-the-service-description" />
+
 <liferay-ui:search-container
 	emptyResultsMessage="there-are-no-consumers"
 	headerNames="name"
@@ -26,12 +29,13 @@
 
 	<liferay-ui:search-container-row
 		className="com.liferay.wsrp.model.WSRPConsumer"
+		escapedModel="<%= true %>"
 		keyProperty="wsrpConsumerId"
 		modelVar="consumer"
 	>
 
 		<%
-		if (!WSRPConsumerManagerFactory.testWSRPConsumerManager(consumer, userToken)) {
+		if (!WSRPConsumerManagerFactory.testWSRPConsumerManager(consumer)) {
 			row.setRestricted(true);
 		}
 		%>
@@ -56,7 +60,7 @@
 	</liferay-ui:search-container-row>
 
 	<div>
-		<input type="button" value="<liferay-ui:message key="add-consumer" />" onClick="location.href = '<portlet:renderURL><portlet:param name="mvcPath" value="/admin/edit_consumer.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>';" />
+		<input onClick="location.href = '<portlet:renderURL><portlet:param name="mvcPath" value="/admin/edit_consumer.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>';" type="button" value="<liferay-ui:message key="add-consumer" />" />
 	</div>
 
 	<br />

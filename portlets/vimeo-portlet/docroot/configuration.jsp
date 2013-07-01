@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,13 +22,13 @@
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 
 	<aui:layout>
-		<aui:column id="controls" columnWidth="50">
+		<aui:column columnWidth="50" id="controls">
 			<div class="aui-field-row">
 				<aui:input cssClass="url" inlineField="true" label="url" name="preferences--url--" value="<%= url %>" />
 			</div>
 
 			<div class="aui-field-row">
-				<aui:select label="preset-frame-size" name="preferences--presetSize--" inlineField="true" cssClass="preset-size">
+				<aui:select cssClass="preset-size" inlineField="true" label="preset-frame-size" name="preferences--presetSize--">
 					<aui:option label="Custom" value="custom" />
 					<aui:option label="Standard 360 4:3" selected='<%= presetSize.equals("480x360") %>' value="480x360" />
 					<aui:option label="Standard 360 16:9" selected='<%= presetSize.equals("640x360") %>' value="640x360" />
@@ -52,19 +52,19 @@
 					</div>
 
 					<div class="aui-field-row">
-						<aui:input cssClass="autoplay" inlineField="true" label="auto-play" name="preferences--autoplay--" value="<%= autoplay %>" type="checkbox" />
+						<aui:input cssClass="autoplay" inlineField="true" label="auto-play" name="preferences--autoplay--" type="checkbox" value="<%= autoplay %>" />
 					</div>
 
 					<div class="aui-field-row">
-						<aui:input cssClass="enable-fullscreen" inlineField="true" label="enable-fullscreen-option" name="preferences--enableFullscreen--" value="<%= enableFullscreen %>" type="checkbox" />
+						<aui:input cssClass="enable-fullscreen" inlineField="true" label="enable-fullscreen-option" name="preferences--enableFullscreen--" type="checkbox" value="<%= enableFullscreen %>" />
 					</div>
 
 					<div class="aui-field-row">
-						<aui:input cssClass="show-byline" inlineField="true" label="show-byline" name="preferences--showByline--" value="<%= showByline %>" type="checkbox" />
+						<aui:input cssClass="show-byline" inlineField="true" label="show-byline" name="preferences--showByline--" type="checkbox" value="<%= showByline %>" />
 
-						<aui:input cssClass="show-portrait" inlineField="true" label="show-portrait" name="preferences--showPortrait--" value="<%= showPortrait %>" type="checkbox" />
+						<aui:input cssClass="show-portrait" inlineField="true" label="show-portrait" name="preferences--showPortrait--" type="checkbox" value="<%= showPortrait %>" />
 
-						<aui:input cssClass="show-title" inlineField="true" label="show-title" name="preferences--showTitle--" value="<%= showTitle %>" type="checkbox" />
+						<aui:input cssClass="show-title" inlineField="true" label="show-title" name="preferences--showTitle--" type="checkbox" value="<%= showTitle %>" />
 					</div>
 				</liferay-ui:panel>
 			</liferay-ui:panel-container>
@@ -181,7 +181,7 @@
 
 	A.on(
 		'change',
-		function (e) {
+		function(e) {
 			createPlayer();
 		},
 		allInputsNode
@@ -196,7 +196,7 @@
 
 	A.on(
 		'change',
-		function (e) {
+		function(e) {
 			presetSizeNode.val('');
 
 			presetSizeNode.val(widthNode.val() + 'x' + heightNode.val());
@@ -206,7 +206,7 @@
 
 	A.on(
 		'change',
-		function (e) {
+		function(e) {
 			presetSizeNode.val('');
 
 			presetSizeNode.val(widthNode.val() + 'x' + heightNode.val());
@@ -216,7 +216,7 @@
 
 	A.on(
 		'click',
-		function (e) {
+		function(e) {
 			e.preventDefault();
 
 			submitForm(document['<portlet:namespace />fm']);
@@ -226,7 +226,7 @@
 
 	A.on(
 		'windowresize',
-		function (e) {
+		function(e) {
 			createPlayer();
 		}
 	);
@@ -234,7 +234,7 @@
 	new A.ColorPicker(
 		{
 			after: {
-				colorChange: function (e) {
+				colorChange: function(e) {
 					playerColorNode.val('#' + this.get('hex'));
 
 					createPlayer();

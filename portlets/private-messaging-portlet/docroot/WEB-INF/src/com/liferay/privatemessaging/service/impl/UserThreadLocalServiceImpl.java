@@ -1,15 +1,18 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * This file is part of Liferay Social Office. Liferay Social Office is free
+ * software: you can redistribute it and/or modify it under the terms of the GNU
+ * Affero General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ * Liferay Social Office is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 
 package com.liferay.privatemessaging.service.impl;
@@ -32,9 +35,11 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -48,6 +53,7 @@ import com.liferay.privatemessaging.model.UserThread;
 import com.liferay.privatemessaging.portlet.PrivateMessagingPortlet;
 import com.liferay.privatemessaging.service.UserThreadLocalServiceUtil;
 import com.liferay.privatemessaging.service.base.UserThreadLocalServiceBaseImpl;
+import com.liferay.privatemessaging.util.PortletKeys;
 import com.liferay.privatemessaging.util.PrivateMessagingConstants;
 
 import java.io.InputStream;
@@ -75,6 +81,8 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 
 		long parentMBMessageId = MBMessageConstants.DEFAULT_PARENT_MESSAGE_ID;
 
+		List<User> recipients = null;
+
 		if (mbThreadId != 0) {
 			List<MBMessage> mbMessages =
 				MBMessageLocalServiceUtil.getThreadMessages(
@@ -85,12 +93,17 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 			parentMBMessageId = lastMBMessage.getMessageId();
 			subject = lastMBMessage.getSubject();
 		}
+		else {
+			recipients = parseRecipients(userId, to);
 
-		List<User> recipients = parseRecipients(userId, to);
+			if (recipients.isEmpty()) {
+				return null;
+			}
+		}
 
 		return addPrivateMessage(
-			userId, mbThreadId, parentMBMessageId, recipients, subject,
-			body, inputStreamOVPs, themeDisplay);
+			userId, mbThreadId, parentMBMessageId, recipients, subject, body,
+			inputStreamOVPs, themeDisplay);
 	}
 
 	public MBMessage addPrivateMessageBranch(
@@ -126,6 +139,7 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 
 		userThread.setCompanyId(user.getCompanyId());
 		userThread.setUserId(userId);
+		userThread.setUserName(user.getFullName());
 		userThread.setCreateDate(new Date());
 		userThread.setModifiedDate(new Date());
 		userThread.setMbThreadId(mbThreadId);
@@ -133,7 +147,7 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 		userThread.setRead(read);
 		userThread.setDeleted(deleted);
 
-		userThreadPersistence.update(userThread, false);
+		userThreadPersistence.update(userThread);
 	}
 
 	public void deleteUser(long userId)
@@ -157,7 +171,7 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 
 		userThread.setDeleted(true);
 
-		userThreadPersistence.update(userThread, false);
+		userThreadPersistence.update(userThread);
 	}
 
 	public List<UserThread> getMBThreadUserThreads(long mbThreadId)
@@ -213,7 +227,7 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 
 		userThread.setRead(true);
 
-		userThreadPersistence.update(userThread, false);
+		userThreadPersistence.update(userThread);
 	}
 
 	public void markUserThreadAsUnread(long userId, long mbThreadId)
@@ -224,7 +238,22 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 
 		userThread.setRead(false);
 
-		userThreadPersistence.update(userThread, false);
+		userThreadPersistence.update(userThread);
+	}
+
+	public void updateUserName(User user) throws SystemException {
+		String userName = user.getFullName();
+
+		List<UserThread> userThreads = userThreadPersistence.findByUserId(
+			user.getUserId());
+
+		for (UserThread userThread : userThreads) {
+			if (!userName.equals(userThread.getUserName())) {
+				userThread.setUserName(userName);
+
+				userThreadPersistence.update(userThread);
+			}
+		}
 	}
 
 	protected MBMessage addPrivateMessage(
@@ -268,8 +297,8 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 			}
 
 			addUserThread(
-				userId, mbMessage.getThreadId(), mbMessage.getMessageId(),
-				true, false);
+				userId, mbMessage.getThreadId(), mbMessage.getMessageId(), true,
+				false);
 		}
 		else {
 			List<UserThread> userThreads =
@@ -290,7 +319,7 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 					userThread.setDeleted(false);
 				}
 
-				userThreadPersistence.update(userThread, false);
+				userThreadPersistence.update(userThread);
 			}
 		}
 
@@ -310,6 +339,23 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 		return mbMessage;
 	}
 
+	protected String getThreadURL(
+			User user, long threadId, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		Group group = user.getGroup();
+
+		long plid = PortalUtil.getPlidFromPortletId(
+			group.getGroupId(), true, PortletKeys.PRIVATE_MESSAGING);
+
+		Layout layout = LayoutLocalServiceUtil.getLayout(plid);
+
+		String privateMessageURL = PortalUtil.getLayoutFullURL(
+			layout, themeDisplay, false);
+
+		return privateMessageURL + "/-/private_messaging/thread/" + threadId;
+	}
+
 	protected List<User> parseRecipients(long userId, String to)
 		throws PortalException, SystemException {
 
@@ -324,17 +370,17 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 			int y = recipient.indexOf(CharPool.GREATER_THAN);
 
 			try {
-				if ((x != -1) && (y != -1)) {
-					String screenName = recipient.substring(x + 1, y);
+				String screenName = recipient;
 
-					users.add(
-						UserLocalServiceUtil.getUserByScreenName(
-							user.getCompanyId(), screenName));
+				if ((x != -1) && (y != -1)) {
+					screenName = recipient.substring(x + 1, y);
 				}
-				else {
-					users.add(
-						UserLocalServiceUtil.getUserByScreenName(
-							user.getCompanyId(), recipient));
+
+				User recipientUser = UserLocalServiceUtil.getUserByScreenName(
+					user.getCompanyId(), screenName);
+
+				if (!users.contains(recipientUser)) {
+					users.add(recipientUser);
 				}
 			}
 			catch (NoSuchUserException nsue) {
@@ -350,12 +396,6 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 		MBMessage mbMessage = MBMessageLocalServiceUtil.getMBMessage(
 			mbMessageId);
 
-		String layoutFullURL = PortalUtil.getLayoutFullURL(themeDisplay);
-
-		if (Validator.isNull(layoutFullURL)) {
-			return;
-		}
-
 		User sender = UserLocalServiceUtil.getUser(mbMessage.getUserId());
 
 		Company company = CompanyLocalServiceUtil.getCompany(
@@ -370,12 +410,10 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 		subject = StringUtil.replace(
 			subject,
 			new String[] {
-				"[$COMPANY_NAME$]",
-				"[$FROM_NAME$]"
+				"[$COMPANY_NAME$]", "[$FROM_NAME$]"
 			},
 			new String[] {
-				company.getName(),
-				sender.getFullName()
+				company.getName(), sender.getFullName()
 			});
 
 		String body = StringUtil.read(
@@ -390,29 +428,16 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 				"/user_" + (sender.isFemale() ? "female" : "male") +
 					"_portrait?img_id=" + portraitId + "&t=" + tokenId;
 
-		String threadURL =
-			layoutFullURL + "/-/private_messaging/thread/" +
-				mbMessage.getThreadId();
-
 		body = StringUtil.replace(
 			body,
 			new String[] {
-				"[$BODY$]",
-				"[$COMPANY_NAME$]",
-				"[$FROM_AVATAR$]",
-				"[$FROM_NAME$]",
-				"[$FROM_PROFILE_URL$]",
-				"[$SUBJECT$]",
-				"[$THREAD_URL$]"
+				"[$BODY$]", "[$COMPANY_NAME$]", "[$FROM_AVATAR$]",
+				"[$FROM_NAME$]", "[$FROM_PROFILE_URL$]", "[$SUBJECT$]"
 			},
 			new String[] {
-				mbMessage.getBody(),
-				company.getName(),
-				portraitURL,
-				sender.getFullName(),
-				sender.getDisplayURL(themeDisplay),
-				mbMessage.getSubject(),
-				threadURL
+				mbMessage.getBody(), company.getName(), portraitURL,
+				sender.getFullName(), sender.getDisplayURL(themeDisplay),
+				mbMessage.getSubject()
 			});
 
 		List<UserThread> userThreads =
@@ -427,6 +452,13 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 			User recipient = UserLocalServiceUtil.getUser(
 				userThread.getUserId());
 
+			String threadURL = getThreadURL(
+				recipient, mbMessage.getThreadId(), themeDisplay);
+
+			if (Validator.isNull(threadURL)) {
+				continue;
+			}
+
 			InternetAddress to = new InternetAddress(
 				recipient.getEmailAddress());
 
@@ -436,8 +468,15 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 					recipient.getTimeZone());
 
 			body = StringUtil.replace(
-				body, "[$SENT_DATE$]",
-				dateFormatDateTime.format(mbMessage.getCreateDate()));
+				body,
+				new String[] {
+					"[$SENT_DATE$]", "[$THREAD_URL$]"
+				},
+				new String[] {
+					dateFormatDateTime.format(mbMessage.getCreateDate()),
+					threadURL
+				}
+			);
 
 			MailMessage mailMessage = new MailMessage(
 				from, to, subject, body, true);
@@ -449,15 +488,17 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 	protected void sendNotificationEvent(MBMessage mbMessage)
 		throws PortalException, SystemException {
 
-		JSONObject notificationEventJSON = JSONFactoryUtil.createJSONObject();
+		JSONObject notificationEventJSONObject =
+			JSONFactoryUtil.createJSONObject();
 
-		notificationEventJSON.put("body", mbMessage.getBody());
-		notificationEventJSON.put("entryId", mbMessage.getThreadId());
-		notificationEventJSON.put("entryKeyName", "mbThreadId");
-		notificationEventJSON.put("mvcPath", "/view.jsp");
-		notificationEventJSON.put("portletId", "1_WAR_privatemessagingportlet");
-		notificationEventJSON.put("title", "x-sent-you-a-message");
-		notificationEventJSON.put("userId", mbMessage.getUserId());
+		notificationEventJSONObject.put("body", mbMessage.getBody());
+		notificationEventJSONObject.put("entryId", mbMessage.getThreadId());
+		notificationEventJSONObject.put("entryKeyName", "mbThreadId");
+		notificationEventJSONObject.put("mvcPath", "/view.jsp");
+		notificationEventJSONObject.put(
+			"portletId", PortletKeys.PRIVATE_MESSAGING);
+		notificationEventJSONObject.put("title", "x-sent-you-a-message");
+		notificationEventJSONObject.put("userId", mbMessage.getUserId());
 
 		List<UserThread> userThreads =
 			UserThreadLocalServiceUtil.getMBThreadUserThreads(
@@ -471,7 +512,7 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 			NotificationEvent notificationEvent =
 				NotificationEventFactoryUtil.createNotificationEvent(
 					System.currentTimeMillis(), "6_WAR_soportlet",
-					notificationEventJSON);
+					notificationEventJSONObject);
 
 			notificationEvent.setDeliveryRequired(0);
 

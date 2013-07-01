@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,6 +36,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the Account service. Represents a row in the &quot;Mail_Account&quot; database table, with each column mapped to a property of this class.
@@ -110,50 +112,255 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 	public AccountModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _accountId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setAccountId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_accountId);
+		return _accountId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Account.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Account.class.getName();
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("accountId", getAccountId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("address", getAddress());
+		attributes.put("personalName", getPersonalName());
+		attributes.put("protocol", getProtocol());
+		attributes.put("incomingHostName", getIncomingHostName());
+		attributes.put("incomingPort", getIncomingPort());
+		attributes.put("incomingSecure", getIncomingSecure());
+		attributes.put("outgoingHostName", getOutgoingHostName());
+		attributes.put("outgoingPort", getOutgoingPort());
+		attributes.put("outgoingSecure", getOutgoingSecure());
+		attributes.put("login", getLogin());
+		attributes.put("password", getPassword());
+		attributes.put("savePassword", getSavePassword());
+		attributes.put("signature", getSignature());
+		attributes.put("useSignature", getUseSignature());
+		attributes.put("folderPrefix", getFolderPrefix());
+		attributes.put("inboxFolderId", getInboxFolderId());
+		attributes.put("draftFolderId", getDraftFolderId());
+		attributes.put("sentFolderId", getSentFolderId());
+		attributes.put("trashFolderId", getTrashFolderId());
+		attributes.put("defaultSender", getDefaultSender());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long accountId = (Long)attributes.get("accountId");
+
+		if (accountId != null) {
+			setAccountId(accountId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String address = (String)attributes.get("address");
+
+		if (address != null) {
+			setAddress(address);
+		}
+
+		String personalName = (String)attributes.get("personalName");
+
+		if (personalName != null) {
+			setPersonalName(personalName);
+		}
+
+		String protocol = (String)attributes.get("protocol");
+
+		if (protocol != null) {
+			setProtocol(protocol);
+		}
+
+		String incomingHostName = (String)attributes.get("incomingHostName");
+
+		if (incomingHostName != null) {
+			setIncomingHostName(incomingHostName);
+		}
+
+		Integer incomingPort = (Integer)attributes.get("incomingPort");
+
+		if (incomingPort != null) {
+			setIncomingPort(incomingPort);
+		}
+
+		Boolean incomingSecure = (Boolean)attributes.get("incomingSecure");
+
+		if (incomingSecure != null) {
+			setIncomingSecure(incomingSecure);
+		}
+
+		String outgoingHostName = (String)attributes.get("outgoingHostName");
+
+		if (outgoingHostName != null) {
+			setOutgoingHostName(outgoingHostName);
+		}
+
+		Integer outgoingPort = (Integer)attributes.get("outgoingPort");
+
+		if (outgoingPort != null) {
+			setOutgoingPort(outgoingPort);
+		}
+
+		Boolean outgoingSecure = (Boolean)attributes.get("outgoingSecure");
+
+		if (outgoingSecure != null) {
+			setOutgoingSecure(outgoingSecure);
+		}
+
+		String login = (String)attributes.get("login");
+
+		if (login != null) {
+			setLogin(login);
+		}
+
+		String password = (String)attributes.get("password");
+
+		if (password != null) {
+			setPassword(password);
+		}
+
+		Boolean savePassword = (Boolean)attributes.get("savePassword");
+
+		if (savePassword != null) {
+			setSavePassword(savePassword);
+		}
+
+		String signature = (String)attributes.get("signature");
+
+		if (signature != null) {
+			setSignature(signature);
+		}
+
+		Boolean useSignature = (Boolean)attributes.get("useSignature");
+
+		if (useSignature != null) {
+			setUseSignature(useSignature);
+		}
+
+		String folderPrefix = (String)attributes.get("folderPrefix");
+
+		if (folderPrefix != null) {
+			setFolderPrefix(folderPrefix);
+		}
+
+		Long inboxFolderId = (Long)attributes.get("inboxFolderId");
+
+		if (inboxFolderId != null) {
+			setInboxFolderId(inboxFolderId);
+		}
+
+		Long draftFolderId = (Long)attributes.get("draftFolderId");
+
+		if (draftFolderId != null) {
+			setDraftFolderId(draftFolderId);
+		}
+
+		Long sentFolderId = (Long)attributes.get("sentFolderId");
+
+		if (sentFolderId != null) {
+			setSentFolderId(sentFolderId);
+		}
+
+		Long trashFolderId = (Long)attributes.get("trashFolderId");
+
+		if (trashFolderId != null) {
+			setTrashFolderId(trashFolderId);
+		}
+
+		Boolean defaultSender = (Boolean)attributes.get("defaultSender");
+
+		if (defaultSender != null) {
+			setDefaultSender(defaultSender);
+		}
+	}
+
+	@Override
 	public long getAccountId() {
 		return _accountId;
 	}
 
+	@Override
 	public void setAccountId(long accountId) {
 		_accountId = accountId;
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
 	}
 
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_columnBitmask |= USERID_COLUMN_BITMASK;
 
@@ -166,10 +373,12 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
@@ -178,6 +387,7 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		return _originalUserId;
 	}
 
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -187,26 +397,32 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	public String getAddress() {
 		if (_address == null) {
 			return StringPool.BLANK;
@@ -216,6 +432,7 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setAddress(String address) {
 		_columnBitmask = -1L;
 
@@ -230,6 +447,7 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		return GetterUtil.getString(_originalAddress);
 	}
 
+	@Override
 	public String getPersonalName() {
 		if (_personalName == null) {
 			return StringPool.BLANK;
@@ -239,10 +457,12 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setPersonalName(String personalName) {
 		_personalName = personalName;
 	}
 
+	@Override
 	public String getProtocol() {
 		if (_protocol == null) {
 			return StringPool.BLANK;
@@ -252,10 +472,12 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setProtocol(String protocol) {
 		_protocol = protocol;
 	}
 
+	@Override
 	public String getIncomingHostName() {
 		if (_incomingHostName == null) {
 			return StringPool.BLANK;
@@ -265,30 +487,37 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setIncomingHostName(String incomingHostName) {
 		_incomingHostName = incomingHostName;
 	}
 
+	@Override
 	public int getIncomingPort() {
 		return _incomingPort;
 	}
 
+	@Override
 	public void setIncomingPort(int incomingPort) {
 		_incomingPort = incomingPort;
 	}
 
+	@Override
 	public boolean getIncomingSecure() {
 		return _incomingSecure;
 	}
 
+	@Override
 	public boolean isIncomingSecure() {
 		return _incomingSecure;
 	}
 
+	@Override
 	public void setIncomingSecure(boolean incomingSecure) {
 		_incomingSecure = incomingSecure;
 	}
 
+	@Override
 	public String getOutgoingHostName() {
 		if (_outgoingHostName == null) {
 			return StringPool.BLANK;
@@ -298,30 +527,37 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setOutgoingHostName(String outgoingHostName) {
 		_outgoingHostName = outgoingHostName;
 	}
 
+	@Override
 	public int getOutgoingPort() {
 		return _outgoingPort;
 	}
 
+	@Override
 	public void setOutgoingPort(int outgoingPort) {
 		_outgoingPort = outgoingPort;
 	}
 
+	@Override
 	public boolean getOutgoingSecure() {
 		return _outgoingSecure;
 	}
 
+	@Override
 	public boolean isOutgoingSecure() {
 		return _outgoingSecure;
 	}
 
+	@Override
 	public void setOutgoingSecure(boolean outgoingSecure) {
 		_outgoingSecure = outgoingSecure;
 	}
 
+	@Override
 	public String getLogin() {
 		if (_login == null) {
 			return StringPool.BLANK;
@@ -331,10 +567,12 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setLogin(String login) {
 		_login = login;
 	}
 
+	@Override
 	public String getPassword() {
 		if (_password == null) {
 			return StringPool.BLANK;
@@ -344,22 +582,27 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setPassword(String password) {
 		_password = password;
 	}
 
+	@Override
 	public boolean getSavePassword() {
 		return _savePassword;
 	}
 
+	@Override
 	public boolean isSavePassword() {
 		return _savePassword;
 	}
 
+	@Override
 	public void setSavePassword(boolean savePassword) {
 		_savePassword = savePassword;
 	}
 
+	@Override
 	public String getSignature() {
 		if (_signature == null) {
 			return StringPool.BLANK;
@@ -369,22 +612,27 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setSignature(String signature) {
 		_signature = signature;
 	}
 
+	@Override
 	public boolean getUseSignature() {
 		return _useSignature;
 	}
 
+	@Override
 	public boolean isUseSignature() {
 		return _useSignature;
 	}
 
+	@Override
 	public void setUseSignature(boolean useSignature) {
 		_useSignature = useSignature;
 	}
 
+	@Override
 	public String getFolderPrefix() {
 		if (_folderPrefix == null) {
 			return StringPool.BLANK;
@@ -394,50 +642,62 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		}
 	}
 
+	@Override
 	public void setFolderPrefix(String folderPrefix) {
 		_folderPrefix = folderPrefix;
 	}
 
+	@Override
 	public long getInboxFolderId() {
 		return _inboxFolderId;
 	}
 
+	@Override
 	public void setInboxFolderId(long inboxFolderId) {
 		_inboxFolderId = inboxFolderId;
 	}
 
+	@Override
 	public long getDraftFolderId() {
 		return _draftFolderId;
 	}
 
+	@Override
 	public void setDraftFolderId(long draftFolderId) {
 		_draftFolderId = draftFolderId;
 	}
 
+	@Override
 	public long getSentFolderId() {
 		return _sentFolderId;
 	}
 
+	@Override
 	public void setSentFolderId(long sentFolderId) {
 		_sentFolderId = sentFolderId;
 	}
 
+	@Override
 	public long getTrashFolderId() {
 		return _trashFolderId;
 	}
 
+	@Override
 	public void setTrashFolderId(long trashFolderId) {
 		_trashFolderId = trashFolderId;
 	}
 
+	@Override
 	public boolean getDefaultSender() {
 		return _defaultSender;
 	}
 
+	@Override
 	public boolean isDefaultSender() {
 		return _defaultSender;
 	}
 
+	@Override
 	public void setDefaultSender(boolean defaultSender) {
 		_defaultSender = defaultSender;
 	}
@@ -447,29 +707,26 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 	}
 
 	@Override
-	public Account toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Account)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
-					Account.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
+			Account.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public Account toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (Account)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -508,6 +765,7 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		return accountImpl;
 	}
 
+	@Override
 	public int compareTo(Account account) {
 		int value = 0;
 
@@ -522,18 +780,15 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof Account)) {
 			return false;
 		}
 
-		Account account = null;
-
-		try {
-			account = (Account)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		Account account = (Account)obj;
 
 		long primaryKey = account.getPrimaryKey();
 
@@ -757,6 +1012,7 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(82);
 
@@ -875,7 +1131,7 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 	}
 
 	private static ClassLoader _classLoader = Account.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Account.class
 		};
 	private long _accountId;
@@ -908,7 +1164,6 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 	private long _sentFolderId;
 	private long _trashFolderId;
 	private boolean _defaultSender;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
-	private Account _escapedModelProxy;
+	private Account _escapedModel;
 }

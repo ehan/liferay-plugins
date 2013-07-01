@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -35,6 +35,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the JIRAAction service. Represents a row in the &quot;jiraaction&quot; database table, with each column mapped to a property of this class.
@@ -86,44 +88,121 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 	public static long JIRAISSUEID_COLUMN_BITMASK = 1L;
 	public static long JIRAUSERID_COLUMN_BITMASK = 2L;
 	public static long TYPE_COLUMN_BITMASK = 4L;
+	public static long MODIFIEDDATE_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.socialcoding.model.JIRAAction"));
 
 	public JIRAActionModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _jiraActionId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setJiraActionId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_jiraActionId);
+		return _jiraActionId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return JIRAAction.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return JIRAAction.class.getName();
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("jiraActionId", getJiraActionId());
+		attributes.put("jiraUserId", getJiraUserId());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("jiraIssueId", getJiraIssueId());
+		attributes.put("type", getType());
+		attributes.put("body", getBody());
+		attributes.put("jiraGroupName", getJiraGroupName());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long jiraActionId = (Long)attributes.get("jiraActionId");
+
+		if (jiraActionId != null) {
+			setJiraActionId(jiraActionId);
+		}
+
+		String jiraUserId = (String)attributes.get("jiraUserId");
+
+		if (jiraUserId != null) {
+			setJiraUserId(jiraUserId);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long jiraIssueId = (Long)attributes.get("jiraIssueId");
+
+		if (jiraIssueId != null) {
+			setJiraIssueId(jiraIssueId);
+		}
+
+		String type = (String)attributes.get("type");
+
+		if (type != null) {
+			setType(type);
+		}
+
+		String body = (String)attributes.get("body");
+
+		if (body != null) {
+			setBody(body);
+		}
+
+		String jiraGroupName = (String)attributes.get("jiraGroupName");
+
+		if (jiraGroupName != null) {
+			setJiraGroupName(jiraGroupName);
+		}
+	}
+
+	@Override
 	public long getJiraActionId() {
 		return _jiraActionId;
 	}
 
+	@Override
 	public void setJiraActionId(long jiraActionId) {
 		_jiraActionId = jiraActionId;
 	}
 
+	@Override
 	public String getJiraUserId() {
 		if (_jiraUserId == null) {
 			return StringPool.BLANK;
@@ -133,6 +212,7 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 		}
 	}
 
+	@Override
 	public void setJiraUserId(String jiraUserId) {
 		_columnBitmask |= JIRAUSERID_COLUMN_BITMASK;
 
@@ -147,28 +227,34 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 		return GetterUtil.getString(_originalJiraUserId);
 	}
 
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_columnBitmask = -1L;
 
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	public long getJiraIssueId() {
 		return _jiraIssueId;
 	}
 
+	@Override
 	public void setJiraIssueId(long jiraIssueId) {
 		_columnBitmask |= JIRAISSUEID_COLUMN_BITMASK;
 
@@ -185,6 +271,7 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 		return _originalJiraIssueId;
 	}
 
+	@Override
 	public String getType() {
 		if (_type == null) {
 			return StringPool.BLANK;
@@ -194,6 +281,7 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 		}
 	}
 
+	@Override
 	public void setType(String type) {
 		_columnBitmask |= TYPE_COLUMN_BITMASK;
 
@@ -208,6 +296,7 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 		return GetterUtil.getString(_originalType);
 	}
 
+	@Override
 	public String getBody() {
 		if (_body == null) {
 			return StringPool.BLANK;
@@ -217,10 +306,12 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 		}
 	}
 
+	@Override
 	public void setBody(String body) {
 		_body = body;
 	}
 
+	@Override
 	public String getJiraGroupName() {
 		if (_jiraGroupName == null) {
 			return StringPool.BLANK;
@@ -230,6 +321,7 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 		}
 	}
 
+	@Override
 	public void setJiraGroupName(String jiraGroupName) {
 		_jiraGroupName = jiraGroupName;
 	}
@@ -239,29 +331,26 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 	}
 
 	@Override
-	public JIRAAction toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (JIRAAction)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(0,
-					JIRAAction.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(0,
+			JIRAAction.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public JIRAAction toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (JIRAAction)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -282,6 +371,7 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 		return jiraActionImpl;
 	}
 
+	@Override
 	public int compareTo(JIRAAction jiraAction) {
 		int value = 0;
 
@@ -299,18 +389,15 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof JIRAAction)) {
 			return false;
 		}
 
-		JIRAAction jiraAction = null;
-
-		try {
-			jiraAction = (JIRAAction)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		JIRAAction jiraAction = (JIRAAction)obj;
 
 		long primaryKey = jiraAction.getPrimaryKey();
 
@@ -428,6 +515,7 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(28);
 
@@ -474,7 +562,7 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 	}
 
 	private static ClassLoader _classLoader = JIRAAction.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			JIRAAction.class
 		};
 	private long _jiraActionId;
@@ -489,7 +577,6 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 	private String _originalType;
 	private String _body;
 	private String _jiraGroupName;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
-	private JIRAAction _escapedModelProxy;
+	private JIRAAction _escapedModel;
 }

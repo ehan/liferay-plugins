@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,13 +23,37 @@
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
-<%@ page import="com.liferay.marketplace.util.MarketplaceConstants" %><%@
+<%@ page import="com.liferay.marketplace.model.App" %><%@
+page import="com.liferay.marketplace.service.AppLocalServiceUtil" %><%@
+page import="com.liferay.marketplace.util.MarketplaceConstants" %><%@
 page import="com.liferay.marketplace.util.PortletKeys" %><%@
-page import="com.liferay.portal.kernel.util.HttpUtil" %><%@
+page import="com.liferay.marketplace.util.comparator.PluginComparator" %><%@
+page import="com.liferay.portal.kernel.dao.orm.QueryUtil" %><%@
+page import="com.liferay.portal.kernel.servlet.ServletContextPool" %><%@
+page import="com.liferay.portal.kernel.util.ArrayUtil" %><%@
+page import="com.liferay.portal.kernel.util.ListUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
-page import="com.liferay.portal.kernel.util.StringPool" %>
+page import="com.liferay.portal.kernel.util.ServerDetector" %><%@
+page import="com.liferay.portal.kernel.util.StringPool" %><%@
+page import="com.liferay.portal.kernel.util.StringUtil" %><%@
+page import="com.liferay.portal.kernel.util.Validator" %><%@
+page import="com.liferay.portal.model.LayoutTemplate" %><%@
+page import="com.liferay.portal.model.Plugin" %><%@
+page import="com.liferay.portal.model.PluginSetting" %><%@
+page import="com.liferay.portal.model.Portlet" %><%@
+page import="com.liferay.portal.model.Theme" %><%@
+page import="com.liferay.portal.service.PluginSettingLocalServiceUtil" %><%@
+page import="com.liferay.portal.service.PortletLocalServiceUtil" %><%@
+page import="com.liferay.portal.util.PortalUtil" %>
 
-<%@ page import="javax.portlet.WindowState" %>
+<%@ page import="java.util.ArrayList" %><%@
+page import="java.util.Iterator" %><%@
+page import="java.util.List" %>
+
+<%@ page import="javax.portlet.PortletURL" %><%@
+page import="javax.portlet.WindowState" %>
+
+<%@ page import="javax.servlet.ServletContext" %>
 
 <portlet:defineObjects />
 
@@ -40,15 +64,17 @@ long appId = ParamUtil.getLong(request, "appId");
 
 String portletId = portletDisplay.getId();
 
-String iFrameURL = StringPool.BLANK;
+String iFrameURL = MarketplaceConstants.MARKETPLACE_URL_LOGOUT;
+
+String referer = StringPool.BLANK;
 
 if (portletId.equals(PortletKeys.MY_MARKETPLACE)) {
-	iFrameURL = HttpUtil.setParameter(MarketplaceConstants.MARKETPLACE_URL_LOGOUT, "referer", MarketplaceConstants.MARKETPLACE_PATH_PURCHASED);
+	referer = MarketplaceConstants.getPathPurchased();
 }
 else if (portletId.equals(PortletKeys.STORE) && (appId > 0)) {
-	iFrameURL = HttpUtil.setParameter(MarketplaceConstants.MARKETPLACE_URL_LOGOUT, "referer", MarketplaceConstants.MARKETPLACE_PATH_STORE + "/application/" + appId);
+	referer = MarketplaceConstants.getPathStore() + "/application/" + appId;
 }
 else {
-	iFrameURL = HttpUtil.setParameter(MarketplaceConstants.MARKETPLACE_URL_LOGOUT, "referer", MarketplaceConstants.MARKETPLACE_PATH_STORE);
+	referer = MarketplaceConstants.getPathStore();
 }
 %>

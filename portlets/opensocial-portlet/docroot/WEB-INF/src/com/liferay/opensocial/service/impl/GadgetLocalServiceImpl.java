@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -95,7 +95,7 @@ public class GadgetLocalServiceImpl extends GadgetLocalServiceBaseImpl {
 		gadget.setUrl(url);
 		gadget.setPortletCategoryNames(portletCategoryNames);
 
-		gadgetPersistence.update(gadget, false);
+		gadgetPersistence.update(gadget);
 
 		gadgetLocalService.initGadget(
 			gadget.getUuid(), companyId, gadgetId, gadget.getName(),
@@ -105,13 +105,12 @@ public class GadgetLocalServiceImpl extends GadgetLocalServiceBaseImpl {
 	}
 
 	@Override
-	public void deleteGadget(Gadget gadget)
-		throws PortalException, SystemException {
+	public Gadget deleteGadget(Gadget gadget) throws SystemException {
 
 		// Gadget
 
 		gadgetLocalService.destroyGadget(
-			gadget.getUuid(), gadget.getCompanyId(), gadget.getName());
+			gadget.getUuid(), gadget.getCompanyId());
 
 		gadgetPersistence.remove(gadget);
 
@@ -121,28 +120,32 @@ public class GadgetLocalServiceImpl extends GadgetLocalServiceBaseImpl {
 			gadget.getGadgetId());
 
 		oAuthConsumerLocalService.deleteOAuthConsumers(gadgetKey);
+
+		return gadget;
 	}
 
 	@Override
-	public void deleteGadget(long gadgetId)
+	public Gadget deleteGadget(long gadgetId)
 		throws PortalException, SystemException {
 
 		Gadget gadget = gadgetPersistence.findByPrimaryKey(gadgetId);
 
-		deleteGadget(gadget);
+		return deleteGadget(gadget);
 	}
 
 	@Clusterable
-	public void destroyGadget(String uuid, long companyId, String name)
-		throws PortalException, SystemException {
+	public void destroyGadget(String uuid, long companyId)
+		throws SystemException {
 
 		try {
-			Portlet portlet = getPortlet(uuid, companyId, name);
+			Portlet portlet = _portletsPool.remove(uuid);
+
+			if (portlet == null) {
+				portlet = PortletLocalServiceUtil.getPortletById(
+					companyId, getPortletId(uuid));
+			}
 
 			PortletInstanceFactoryUtil.destroy(portlet);
-		}
-		catch (PortalException pe) {
-			throw pe;
 		}
 		catch (SystemException se) {
 			throw se;
@@ -152,12 +155,11 @@ public class GadgetLocalServiceImpl extends GadgetLocalServiceBaseImpl {
 		}
 	}
 
-	public void destroyGadgets() throws PortalException, SystemException {
+	public void destroyGadgets() throws SystemException {
 		List<Gadget> gadgets = gadgetPersistence.findAll();
 
 		for (Gadget gadget : gadgets) {
-			destroyGadget(
-				gadget.getUuid(), gadget.getCompanyId(), gadget.getName());
+			destroyGadget(gadget.getUuid(), gadget.getCompanyId());
 		}
 	}
 
@@ -173,10 +175,10 @@ public class GadgetLocalServiceImpl extends GadgetLocalServiceBaseImpl {
 		return gadgetPersistence.findByC_U(companyId, url);
 	}
 
-	public Gadget getGadget(String uuid)
+	public Gadget getGadget(String uuid, long companyId)
 		throws PortalException, SystemException {
 
-		List<Gadget> gadgets = gadgetPersistence.findByUuid(uuid);
+		List<Gadget> gadgets = gadgetPersistence.findByUuid_C(uuid, companyId);
 
 		if (gadgets.isEmpty()) {
 			throw new NoSuchGadgetException(
@@ -222,9 +224,7 @@ public class GadgetLocalServiceImpl extends GadgetLocalServiceBaseImpl {
 		}
 	}
 
-	public void initGadgets()
-		throws PortalException, SystemException {
-
+	public void initGadgets() throws PortalException, SystemException {
 		List<Gadget> gadgets = gadgetPersistence.findAll();
 
 		for (Gadget gadget : gadgets) {
@@ -243,11 +243,11 @@ public class GadgetLocalServiceImpl extends GadgetLocalServiceBaseImpl {
 
 		gadget.setPortletCategoryNames(portletCategoryNames);
 
-		gadgetPersistence.update(gadget, false);
+		gadgetPersistence.update(gadget);
 
 		gadgetLocalService.initGadget(
-			gadget.getUuid(), gadget.getCompanyId(), gadgetId,
-			gadget.getName(), gadget.getPortletCategoryNames());
+			gadget.getUuid(), gadget.getCompanyId(), gadgetId, gadget.getName(),
+			gadget.getPortletCategoryNames());
 
 		return gadget;
 	}
@@ -285,10 +285,7 @@ public class GadgetLocalServiceImpl extends GadgetLocalServiceBaseImpl {
 			return portlet;
 		}
 
-		String portletName = GadgetPortlet.PORTLET_NAME_PREFIX.concat(uuid);
-
-		String portletId = PortalUtil.getJsSafePortletId(
-			PortalUUIDUtil.toJsSafeUuid(portletName));
+		String portletId = getPortletId(uuid);
 
 		portlet = PortletLocalServiceUtil.clonePortlet(_GADGET_PORTLET_ID);
 
@@ -324,6 +321,15 @@ public class GadgetLocalServiceImpl extends GadgetLocalServiceBaseImpl {
 		PortletBagPool.put(portletId, portletBag);
 
 		return portlet;
+	}
+
+	protected String getPortletId(String uuid) {
+		String portletId = GadgetPortlet.PORTLET_NAME_PREFIX.concat(uuid);
+
+		portletId = PortalUtil.getJsSafePortletId(
+			PortalUUIDUtil.toJsSafeUuid(portletId));
+
+		return portletId;
 	}
 
 	protected void validate(

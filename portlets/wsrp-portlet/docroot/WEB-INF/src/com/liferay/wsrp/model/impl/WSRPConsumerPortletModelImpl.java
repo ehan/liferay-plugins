@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,6 +34,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the WSRPConsumerPortlet service. Represents a row in the &quot;WSRP_WSRPConsumerPortlet&quot; database table, with each column mapped to a property of this class.
@@ -82,39 +84,116 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.wsrp.model.WSRPConsumerPortlet"),
 			true);
-	public static long PORTLETHANDLE_COLUMN_BITMASK = 1L;
-	public static long UUID_COLUMN_BITMASK = 2L;
-	public static long WSRPCONSUMERID_COLUMN_BITMASK = 4L;
+	public static long COMPANYID_COLUMN_BITMASK = 1L;
+	public static long PORTLETHANDLE_COLUMN_BITMASK = 2L;
+	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long WSRPCONSUMERID_COLUMN_BITMASK = 8L;
+	public static long NAME_COLUMN_BITMASK = 16L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.wsrp.model.WSRPConsumerPortlet"));
 
 	public WSRPConsumerPortletModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _wsrpConsumerPortletId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setWsrpConsumerPortletId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_wsrpConsumerPortletId);
+		return _wsrpConsumerPortletId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return WSRPConsumerPortlet.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return WSRPConsumerPortlet.class.getName();
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("uuid", getUuid());
+		attributes.put("wsrpConsumerPortletId", getWsrpConsumerPortletId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("wsrpConsumerId", getWsrpConsumerId());
+		attributes.put("name", getName());
+		attributes.put("portletHandle", getPortletHandle());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
+		Long wsrpConsumerPortletId = (Long)attributes.get(
+				"wsrpConsumerPortletId");
+
+		if (wsrpConsumerPortletId != null) {
+			setWsrpConsumerPortletId(wsrpConsumerPortletId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long wsrpConsumerId = (Long)attributes.get("wsrpConsumerId");
+
+		if (wsrpConsumerId != null) {
+			setWsrpConsumerId(wsrpConsumerId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String portletHandle = (String)attributes.get("portletHandle");
+
+		if (portletHandle != null) {
+			setPortletHandle(portletHandle);
+		}
+	}
+
+	@Override
 	public String getUuid() {
 		if (_uuid == null) {
 			return StringPool.BLANK;
@@ -124,6 +203,7 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 		}
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 		if (_originalUuid == null) {
 			_originalUuid = _uuid;
@@ -136,42 +216,64 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 		return GetterUtil.getString(_originalUuid);
 	}
 
+	@Override
 	public long getWsrpConsumerPortletId() {
 		return _wsrpConsumerPortletId;
 	}
 
+	@Override
 	public void setWsrpConsumerPortletId(long wsrpConsumerPortletId) {
 		_wsrpConsumerPortletId = wsrpConsumerPortletId;
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
+		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
+
+		if (!_setOriginalCompanyId) {
+			_setOriginalCompanyId = true;
+
+			_originalCompanyId = _companyId;
+		}
+
 		_companyId = companyId;
 	}
 
+	public long getOriginalCompanyId() {
+		return _originalCompanyId;
+	}
+
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	public long getWsrpConsumerId() {
 		return _wsrpConsumerId;
 	}
 
+	@Override
 	public void setWsrpConsumerId(long wsrpConsumerId) {
 		_columnBitmask |= WSRPCONSUMERID_COLUMN_BITMASK;
 
@@ -188,6 +290,7 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 		return _originalWsrpConsumerId;
 	}
 
+	@Override
 	public String getName() {
 		if (_name == null) {
 			return StringPool.BLANK;
@@ -197,12 +300,14 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 		}
 	}
 
+	@Override
 	public void setName(String name) {
 		_columnBitmask = -1L;
 
 		_name = name;
 	}
 
+	@Override
 	public String getPortletHandle() {
 		if (_portletHandle == null) {
 			return StringPool.BLANK;
@@ -212,6 +317,7 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 		}
 	}
 
+	@Override
 	public void setPortletHandle(String portletHandle) {
 		_columnBitmask |= PORTLETHANDLE_COLUMN_BITMASK;
 
@@ -231,29 +337,26 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 	}
 
 	@Override
-	public WSRPConsumerPortlet toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (WSRPConsumerPortlet)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
-					WSRPConsumerPortlet.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
+			WSRPConsumerPortlet.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public WSRPConsumerPortlet toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (WSRPConsumerPortlet)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -274,6 +377,7 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 		return wsrpConsumerPortletImpl;
 	}
 
+	@Override
 	public int compareTo(WSRPConsumerPortlet wsrpConsumerPortlet) {
 		int value = 0;
 
@@ -288,18 +392,15 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof WSRPConsumerPortlet)) {
 			return false;
 		}
 
-		WSRPConsumerPortlet wsrpConsumerPortlet = null;
-
-		try {
-			wsrpConsumerPortlet = (WSRPConsumerPortlet)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		WSRPConsumerPortlet wsrpConsumerPortlet = (WSRPConsumerPortlet)obj;
 
 		long primaryKey = wsrpConsumerPortlet.getPrimaryKey();
 
@@ -321,6 +422,10 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 		WSRPConsumerPortletModelImpl wsrpConsumerPortletModelImpl = this;
 
 		wsrpConsumerPortletModelImpl._originalUuid = wsrpConsumerPortletModelImpl._uuid;
+
+		wsrpConsumerPortletModelImpl._originalCompanyId = wsrpConsumerPortletModelImpl._companyId;
+
+		wsrpConsumerPortletModelImpl._setOriginalCompanyId = false;
 
 		wsrpConsumerPortletModelImpl._originalWsrpConsumerId = wsrpConsumerPortletModelImpl._wsrpConsumerId;
 
@@ -411,6 +516,7 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(28);
 
@@ -457,13 +563,15 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 	}
 
 	private static ClassLoader _classLoader = WSRPConsumerPortlet.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			WSRPConsumerPortlet.class
 		};
 	private String _uuid;
 	private String _originalUuid;
 	private long _wsrpConsumerPortletId;
 	private long _companyId;
+	private long _originalCompanyId;
+	private boolean _setOriginalCompanyId;
 	private Date _createDate;
 	private Date _modifiedDate;
 	private long _wsrpConsumerId;
@@ -472,7 +580,6 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 	private String _name;
 	private String _portletHandle;
 	private String _originalPortletHandle;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
-	private WSRPConsumerPortlet _escapedModelProxy;
+	private WSRPConsumerPortlet _escapedModel;
 }

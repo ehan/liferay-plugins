@@ -7,6 +7,18 @@
 			<access>PROPERTY</access>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
+	<mapped-superclass class="com.liferay.so.model.impl.FavoriteSiteModelImpl">
+		<attributes>
+			<id name="favoriteSiteId" />
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
 	<mapped-superclass class="com.liferay.so.model.impl.MemberRequestModelImpl">
 		<attributes>
 			<id name="memberRequestId" />
@@ -27,6 +39,7 @@
 			<basic name="invitedRoleId" />
 			<basic name="invitedTeamId" />
 			<basic name="status" />
+			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="receiverUserUuid" />
@@ -56,11 +69,16 @@
 			<basic name="data">
 				<column name="DATA_" />
 			</basic>
+			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
+	<entity class="com.liferay.so.model.impl.FavoriteSiteImpl" name="FavoriteSite">
+		<table name="SO_FavoriteSite" />
+		<attributes />
+	</entity>
 	<entity class="com.liferay.so.model.impl.MemberRequestImpl" name="MemberRequest">
 		<table name="SO_MemberRequest" />
 		<attributes />

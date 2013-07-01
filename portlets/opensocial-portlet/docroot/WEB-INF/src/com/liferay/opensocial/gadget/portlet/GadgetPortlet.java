@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,8 +17,10 @@ package com.liferay.opensocial.gadget.portlet;
 import com.liferay.opensocial.gadget.action.ConfigurationActionImpl;
 import com.liferay.opensocial.model.Gadget;
 import com.liferay.opensocial.shindig.util.ShindigUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.theme.PortletDisplay;
+import com.liferay.portal.theme.ThemeDisplay;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.RenderRequest;
@@ -32,9 +34,13 @@ public class GadgetPortlet extends BaseGadgetPortlet {
 
 	@Override
 	protected Gadget getGadget(RenderRequest renderRequest) throws Exception {
+		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
 		PortletConfig portletConfig = getPortletConfig();
 
-		return ShindigUtil.getGadget(portletConfig.getPortletName());
+		return ShindigUtil.getGadget(
+			portletConfig.getPortletName(), themeDisplay.getCompanyId());
 	}
 
 	@Override

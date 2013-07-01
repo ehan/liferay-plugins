@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,16 +15,16 @@
 package com.liferay.socialcoding.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
- * The utility for the j i r a change group local service. This utility wraps {@link com.liferay.socialcoding.service.impl.JIRAChangeGroupLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for JIRAChangeGroup. This utility wraps
+ * {@link com.liferay.socialcoding.service.impl.JIRAChangeGroupLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see JIRAChangeGroupLocalService
@@ -67,25 +67,32 @@ public class JIRAChangeGroupLocalServiceUtil {
 	* Deletes the j i r a change group with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param jiraChangeGroupId the primary key of the j i r a change group
+	* @return the j i r a change group that was removed
 	* @throws PortalException if a j i r a change group with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deleteJIRAChangeGroup(long jiraChangeGroupId)
+	public static com.liferay.socialcoding.model.JIRAChangeGroup deleteJIRAChangeGroup(
+		long jiraChangeGroupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteJIRAChangeGroup(jiraChangeGroupId);
+		return getService().deleteJIRAChangeGroup(jiraChangeGroupId);
 	}
 
 	/**
 	* Deletes the j i r a change group from the database. Also notifies the appropriate model listeners.
 	*
 	* @param jiraChangeGroup the j i r a change group
+	* @return the j i r a change group that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deleteJIRAChangeGroup(
+	public static com.liferay.socialcoding.model.JIRAChangeGroup deleteJIRAChangeGroup(
 		com.liferay.socialcoding.model.JIRAChangeGroup jiraChangeGroup)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteJIRAChangeGroup(jiraChangeGroup);
+		return getService().deleteJIRAChangeGroup(jiraChangeGroup);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
 	}
 
 	/**
@@ -106,7 +113,7 @@ public class JIRAChangeGroupLocalServiceUtil {
 	* Performs a dynamic query on the database and returns a range of the matching rows.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAChangeGroupModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param dynamicQuery the dynamic query
@@ -126,7 +133,7 @@ public class JIRAChangeGroupLocalServiceUtil {
 	* Performs a dynamic query on the database and returns an ordered range of the matching rows.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAChangeGroupModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param dynamicQuery the dynamic query
@@ -157,6 +164,21 @@ public class JIRAChangeGroupLocalServiceUtil {
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().dynamicQueryCount(dynamicQuery);
+	}
+
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	public static long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
 	public static com.liferay.socialcoding.model.JIRAChangeGroup fetchJIRAChangeGroup(
@@ -191,7 +213,7 @@ public class JIRAChangeGroupLocalServiceUtil {
 	* Returns a range of all the j i r a change groups.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAChangeGroupModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of j i r a change groups
@@ -230,21 +252,6 @@ public class JIRAChangeGroupLocalServiceUtil {
 	}
 
 	/**
-	* Updates the j i r a change group in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param jiraChangeGroup the j i r a change group
-	* @param merge whether to merge the j i r a change group with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
-	* @return the j i r a change group that was updated
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.socialcoding.model.JIRAChangeGroup updateJIRAChangeGroup(
-		com.liferay.socialcoding.model.JIRAChangeGroup jiraChangeGroup,
-		boolean merge)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().updateJIRAChangeGroup(jiraChangeGroup, merge);
-	}
-
-	/**
 	* Returns the Spring bean ID for this bean.
 	*
 	* @return the Spring bean ID for this bean
@@ -262,41 +269,39 @@ public class JIRAChangeGroupLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}
 
 	public static JIRAChangeGroupLocalService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					JIRAChangeGroupLocalService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					JIRAChangeGroupLocalService.class.getName(),
-					portletClassLoader);
-
-			_service = new JIRAChangeGroupLocalServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableLocalService instanceof JIRAChangeGroupLocalService) {
+				_service = (JIRAChangeGroupLocalService)invokableLocalService;
+			}
+			else {
+				_service = new JIRAChangeGroupLocalServiceClp(invokableLocalService);
+			}
 
 			ReferenceRegistry.registerReference(JIRAChangeGroupLocalServiceUtil.class,
 				"_service");
-			MethodCache.remove(JIRAChangeGroupLocalService.class);
 		}
 
 		return _service;
 	}
 
+	/**
+	 * @deprecated As of 6.2.0
+	 */
 	public void setService(JIRAChangeGroupLocalService service) {
-		MethodCache.remove(JIRAChangeGroupLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(JIRAChangeGroupLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(JIRAChangeGroupLocalService.class);
 	}
 
 	private static JIRAChangeGroupLocalService _service;

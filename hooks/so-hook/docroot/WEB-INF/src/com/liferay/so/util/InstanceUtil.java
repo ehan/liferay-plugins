@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
@@ -29,6 +30,7 @@ import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Role;
+import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
@@ -61,40 +63,45 @@ import java.util.Map;
 public class InstanceUtil {
 
 	public static void initInstance(long companyId) {
+		boolean strict = PortletPreferencesThreadLocal.isStrict();
+
 		try {
 			PortletPreferencesThreadLocal.setStrict(false);
 
 			setupRole(companyId);
 
 			setupExpando(companyId);
-			setupLayoutSetPrototype(companyId);
 
-			setInitialized(companyId);
+			initLayoutSetPrototype(companyId);
+
+			setInitialized(companyId, true);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
 		}
 		finally {
-			PortletPreferencesThreadLocal.setStrict(true);
+			PortletPreferencesThreadLocal.setStrict(strict);
 		}
 	}
 
 	public static void initLayoutSetPrototype(long companyId) throws Exception {
-		setupLayoutSetPrototype(companyId);
+		setupLayoutSetPrototypeSite(companyId);
+		setupLayoutSetPrototypeUserPrivate(companyId);
+		setupLayoutSetPrototypeUserPublic(companyId);
 	}
 
 	public static void initRuntime(long companyId) {
 
-		// Communities
+		// Directory
 
 		Portlet portlet = PortletLocalServiceUtil.getPortletById(
-			PortletKeys.MY_SITES);
+			PortletKeys.DIRECTORY);
 
 		portlet.setAddDefaultResource(true);
 
-		// Directory
+		// My Sites
 
-		portlet = PortletLocalServiceUtil.getPortletById(PortletKeys.DIRECTORY);
+		portlet = PortletLocalServiceUtil.getPortletById(PortletKeys.MY_SITES);
 
 		portlet.setAddDefaultResource(true);
 
@@ -119,6 +126,21 @@ public class InstanceUtil {
 		}
 	}
 
+	public static void setInitialized(long companyId, boolean initialized)
+		throws Exception {
+
+		Group group = GroupLocalServiceUtil.getCompanyGroup(companyId);
+
+		UnicodeProperties typeSettingsProperties =
+			group.getTypeSettingsProperties();
+
+		typeSettingsProperties.setProperty(
+			"social-office-initialized", String.valueOf(initialized));
+
+		GroupLocalServiceUtil.updateGroup(
+			group.getGroupId(), typeSettingsProperties.toString());
+	}
+
 	protected static LayoutSetPrototype addLayoutSetPrototype(
 			long companyId, String name)
 		throws Exception {
@@ -133,12 +155,10 @@ public class InstanceUtil {
 		boolean active = true;
 		long defaultUserId = UserLocalServiceUtil.getDefaultUserId(companyId);
 
-		ServiceContext serviceContext = new ServiceContext();
-
 		LayoutSetPrototype layoutSetPrototype =
 			LayoutSetPrototypeLocalServiceUtil.addLayoutSetPrototype(
 				defaultUserId, companyId, localeNamesMap, description, active,
-				true, serviceContext);
+				true, new ServiceContext());
 
 		UnicodeProperties settingsProperties =
 			layoutSetPrototype.getSettingsProperties();
@@ -154,17 +174,10 @@ public class InstanceUtil {
 		return layoutSetPrototype;
 	}
 
-	protected static void setInitialized(long companyId) throws Exception {
-		Group group = GroupLocalServiceUtil.getCompanyGroup(companyId);
-
-		UnicodeProperties typeSettingsProperties =
-			group.getTypeSettingsProperties();
-
-		typeSettingsProperties.setProperty(
-			"social-office-initialized", Boolean.TRUE.toString());
-
-		GroupLocalServiceUtil.updateGroup(
-			group.getGroupId(), typeSettingsProperties.toString());
+	protected static Map<Locale, String> getLocalizationMap(String key) {
+		return LocalizationUtil.getLocalizationMap(
+			"content.Language", InstanceUtil.class.getClassLoader(), key,
+			false);
 	}
 
 	protected static void setupExpando(long companyId) throws Exception {
@@ -210,8 +223,9 @@ public class InstanceUtil {
 		try {
 			ExpandoColumn expandoColumn =
 				ExpandoColumnLocalServiceUtil.addColumn(
-					expandoTable.getTableId(), "socialOfficeDefault",
-					ExpandoColumnConstants.BOOLEAN);
+					expandoTable.getTableId(),
+					SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY,
+					ExpandoColumnConstants.STRING);
 
 			updatePermissions(expandoColumn);
 		}
@@ -219,7 +233,7 @@ public class InstanceUtil {
 		}
 	}
 
-	protected static void setupLayoutSetPrototype(long companyId)
+	protected static void setupLayoutSetPrototypeSite(long companyId)
 		throws Exception {
 
 		LayoutSetPrototype layoutSetPrototype = addLayoutSetPrototype(
@@ -227,8 +241,10 @@ public class InstanceUtil {
 
 		ExpandoValueLocalServiceUtil.addValue(
 			companyId, LayoutSetPrototype.class.getName(),
-			ExpandoTableConstants.DEFAULT_TABLE_NAME, "socialOfficeDefault",
-			layoutSetPrototype.getLayoutSetPrototypeId(), true);
+			ExpandoTableConstants.DEFAULT_TABLE_NAME,
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY,
+			layoutSetPrototype.getLayoutSetPrototypeId(),
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_SITE);
 
 		Role role = RoleLocalServiceUtil.getRole(
 			layoutSetPrototype.getCompanyId(),
@@ -243,10 +259,8 @@ public class InstanceUtil {
 
 		Group group = layoutSetPrototype.getGroup();
 
-		ServiceContext serviceContext = new ServiceContext();
-
 		LayoutLocalServiceUtil.deleteLayouts(
-			group.getGroupId(), true, serviceContext);
+			group.getGroupId(), true, new ServiceContext());
 
 		LayoutSetLocalServiceUtil.updateLookAndFeel(
 			group.getGroupId(), "so_WAR_sotheme", "01", "", false);
@@ -254,7 +268,8 @@ public class InstanceUtil {
 		// Home
 
 		Layout layout = LayoutUtil.addLayout(
-			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Home",
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("home"), null,
 			PortletPropsValues.SITE_PROTOTYPE_LAYOUT_TEMPLATE);
 
 		LayoutUtil.addPortlets(
@@ -267,8 +282,8 @@ public class InstanceUtil {
 		// Calendar
 
 		layout = LayoutUtil.addLayout(
-			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Calendar",
-			"1_column");
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("calendar"), null, "1_column");
 
 		LayoutUtil.addPortlets(
 			group, layout, "/calendar",
@@ -279,8 +294,8 @@ public class InstanceUtil {
 		// Documents
 
 		layout = LayoutUtil.addLayout(
-			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Documents",
-			"1_column");
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("documents"), null, "1_column");
 
 		LayoutUtil.addPortlets(
 			group, layout, "/documents",
@@ -293,11 +308,14 @@ public class InstanceUtil {
 		// Forums
 
 		layout = LayoutUtil.addLayout(
-			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Forums",
-			"1_column");
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("forums"), null, "1_column");
 
 		LayoutUtil.addPortlets(
 			group, layout, "/forums", PortletPropsKeys.SITE_PROTOTYPE_PORTLETS);
+
+		LayoutUtil.removePortletBorder(layout, "73");
+		LayoutUtil.removePortletBorder(layout, "19");
 
 		LayoutUtil.configureAssetPublisher(layout);
 		LayoutUtil.configureMessageBoards(layout);
@@ -307,8 +325,8 @@ public class InstanceUtil {
 		// Blog
 
 		layout = LayoutUtil.addLayout(
-			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Blog",
-			"2_columns_iii");
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("blogs"), null, "2_columns_iii");
 
 		LayoutUtil.addPortlets(
 			group, layout, "/blog", PortletPropsKeys.SITE_PROTOTYPE_PORTLETS);
@@ -320,8 +338,8 @@ public class InstanceUtil {
 		// Wiki
 
 		layout = LayoutUtil.addLayout(
-			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Wiki",
-			"1_column");
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("wiki"), null, "1_column");
 
 		LayoutUtil.addPortlets(
 			group, layout, "/wiki", PortletPropsKeys.SITE_PROTOTYPE_PORTLETS);
@@ -333,8 +351,8 @@ public class InstanceUtil {
 		// Members
 
 		layout = LayoutUtil.addLayout(
-			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Members",
-			"1_column");
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("members"), null, "1_column");
 
 		LayoutUtil.addPortlets(
 			group, layout, "/members",
@@ -343,6 +361,177 @@ public class InstanceUtil {
 		LayoutUtil.removePortletBorder(layout, "2_WAR_soportlet");
 
 		LayoutUtil.updatePermissions(layout, true);
+	}
+
+	protected static void setupLayoutSetPrototypeUserPrivate(long companyId)
+		throws Exception {
+
+		LayoutSetPrototype layoutSetPrototype = addLayoutSetPrototype(
+			companyId, "Social Office User Home");
+
+		ExpandoValueLocalServiceUtil.addValue(
+			companyId, LayoutSetPrototype.class.getName(),
+			ExpandoTableConstants.DEFAULT_TABLE_NAME,
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY,
+			layoutSetPrototype.getLayoutSetPrototypeId(),
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_USER_PRIVATE);
+
+		Group group = layoutSetPrototype.getGroup();
+
+		LayoutLocalServiceUtil.deleteLayouts(
+			group.getGroupId(), true, new ServiceContext());
+
+		LayoutSetLocalServiceUtil.updateLookAndFeel(
+			group.getGroupId(), "so_WAR_sotheme", "01", "", false);
+
+		// Dashboard
+
+		Layout layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("dashboard"), "/so/dashboard", "2_columns_iii");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/home",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, false);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 0);
+
+		// Contacts Center
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("contacts-center"), "/so/contacts-center",
+			"1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/contacts-center",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 1);
+
+		// Microblogs
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("microblogs"), "/so/microblogs", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/microblogs",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 2);
+
+		// Messages
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("messages"), "/so/messages", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/messages",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 3);
+
+		// My Documents
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("my-documents"), "/so/my-documents", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/my-documents",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 4);
+
+		// Tasks
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("tasks"), "/so/tasks", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/tasks",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 5);
+	}
+
+	protected static void setupLayoutSetPrototypeUserPublic(long companyId)
+		throws Exception {
+
+		LayoutSetPrototype layoutSetPrototype = addLayoutSetPrototype(
+			companyId, "Social Office User Profile");
+
+		ExpandoValueLocalServiceUtil.addValue(
+			companyId, LayoutSetPrototype.class.getName(),
+			ExpandoTableConstants.DEFAULT_TABLE_NAME,
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY,
+			layoutSetPrototype.getLayoutSetPrototypeId(),
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_USER_PUBLIC);
+
+		Group group = layoutSetPrototype.getGroup();
+
+		LayoutLocalServiceUtil.deleteLayouts(
+			group.getGroupId(), true, new ServiceContext());
+
+		LayoutSetLocalServiceUtil.updateLookAndFeel(
+			group.getGroupId(), "so_WAR_sotheme", "01", "", false);
+
+		// Profile
+
+		Layout layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("profile"), "/so/profile", "1_2_columns_ii");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/profile",
+			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 0);
+
+		// Contacts
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("contacts"), "/so/contacts", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/contacts",
+			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 1);
+
+		// Microblogs
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			getLocalizationMap("microblogs"), "/so/microblogs", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/microblogs",
+			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 2);
 	}
 
 	protected static void setupRole(long companyId) throws Exception {
@@ -354,9 +543,19 @@ public class InstanceUtil {
 			LocaleUtil.getDefault(),
 			"Social Office Users have access to the Social Office Suite.");
 
-		RoleLocalServiceUtil.addRole(
+		Role role = RoleLocalServiceUtil.addRole(
 			defaultUserId, companyId, RoleConstants.SOCIAL_OFFICE_USER, null,
 			descriptionMap, RoleConstants.TYPE_REGULAR);
+
+		ResourcePermissionLocalServiceUtil.setResourcePermissions(
+			companyId, PortletKeys.PORTAL, ResourceConstants.SCOPE_COMPANY,
+			String.valueOf(companyId), role.getRoleId(),
+			new String[] {ActionKeys.ADD_COMMUNITY});
+
+		ResourcePermissionLocalServiceUtil.setResourcePermissions(
+			companyId, User.class.getName(), ResourceConstants.SCOPE_COMPANY,
+			String.valueOf(companyId), role.getRoleId(),
+			new String[] {ActionKeys.VIEW});
 	}
 
 	protected static void updatePermissions(ExpandoColumn expandoColumn)

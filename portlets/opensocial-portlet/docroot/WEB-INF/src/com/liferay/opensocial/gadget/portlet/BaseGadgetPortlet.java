@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -37,6 +37,9 @@ import com.liferay.portlet.expando.service.ExpandoTableLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -97,14 +100,27 @@ public abstract class BaseGadgetPortlet extends MVCPortlet {
 				expandoTable.getTableId(), columnName,
 				ExpandoColumnConstants.STRING);
 
-			Role role = RoleLocalServiceUtil.getRole(
+			Map<Long, String[]> roleIdsToActionIds =
+				new HashMap<Long, String[]>();
+
+			Role guestRole = RoleLocalServiceUtil.getRole(
+				expandoColumn.getCompanyId(), RoleConstants.GUEST);
+
+			roleIdsToActionIds.put(
+				guestRole.getRoleId(), new String[] {ActionKeys.VIEW});
+
+			Role userRole = RoleLocalServiceUtil.getRole(
 				expandoColumn.getCompanyId(), RoleConstants.USER);
+
+			roleIdsToActionIds.put(
+				userRole.getRoleId(),
+				new String[] {ActionKeys.UPDATE, ActionKeys.VIEW});
 
 			ResourcePermissionLocalServiceUtil.setResourcePermissions(
 				expandoColumn.getCompanyId(), ExpandoColumn.class.getName(),
 				ResourceConstants.SCOPE_INDIVIDUAL,
-				String.valueOf(expandoColumn.getColumnId()), role.getRoleId(),
-				new String[] {ActionKeys.UPDATE, ActionKeys.VIEW});
+				String.valueOf(expandoColumn.getColumnId()),
+				roleIdsToActionIds);
 		}
 	}
 
