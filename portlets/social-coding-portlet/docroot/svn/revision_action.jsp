@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,11 +34,11 @@ JIRAIssue jiraIssue = (JIRAIssue)objArray[2];
 		%>
 
 		<liferay-ui:icon
+			label="<%= true %>"
 			message="SVN"
 			src='<%= request.getContextPath() + "/icons/svn.png" %>'
-			url="<%= taglibSVNURL %>"
 			target="_blank"
-			label="<%= true %>"
+			url="<%= taglibSVNURL %>"
 		/>
 
 		<c:if test="<%= jiraIssue != null %>">
@@ -48,11 +48,11 @@ JIRAIssue jiraIssue = (JIRAIssue)objArray[2];
 			%>
 
 			<liferay-ui:icon
+				label="<%= true %>"
 				message="JIRA"
 				src='<%= request.getContextPath() + "/icons/jira.png" %>'
-				url="<%= taglibJIRAURL %>"
 				target="_blank"
-				label="<%= true %>"
+				url="<%= taglibJIRAURL %>"
 			/>
 		</c:if>
 	</liferay-ui:icon-list>

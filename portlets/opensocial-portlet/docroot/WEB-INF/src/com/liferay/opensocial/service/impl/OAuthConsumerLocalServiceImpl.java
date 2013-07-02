@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -55,23 +55,23 @@ public class OAuthConsumerLocalServiceImpl
 		oAuthConsumer.setConsumerSecret(consumerSecret);
 		oAuthConsumer.setKeyType(keyType);
 
-		oAuthConsumerPersistence.update(oAuthConsumer, false);
+		oAuthConsumerPersistence.update(oAuthConsumer);
 
 		return oAuthConsumer;
 	}
 
 	@Override
-	public void deleteOAuthConsumer(long oAuthConsumerId)
+	public OAuthConsumer deleteOAuthConsumer(long oAuthConsumerId)
 		throws PortalException, SystemException {
 
 		OAuthConsumer oAuthConsumer = oAuthConsumerPersistence.findByPrimaryKey(
 			oAuthConsumerId);
 
-		deleteOAuthConsumer(oAuthConsumer);
+		return deleteOAuthConsumer(oAuthConsumer);
 	}
 
 	@Override
-	public void deleteOAuthConsumer(OAuthConsumer oAuthConsumer)
+	public OAuthConsumer deleteOAuthConsumer(OAuthConsumer oAuthConsumer)
 		throws SystemException {
 
 		// OAuth consumer
@@ -82,11 +82,11 @@ public class OAuthConsumerLocalServiceImpl
 
 		oAuthTokenLocalService.deleteOAuthTokens(
 			oAuthConsumer.getGadgetKey(), oAuthConsumer.getServiceName());
+
+		return oAuthConsumer;
 	}
 
-	public void deleteOAuthConsumers(String gadgetKey)
-		throws SystemException {
-
+	public void deleteOAuthConsumers(String gadgetKey) throws SystemException {
 		List<OAuthConsumer> oAuthConsumers =
 			oAuthConsumerPersistence.findByGadgetKey(gadgetKey);
 
@@ -141,7 +141,7 @@ public class OAuthConsumerLocalServiceImpl
 		oAuthConsumer.setConsumerSecret(consumerSecret);
 		oAuthConsumer.setKeyType(keyType);
 
-		oAuthConsumerPersistence.update(oAuthConsumer, false);
+		oAuthConsumerPersistence.update(oAuthConsumer);
 
 		return oAuthConsumer;
 	}

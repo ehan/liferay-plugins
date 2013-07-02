@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -39,10 +39,10 @@ public class JIRAChangeGroupFinderImpl
 	extends BasePersistenceImpl<JIRAChangeGroup>
 	implements JIRAChangeGroupFinder {
 
-	public static String COUNT_BY_CD_P =
+	public static final String COUNT_BY_CD_P =
 		JIRAChangeGroupFinder.class.getName() + ".countByCD_P";
 
-	public static String FIND_BY_CD_P =
+	public static final String FIND_BY_CD_P =
 		JIRAChangeGroupFinder.class.getName() + ".findByCD_P";
 
 	public int countByCD_P(Date createDate, long projectId)

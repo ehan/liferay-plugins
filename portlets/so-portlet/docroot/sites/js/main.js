@@ -21,7 +21,7 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'autocomplete-base']
+		requires: ['aui-base', 'autocomplete-base', 'node-core']
 	}
 );
 
@@ -33,6 +33,8 @@ AUI().use(
 	'json-parse',
 	'liferay-so-site-list',
 	function(A) {
+		var Lang = A.Lang;
+
 		Liferay.namespace('SO');
 
 		Liferay.SO.Sites = {
@@ -73,11 +75,10 @@ AUI().use(
 
 								event.cfg.data = {
 									directory: data.directory || false,
-									end: data.end || 0,
+									end: data.end || 10,
 									keywords: data.keywords || '',
 									searchTab: data.searchTab || tabs1,
-									start: data.start || 0,
-									userGroups: data.userGroups || false
+									start: data.start || 0
 								}
 							}
 						},
@@ -103,7 +104,6 @@ AUI().use(
 				popup.show();
 
 				popup.set('title', title);
-				popup.set('xy', [viewportRegion.left + 20, viewportRegion.top + 20]);
 
 				popup.io.set('uri', url);
 				popup.io.set('data', data);
@@ -124,10 +124,15 @@ AUI().use(
 				if (!instance._popup) {
 					instance._popup = new A.Dialog(
 						{
+							align: {
+								node: null,
+								points: ['tc', 'tc']
+							},
 							constrain2view: true,
 							cssClass: 'so-portlet-sites-dialog',
-							resizable: false,
-							width: 526
+							modal: true,
+							resizable: true,
+							width: 650
 						}
 					).plug(
 						A.Plugin.IO,
@@ -144,15 +149,27 @@ AUI().use(
 				instance._directoryList = directoryList;
 			},
 
-			updateSites: function() {
+			setTitle: function(title) {
+				var instance = this;
+
+				var popup = instance.getPopup();
+
+				popup.set('title', title);
+			},
+
+			updateSites: function(showSuccessMessage, keywordsInput, requestTemplate) {
 				var instance = this;
 
 				if (instance._directoryList) {
-					instance._directoryList.sendRequest();
+					instance._directoryList.sendRequest(keywordsInput, requestTemplate);
 				}
 
 				if (instance._siteList) {
 					instance._siteList.sendRequest();
+				}
+
+				if (showSuccessMessage && instance._messages) {
+					instance._messages.html('<span class="portlet-msg-success">' + Liferay.Language.get('your-request-completed-successfully') + '</span>');
 				}
 			},
 
@@ -194,15 +211,26 @@ AUI().use(
 
 				var siteList = new Liferay.SO.SiteList(
 					{
+						inputNode: siteSearchInput,
+						listNode: siteList,
+						minQueryLength: 0,
 						requestTemplate: function(query) {
 							return {
 								keywords: query
 							}
 						},
+						resultTextLocator: function(response) {
+							var result = '';
 
-						inputNode: siteSearchInput,
-						listNode: siteList,
-						minQueryLength: 0,
+							if (!Lang.isUndefined(response.toString)) {
+								result = response.toString();
+							}
+							else if (!Lang.isUndefined(response.responseText)) {
+								result = response.responseText;
+							}
+
+							return result;
+						},
 						source: instance.createDataSource(siteListURL)
 					}
 				);
@@ -210,6 +238,8 @@ AUI().use(
 				siteList.on('results', instance._updateSiteList);
 
 				instance._siteList = siteList;
+
+				instance._messages = A.one(config.messages);
 			},
 
 			_updateSiteList: function(event) {
@@ -230,7 +260,7 @@ AUI().use(
 				else {
 					var siteTemplate =
 						'<li class="{classNames}">' +
-							'{starHtml}' +
+							'{favoriteHtml}' +
 							'<span class="name">{siteName}</span>' +
 						'</li>';
 
@@ -240,7 +270,7 @@ AUI().use(
 							function(result) {
 								var classNames = [];
 
-								if (result.socialOfficeEnabled) {
+								if (result.socialOfficeGroup) {
 									classNames.push('social-office-enabled');
 								}
 
@@ -250,15 +280,22 @@ AUI().use(
 
 								var name = result.name;
 
-								if (result.url) {
-									name = '<a href="' + result.url + '">' + name + '</a>';
+								if (result.publicLayoutsURL) {
+									name = '<a href="' + result.publicLayoutsURL + '">' + name + '</a>';
+
+									if (result.privateLayoutsURL) {
+										name += '<a class="private-pages" href="' + result.privateLayoutsURL + '"> (' + Liferay.Language.get("private-pages") + ')</a>';
+									}
+								}
+								else if (!result.publicLayoutsURL && result.privateLayoutsURL) {
+									name = '<a href="' + result.privateLayoutsURL + '">' + name + '</a>';
 								}
 
 								return A.Lang.sub(
 									siteTemplate,
 									{
 										classNames: classNames.join(' '),
-										starHtml: (result.starURL ? '<span class="action star"><a href="' + result.starURL + '">' + Liferay.Language.get('star') + '</a></span>' : '<span class="action unstar"><a href="' + result.unstarURL + '">' + Liferay.Language.get('unstar') + '</a></span>'),
+										favoriteHtml: (result.favoriteURL ? '<span class="action favorite"><a href="' + result.favoriteURL + '">' + Liferay.Language.get('favorite') + '</a></span>' : '<span class="action unfavorite"><a href="' + result.unfavoriteURL + '">' + Liferay.Language.get('unfavorite') + '</a></span>'),
 										siteName: name
 									}
 								);

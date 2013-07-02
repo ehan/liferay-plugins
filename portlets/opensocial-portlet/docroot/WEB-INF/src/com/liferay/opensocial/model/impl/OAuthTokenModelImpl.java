@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,6 +36,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the OAuthToken service. Represents a row in the &quot;OpenSocial_OAuthToken&quot; database table, with each column mapped to a property of this class.
@@ -76,6 +78,8 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		};
 	public static final String TABLE_SQL_CREATE = "create table OpenSocial_OAuthToken (oAuthTokenId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,gadgetKey VARCHAR(75) null,serviceName VARCHAR(75) null,moduleId LONG,accessToken VARCHAR(75) null,tokenName VARCHAR(75) null,tokenSecret VARCHAR(75) null,sessionHandle VARCHAR(75) null,expiration LONG)";
 	public static final String TABLE_SQL_DROP = "drop table OpenSocial_OAuthToken";
+	public static final String ORDER_BY_JPQL = " ORDER BY oAuthToken.oAuthTokenId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY OpenSocial_OAuthToken.oAuthTokenId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -93,56 +97,178 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 	public static long SERVICENAME_COLUMN_BITMASK = 4L;
 	public static long TOKENNAME_COLUMN_BITMASK = 8L;
 	public static long USERID_COLUMN_BITMASK = 16L;
+	public static long OAUTHTOKENID_COLUMN_BITMASK = 32L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.opensocial.model.OAuthToken"));
 
 	public OAuthTokenModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _oAuthTokenId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setOAuthTokenId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_oAuthTokenId);
+		return _oAuthTokenId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return OAuthToken.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return OAuthToken.class.getName();
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("oAuthTokenId", getOAuthTokenId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("gadgetKey", getGadgetKey());
+		attributes.put("serviceName", getServiceName());
+		attributes.put("moduleId", getModuleId());
+		attributes.put("accessToken", getAccessToken());
+		attributes.put("tokenName", getTokenName());
+		attributes.put("tokenSecret", getTokenSecret());
+		attributes.put("sessionHandle", getSessionHandle());
+		attributes.put("expiration", getExpiration());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long oAuthTokenId = (Long)attributes.get("oAuthTokenId");
+
+		if (oAuthTokenId != null) {
+			setOAuthTokenId(oAuthTokenId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String gadgetKey = (String)attributes.get("gadgetKey");
+
+		if (gadgetKey != null) {
+			setGadgetKey(gadgetKey);
+		}
+
+		String serviceName = (String)attributes.get("serviceName");
+
+		if (serviceName != null) {
+			setServiceName(serviceName);
+		}
+
+		Long moduleId = (Long)attributes.get("moduleId");
+
+		if (moduleId != null) {
+			setModuleId(moduleId);
+		}
+
+		String accessToken = (String)attributes.get("accessToken");
+
+		if (accessToken != null) {
+			setAccessToken(accessToken);
+		}
+
+		String tokenName = (String)attributes.get("tokenName");
+
+		if (tokenName != null) {
+			setTokenName(tokenName);
+		}
+
+		String tokenSecret = (String)attributes.get("tokenSecret");
+
+		if (tokenSecret != null) {
+			setTokenSecret(tokenSecret);
+		}
+
+		String sessionHandle = (String)attributes.get("sessionHandle");
+
+		if (sessionHandle != null) {
+			setSessionHandle(sessionHandle);
+		}
+
+		Long expiration = (Long)attributes.get("expiration");
+
+		if (expiration != null) {
+			setExpiration(expiration);
+		}
+	}
+
+	@Override
 	public long getOAuthTokenId() {
 		return _oAuthTokenId;
 	}
 
+	@Override
 	public void setOAuthTokenId(long oAuthTokenId) {
 		_oAuthTokenId = oAuthTokenId;
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
 	}
 
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_columnBitmask |= USERID_COLUMN_BITMASK;
 
@@ -155,10 +281,12 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
@@ -167,6 +295,7 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		return _originalUserId;
 	}
 
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -176,26 +305,32 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	public String getGadgetKey() {
 		if (_gadgetKey == null) {
 			return StringPool.BLANK;
@@ -205,6 +340,7 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		}
 	}
 
+	@Override
 	public void setGadgetKey(String gadgetKey) {
 		_columnBitmask |= GADGETKEY_COLUMN_BITMASK;
 
@@ -219,6 +355,7 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		return GetterUtil.getString(_originalGadgetKey);
 	}
 
+	@Override
 	public String getServiceName() {
 		if (_serviceName == null) {
 			return StringPool.BLANK;
@@ -228,6 +365,7 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		}
 	}
 
+	@Override
 	public void setServiceName(String serviceName) {
 		_columnBitmask |= SERVICENAME_COLUMN_BITMASK;
 
@@ -242,10 +380,12 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		return GetterUtil.getString(_originalServiceName);
 	}
 
+	@Override
 	public long getModuleId() {
 		return _moduleId;
 	}
 
+	@Override
 	public void setModuleId(long moduleId) {
 		_columnBitmask |= MODULEID_COLUMN_BITMASK;
 
@@ -262,6 +402,7 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		return _originalModuleId;
 	}
 
+	@Override
 	public String getAccessToken() {
 		if (_accessToken == null) {
 			return StringPool.BLANK;
@@ -271,10 +412,12 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		}
 	}
 
+	@Override
 	public void setAccessToken(String accessToken) {
 		_accessToken = accessToken;
 	}
 
+	@Override
 	public String getTokenName() {
 		if (_tokenName == null) {
 			return StringPool.BLANK;
@@ -284,6 +427,7 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		}
 	}
 
+	@Override
 	public void setTokenName(String tokenName) {
 		_columnBitmask |= TOKENNAME_COLUMN_BITMASK;
 
@@ -298,6 +442,7 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		return GetterUtil.getString(_originalTokenName);
 	}
 
+	@Override
 	public String getTokenSecret() {
 		if (_tokenSecret == null) {
 			return StringPool.BLANK;
@@ -307,10 +452,12 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		}
 	}
 
+	@Override
 	public void setTokenSecret(String tokenSecret) {
 		_tokenSecret = tokenSecret;
 	}
 
+	@Override
 	public String getSessionHandle() {
 		if (_sessionHandle == null) {
 			return StringPool.BLANK;
@@ -320,14 +467,17 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		}
 	}
 
+	@Override
 	public void setSessionHandle(String sessionHandle) {
 		_sessionHandle = sessionHandle;
 	}
 
+	@Override
 	public long getExpiration() {
 		return _expiration;
 	}
 
+	@Override
 	public void setExpiration(long expiration) {
 		_expiration = expiration;
 	}
@@ -337,29 +487,26 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 	}
 
 	@Override
-	public OAuthToken toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (OAuthToken)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
-					OAuthToken.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
+			OAuthToken.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public OAuthToken toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (OAuthToken)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -386,6 +533,7 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		return oAuthTokenImpl;
 	}
 
+	@Override
 	public int compareTo(OAuthToken oAuthToken) {
 		long primaryKey = oAuthToken.getPrimaryKey();
 
@@ -402,18 +550,15 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof OAuthToken)) {
 			return false;
 		}
 
-		OAuthToken oAuthToken = null;
-
-		try {
-			oAuthToken = (OAuthToken)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		OAuthToken oAuthToken = (OAuthToken)obj;
 
 		long primaryKey = oAuthToken.getPrimaryKey();
 
@@ -579,6 +724,7 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(46);
 
@@ -649,7 +795,7 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 	}
 
 	private static ClassLoader _classLoader = OAuthToken.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			OAuthToken.class
 		};
 	private long _oAuthTokenId;
@@ -674,7 +820,6 @@ public class OAuthTokenModelImpl extends BaseModelImpl<OAuthToken>
 	private String _tokenSecret;
 	private String _sessionHandle;
 	private long _expiration;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
-	private OAuthToken _escapedModelProxy;
+	private OAuthToken _escapedModel;
 }

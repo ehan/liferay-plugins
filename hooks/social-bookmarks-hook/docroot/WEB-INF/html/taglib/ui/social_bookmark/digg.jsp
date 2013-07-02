@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -28,11 +28,11 @@ else if (displayStyle.equals("vertical")) {
 %>
 
 <liferay-util:html-bottom outputKey="taglib_ui_social_bookmark_digg">
-	<script type="text/javascript" src="http://widgets.digg.com/buttons.js"></script>
+	<script src="<%= HttpUtil.getProtocol(request) %>://widgets.digg.com/buttons.js" type="text/javascript"></script>
 </liferay-util:html-bottom>
 
 <a
 	class="DiggThisButton <%= diggDisplayStyle %>"
-	href="http://digg.com/submit?url=<%= HttpUtil.encodeURL(url) %>&amp;title=<%= HttpUtil.encodeURL(title) %>"
+	href="<%= HttpUtil.getProtocol(request) %>://digg.com/submit?url=<%= HttpUtil.encodeURL(url) %>&amp;title=<%= HttpUtil.encodeURL(title) %>"
 >
 </a>

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -42,6 +42,7 @@ import com.liferay.portal.workflow.kaleo.runtime.TaskManager;
 import com.liferay.portal.workflow.kaleo.service.KaleoTaskAssignmentLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoTaskInstanceTokenLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.util.WorkflowContextUtil;
+import com.liferay.portal.workflow.kaleo.util.WorkflowModelUtil;
 
 import java.io.Serializable;
 
@@ -56,6 +57,7 @@ import java.util.Map;
  */
 public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 
+	@Override
 	public WorkflowTask assignWorkflowTaskToRole(
 			long companyId, long userId, long workflowTaskInstanceId,
 			long roleId, String comment, Date dueDate,
@@ -72,6 +74,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 			serviceContext);
 	}
 
+	@Override
 	public WorkflowTask assignWorkflowTaskToUser(
 			long companyId, long userId, long workflowTaskInstanceId,
 			long assigneeUserId, String comment, Date dueDate,
@@ -88,6 +91,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 			workflowContext, serviceContext);
 	}
 
+	@Override
 	public WorkflowTask completeWorkflowTask(
 			long companyId, long userId, long workflowTaskInstanceId,
 			String transitionName, String comment,
@@ -99,14 +103,14 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		serviceContext.setCompanyId(companyId);
 		serviceContext.setUserId(userId);
 
-		WorkflowTaskAdapter workflowTaskAdapter =
-			(WorkflowTaskAdapter)_taskManager.completeWorkflowTask(
-				workflowTaskInstanceId, transitionName, comment,
-				workflowContext, serviceContext);
+		WorkflowTask workflowTask = _taskManager.completeWorkflowTask(
+			workflowTaskInstanceId, transitionName, comment, workflowContext,
+			serviceContext);
 
 		try {
 			KaleoTaskInstanceToken kaleoTaskInstanceToken =
-				workflowTaskAdapter.getKaleoTaskInstanceToken();
+				KaleoTaskInstanceTokenLocalServiceUtil.
+					getKaleoTaskInstanceToken(workflowTask.getWorkflowTaskId());
 
 			KaleoInstanceToken kaleoInstanceToken =
 				kaleoTaskInstanceToken.getKaleoInstanceToken();
@@ -130,9 +134,10 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 			throw new WorkflowException("Unable to complete task", e);
 		}
 
-		return workflowTaskAdapter;
+		return workflowTask;
 	}
 
+	@Override
 	public List<String> getNextTransitionNames(
 			long companyId, long userId, long workflowTaskInstanceId)
 		throws WorkflowException {
@@ -162,6 +167,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public long[] getPooledActorsIds(
 			long companyId, long workflowTaskInstanceId)
 		throws WorkflowException {
@@ -212,6 +218,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public WorkflowTask getWorkflowTask(
 			long companyId, long workflowTaskInstanceId)
 		throws WorkflowException {
@@ -221,7 +228,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 				KaleoTaskInstanceTokenLocalServiceUtil.
 					getKaleoTaskInstanceToken(workflowTaskInstanceId);
 
-			return new WorkflowTaskAdapter(
+			return WorkflowModelUtil.toWorkflowTask(
 				kaleoTaskInstanceToken,
 				WorkflowContextUtil.convert(
 					kaleoTaskInstanceToken.getWorkflowContext()));
@@ -231,6 +238,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public int getWorkflowTaskCount(long companyId, Boolean completed)
 		throws WorkflowException {
 
@@ -247,6 +255,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public int getWorkflowTaskCountByRole(
 			long companyId, long roleId, Boolean completed)
 		throws WorkflowException {
@@ -265,6 +274,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public int getWorkflowTaskCountBySubmittingUser(
 			long companyId, long userId, Boolean completed)
 		throws WorkflowException {
@@ -283,6 +293,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public int getWorkflowTaskCountByUser(
 			long companyId, long userId, Boolean completed)
 		throws WorkflowException {
@@ -295,14 +306,15 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 
 			return KaleoTaskInstanceTokenLocalServiceUtil.
 				getKaleoTaskInstanceTokensCount(
-					User.class.getName(), serviceContext.getUserId(),
-					completed, serviceContext);
+					User.class.getName(), serviceContext.getUserId(), completed,
+					serviceContext);
 		}
 		catch (Exception e) {
 			throw new WorkflowException(e);
 		}
 	}
 
+	@Override
 	public int getWorkflowTaskCountByUserRoles(
 			long companyId, long userId, Boolean completed)
 		throws WorkflowException {
@@ -321,6 +333,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public int getWorkflowTaskCountByWorkflowInstance(
 			long companyId, Long userId, long workflowInstanceId,
 			Boolean completed)
@@ -344,6 +357,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public List<WorkflowTask> getWorkflowTasks(
 			long companyId, Boolean completed, int start, int end,
 			OrderByComparator orderByComparator)
@@ -367,6 +381,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public List<WorkflowTask> getWorkflowTasksByRole(
 			long companyId, long roleId, Boolean completed, int start, int end,
 			OrderByComparator orderByComparator)
@@ -390,6 +405,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public List<WorkflowTask> getWorkflowTasksBySubmittingUser(
 			long companyId, long userId, Boolean completed, int start, int end,
 			OrderByComparator orderByComparator)
@@ -413,6 +429,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public List<WorkflowTask> getWorkflowTasksByUser(
 			long companyId, long userId, Boolean completed, int start, int end,
 			OrderByComparator orderByComparator)
@@ -436,9 +453,10 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public List<WorkflowTask> getWorkflowTasksByUserRoles(
-			long companyId, long userId, Boolean completed, int start,
-			int end, OrderByComparator orderByComparator)
+			long companyId, long userId, Boolean completed, int start, int end,
+			OrderByComparator orderByComparator)
 		throws WorkflowException {
 
 		try {
@@ -459,6 +477,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public List<WorkflowTask> getWorkflowTasksByWorkflowInstance(
 			long companyId, Long userId, long workflowInstanceId,
 			Boolean completed, int start, int end,
@@ -487,6 +506,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public List<WorkflowTask> search(
 			long companyId, long userId, String keywords, Boolean completed,
 			Boolean searchByUserRoles, int start, int end,
@@ -511,6 +531,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public List<WorkflowTask> search(
 			long companyId, long userId, String taskName, String assetType,
 			Long[] assetPrimaryKey, Date dueDateGT, Date dueDateLT,
@@ -537,6 +558,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public List<WorkflowTask> search(
 			long companyId, long userId, String keywords, String[] assetTypes,
 			Boolean completed, Boolean searchByUserRoles, int start, int end,
@@ -561,6 +583,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public int searchCount(
 			long companyId, long userId, String keywords, Boolean completed,
 			Boolean searchByUserRoles)
@@ -580,6 +603,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public int searchCount(
 			long companyId, long userId, String taskName, String assetType,
 			Long[] assetPrimaryKey, Date dueDateGT, Date dueDateLT,
@@ -601,6 +625,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		}
 	}
 
+	@Override
 	public int searchCount(
 			long companyId, long userId, String keywords, String[] assetTypes,
 			Boolean completed, Boolean searchByUserRoles)
@@ -629,6 +654,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		_taskManager = taskManager;
 	}
 
+	@Override
 	public WorkflowTask updateDueDate(
 			long companyId, long userId, long workflowTaskInstanceId,
 			String comment, Date dueDate)
@@ -642,6 +668,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		return _taskManager.updateDueDate(
 			workflowTaskInstanceId, comment, dueDate, serviceContext);
 	}
+
 	protected List<WorkflowTask> toWorkflowTasks(
 			List<KaleoTaskInstanceToken> kaleoTaskInstanceTokens)
 		throws PortalException, SystemException {
@@ -652,12 +679,11 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		for (KaleoTaskInstanceToken kaleoTaskInstanceToken :
 				kaleoTaskInstanceTokens) {
 
-			WorkflowTask workflowTask = new WorkflowTaskAdapter(
-				kaleoTaskInstanceToken,
-				WorkflowContextUtil.convert(
-					kaleoTaskInstanceToken.getWorkflowContext()));
-
-			workflowTasks.add(workflowTask);
+			workflowTasks.add(
+				WorkflowModelUtil.toWorkflowTask(
+					kaleoTaskInstanceToken,
+					WorkflowContextUtil.convert(
+						kaleoTaskInstanceToken.getWorkflowContext())));
 		}
 
 		return workflowTasks;

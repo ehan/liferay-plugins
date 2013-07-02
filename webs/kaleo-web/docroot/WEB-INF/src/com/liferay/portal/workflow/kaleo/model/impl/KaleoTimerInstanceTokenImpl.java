@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -32,6 +32,7 @@ public class KaleoTimerInstanceTokenImpl
 	public KaleoTimerInstanceTokenImpl() {
 	}
 
+	@Override
 	public KaleoInstanceToken getKaleoInstanceToken()
 		throws PortalException, SystemException {
 
@@ -39,6 +40,7 @@ public class KaleoTimerInstanceTokenImpl
 			getKaleoInstanceTokenId());
 	}
 
+	@Override
 	public KaleoTaskInstanceToken getKaleoTaskInstanceToken()
 		throws SystemException {
 
@@ -46,6 +48,7 @@ public class KaleoTimerInstanceTokenImpl
 			fetchKaleoTaskInstanceToken(getKaleoTaskInstanceTokenId());
 	}
 
+	@Override
 	public KaleoTimer getKaleoTimer() throws PortalException, SystemException {
 		return KaleoTimerLocalServiceUtil.getKaleoTimer(getKaleoTimerId());
 	}

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -213,8 +213,8 @@ public class MongoExpandoValueLocalServiceImpl
 	@Override
 	public void deleteTableValues(long tableId) throws SystemException {
 		try {
-			ExpandoTable expandoTable =
-				ExpandoTableLocalServiceUtil.getTable(tableId);
+			ExpandoTable expandoTable = ExpandoTableLocalServiceUtil.getTable(
+				tableId);
 
 			DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
 
@@ -365,7 +365,7 @@ public class MongoExpandoValueLocalServiceImpl
 				dbCursor = dbCollection.find();
 			}
 
-			if ((start != QueryUtil.ALL_POS) && end != QueryUtil.ALL_POS) {
+			if ((start != QueryUtil.ALL_POS) && (end != QueryUtil.ALL_POS)) {
 				dbCursor = dbCursor.skip(start).limit(end - start);
 			}
 
@@ -388,9 +388,7 @@ public class MongoExpandoValueLocalServiceImpl
 	}
 
 	@Override
-	public int getColumnValuesCount(long columnId)
-		throws SystemException {
-
+	public int getColumnValuesCount(long columnId) throws SystemException {
 		try {
 			ExpandoColumn expandoColumn =
 				ExpandoColumnLocalServiceUtil.getColumn(columnId);

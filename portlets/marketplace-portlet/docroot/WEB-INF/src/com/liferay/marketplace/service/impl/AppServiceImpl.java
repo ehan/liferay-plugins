@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,28 +20,21 @@ import com.liferay.marketplace.service.permission.MarketplacePermission;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 
-import java.io.InputStream;
+import java.io.File;
 
 /**
  * @author Ryan Park
  */
 public class AppServiceImpl extends AppServiceBaseImpl {
 
-	public App addApp(long remoteAppId, String version, InputStream inputStream)
-		throws PortalException, SystemException {
-
+	@Override
+	public App deleteApp(long appId) throws PortalException, SystemException {
 		MarketplacePermission.check(getPermissionChecker());
 
-		return appLocalService.addApp(
-			getUserId(), remoteAppId, version, inputStream);
+		return appLocalService.deleteApp(appId);
 	}
 
-	public void deleteApp(long appId) throws PortalException, SystemException {
-		MarketplacePermission.check(getPermissionChecker());
-
-		appLocalService.deleteApp(appId);
-	}
-
+	@Override
 	public void installApp(long remoteAppId)
 		throws PortalException, SystemException {
 
@@ -50,6 +43,7 @@ public class AppServiceImpl extends AppServiceBaseImpl {
 		appLocalService.installApp(remoteAppId);
 	}
 
+	@Override
 	public void uninstallApp(long remoteAppId)
 		throws PortalException, SystemException {
 
@@ -58,12 +52,14 @@ public class AppServiceImpl extends AppServiceBaseImpl {
 		appLocalService.uninstallApp(remoteAppId);
 	}
 
-	public App updateApp(long appId, String version, InputStream inputStream)
+	@Override
+	public App updateApp(long remoteAppId, String version, File file)
 		throws PortalException, SystemException {
 
 		MarketplacePermission.check(getPermissionChecker());
 
-		return appLocalService.updateApp(appId, version, inputStream);
+		return appLocalService.updateApp(
+			getUserId(), remoteAppId, version, file);
 	}
 
 }

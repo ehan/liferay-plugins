@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -30,5 +30,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String PORTLET_CONTEXT = "PORTLET_CONTEXT";
 
 	public static final String SESSION_CONTEXT = "SESSION_CONTEXT";
+
+	public static final String WSRP_CONSUMER_MANAGERS =
+		"WSRP_CONSUMER_MANAGERS";
 
 }

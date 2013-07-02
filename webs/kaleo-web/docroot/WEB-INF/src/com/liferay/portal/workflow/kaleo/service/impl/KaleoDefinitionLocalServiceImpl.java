@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,6 +34,7 @@ import java.util.List;
 public class KaleoDefinitionLocalServiceImpl
 	extends KaleoDefinitionLocalServiceBaseImpl {
 
+	@Override
 	public void activateKaleoDefinition(
 			long kaleoDefinitionId, long startKaleoNodeId,
 			ServiceContext serviceContext)
@@ -49,7 +50,7 @@ public class KaleoDefinitionLocalServiceImpl
 			previousKaleoDefinition.setModifiedDate(new Date());
 			previousKaleoDefinition.setActive(false);
 
-			kaleoDefinitionPersistence.update(previousKaleoDefinition, false);
+			kaleoDefinitionPersistence.update(previousKaleoDefinition);
 		}
 		catch (NoSuchDefinitionException nsde) {
 		}
@@ -58,9 +59,10 @@ public class KaleoDefinitionLocalServiceImpl
 		kaleoDefinition.setModifiedDate(new Date());
 		kaleoDefinition.setActive(true);
 
-		kaleoDefinitionPersistence.update(kaleoDefinition, false);
+		kaleoDefinitionPersistence.update(kaleoDefinition);
 	}
 
+	@Override
 	public void activateKaleoDefinition(
 			long kaleoDefinitionId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -71,9 +73,10 @@ public class KaleoDefinitionLocalServiceImpl
 		kaleoDefinition.setModifiedDate(new Date());
 		kaleoDefinition.setActive(true);
 
-		kaleoDefinitionPersistence.update(kaleoDefinition, false);
+		kaleoDefinitionPersistence.update(kaleoDefinition);
 	}
 
+	@Override
 	public void activateKaleoDefinition(
 			String name, int version, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -85,9 +88,10 @@ public class KaleoDefinitionLocalServiceImpl
 		kaleoDefinition.setModifiedDate(new Date());
 		kaleoDefinition.setActive(true);
 
-		kaleoDefinitionPersistence.update(kaleoDefinition, false);
+		kaleoDefinitionPersistence.update(kaleoDefinition);
 	}
 
+	@Override
 	public KaleoDefinition addKaleoDefinition(
 			String name, String title, String description, String content,
 			int version, ServiceContext serviceContext)
@@ -114,11 +118,12 @@ public class KaleoDefinitionLocalServiceImpl
 		kaleoDefinition.setVersion(version);
 		kaleoDefinition.setActive(false);
 
-		kaleoDefinitionPersistence.update(kaleoDefinition, false);
+		kaleoDefinitionPersistence.update(kaleoDefinition);
 
 		return kaleoDefinition;
 	}
 
+	@Override
 	public void deactivateKaleoDefinition(
 			String name, int version, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -130,9 +135,10 @@ public class KaleoDefinitionLocalServiceImpl
 		kaleoDefinition.setModifiedDate(new Date());
 		kaleoDefinition.setActive(false);
 
-		kaleoDefinitionPersistence.update(kaleoDefinition, false);
+		kaleoDefinitionPersistence.update(kaleoDefinition);
 	}
 
+	@Override
 	public void deleteCompanyKaleoDefinitions(long companyId)
 		throws SystemException {
 
@@ -161,6 +167,7 @@ public class KaleoDefinitionLocalServiceImpl
 		kaleoTransitionLocalService.deleteCompanyKaleoTransitions(companyId);
 	}
 
+	@Override
 	public void deleteKaleoDefinition(
 			String name, int version, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -210,6 +217,7 @@ public class KaleoDefinitionLocalServiceImpl
 			kaleoDefinition.getKaleoDefinitionId());
 	}
 
+	@Override
 	public KaleoDefinition getKaleoDefinition(
 			String name, int version, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -218,6 +226,7 @@ public class KaleoDefinitionLocalServiceImpl
 			serviceContext.getCompanyId(), name, version);
 	}
 
+	@Override
 	public List<KaleoDefinition> getKaleoDefinitions(
 			boolean active, int start, int end,
 			OrderByComparator orderByComparator, ServiceContext serviceContext)
@@ -228,6 +237,7 @@ public class KaleoDefinitionLocalServiceImpl
 			orderByComparator);
 	}
 
+	@Override
 	public List<KaleoDefinition> getKaleoDefinitions(
 			int start, int end, OrderByComparator orderByComparator,
 			ServiceContext serviceContext)
@@ -237,6 +247,7 @@ public class KaleoDefinitionLocalServiceImpl
 			serviceContext.getCompanyId(), start, end, orderByComparator);
 	}
 
+	@Override
 	public List<KaleoDefinition> getKaleoDefinitions(
 			String name, boolean active, int start, int end,
 			OrderByComparator orderByComparator, ServiceContext serviceContext)
@@ -247,6 +258,7 @@ public class KaleoDefinitionLocalServiceImpl
 			orderByComparator);
 	}
 
+	@Override
 	public List<KaleoDefinition> getKaleoDefinitions(
 			String name, int start, int end,
 			OrderByComparator orderByComparator, ServiceContext serviceContext)
@@ -256,6 +268,7 @@ public class KaleoDefinitionLocalServiceImpl
 			serviceContext.getCompanyId(), name, start, end, orderByComparator);
 	}
 
+	@Override
 	public int getKaleoDefinitionsCount(
 			boolean active, ServiceContext serviceContext)
 		throws SystemException {
@@ -264,6 +277,7 @@ public class KaleoDefinitionLocalServiceImpl
 			serviceContext.getCompanyId(), active);
 	}
 
+	@Override
 	public int getKaleoDefinitionsCount(ServiceContext serviceContext)
 		throws SystemException {
 
@@ -271,6 +285,7 @@ public class KaleoDefinitionLocalServiceImpl
 			serviceContext.getCompanyId());
 	}
 
+	@Override
 	public int getKaleoDefinitionsCount(
 			String name, boolean active, ServiceContext serviceContext)
 		throws SystemException {
@@ -279,6 +294,7 @@ public class KaleoDefinitionLocalServiceImpl
 			serviceContext.getCompanyId(), name, active);
 	}
 
+	@Override
 	public int getKaleoDefinitionsCount(
 			String name, ServiceContext serviceContext)
 		throws SystemException {
@@ -287,6 +303,7 @@ public class KaleoDefinitionLocalServiceImpl
 			serviceContext.getCompanyId(), name);
 	}
 
+	@Override
 	public KaleoDefinition getLatestKaleoDefinition(
 			String name, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -302,6 +319,7 @@ public class KaleoDefinitionLocalServiceImpl
 		return kaleoDefinitions.get(0);
 	}
 
+	@Override
 	public KaleoDefinition incrementKaleoDefinition(
 			Definition definition, String title, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -315,6 +333,7 @@ public class KaleoDefinitionLocalServiceImpl
 			serviceContext);
 	}
 
+	@Override
 	public KaleoDefinition updateTitle(
 			String name, int version, String title,
 			ServiceContext serviceContext)
@@ -326,7 +345,7 @@ public class KaleoDefinitionLocalServiceImpl
 
 		kaleoDefinition.setTitle(title);
 
-		kaleoDefinitionPersistence.update(kaleoDefinition, false);
+		kaleoDefinitionPersistence.update(kaleoDefinition);
 
 		return kaleoDefinition;
 	}

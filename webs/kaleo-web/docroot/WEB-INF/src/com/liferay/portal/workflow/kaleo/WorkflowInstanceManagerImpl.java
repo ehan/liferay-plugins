@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,9 +20,6 @@ import com.liferay.portal.kernel.workflow.WorkflowException;
 import com.liferay.portal.kernel.workflow.WorkflowInstance;
 import com.liferay.portal.kernel.workflow.WorkflowInstanceManager;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
-import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
-import com.liferay.portal.workflow.kaleo.runtime.KaleoSignaler;
 import com.liferay.portal.workflow.kaleo.runtime.WorkflowEngine;
 
 import java.io.Serializable;
@@ -36,6 +33,7 @@ import java.util.Map;
  */
 public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 
+	@Override
 	public void deleteWorkflowInstance(long companyId, long workflowInstanceId)
 		throws WorkflowException {
 
@@ -47,6 +45,7 @@ public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 			workflowInstanceId, serviceContext);
 	}
 
+	@Override
 	public List<String> getNextTransitionNames(
 			long companyId, long userId, long workflowInstanceId)
 		throws WorkflowException {
@@ -65,6 +64,7 @@ public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 		}
 	}
 
+	@Override
 	public WorkflowInstance getWorkflowInstance(
 			long companyId, long workflowInstanceId)
 		throws WorkflowException {
@@ -77,6 +77,7 @@ public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 			workflowInstanceId, serviceContext);
 	}
 
+	@Override
 	public int getWorkflowInstanceCount(
 			long companyId, Long userId, String assetClassName,
 			Long assetClassPK, Boolean completed)
@@ -87,10 +88,10 @@ public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 		serviceContext.setCompanyId(companyId);
 
 		return _workflowEngine.getWorkflowInstanceCount(
-			userId, assetClassName, assetClassPK, completed,
-			serviceContext);
+			userId, assetClassName, assetClassPK, completed, serviceContext);
 	}
 
+	@Override
 	public int getWorkflowInstanceCount(
 			long companyId, Long userId, String[] assetClassNames,
 			Boolean completed)
@@ -104,6 +105,7 @@ public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 			userId, assetClassNames, completed, serviceContext);
 	}
 
+	@Override
 	public int getWorkflowInstanceCount(
 			long companyId, String workflowDefinitionName,
 			Integer workflowDefinitionVersion, Boolean completed)
@@ -118,6 +120,7 @@ public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 			serviceContext);
 	}
 
+	@Override
 	public List<WorkflowInstance> getWorkflowInstances(
 			long companyId, Long userId, String assetClassName,
 			Long assetClassPK, Boolean completed, int start, int end,
@@ -129,10 +132,11 @@ public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 		serviceContext.setCompanyId(companyId);
 
 		return _workflowEngine.getWorkflowInstances(
-			userId, assetClassName, assetClassPK, completed, start,
-			end, orderByComparator, serviceContext);
+			userId, assetClassName, assetClassPK, completed, start, end,
+			orderByComparator, serviceContext);
 	}
 
+	@Override
 	public List<WorkflowInstance> getWorkflowInstances(
 			long companyId, Long userId, String[] assetClassNames,
 			Boolean completed, int start, int end,
@@ -148,6 +152,7 @@ public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 			serviceContext);
 	}
 
+	@Override
 	public List<WorkflowInstance> getWorkflowInstances(
 			long companyId, String workflowDefinitionName,
 			Integer workflowDefinitionVersion, Boolean completed, int start,
@@ -163,14 +168,11 @@ public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 			end, orderByComparator, serviceContext);
 	}
 
-	public void setKaleoSignaler(KaleoSignaler kaleoSignaler) {
-		_kaleoSignaler = kaleoSignaler;
-	}
-
 	public void setWorkflowEngine(WorkflowEngine workflowEngine) {
 		_workflowEngine = workflowEngine;
 	}
 
+	@Override
 	public WorkflowInstance signalWorkflowInstance(
 			long companyId, long userId, long workflowInstanceId,
 			String transitionName, Map<String, Serializable> workflowContext)
@@ -181,27 +183,12 @@ public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 		serviceContext.setCompanyId(companyId);
 		serviceContext.setUserId(userId);
 
-		WorkflowInstanceAdapter workflowInstanceAdapter =
-			(WorkflowInstanceAdapter)_workflowEngine.signalWorkflowInstance(
-				workflowInstanceId, transitionName, workflowContext,
-				serviceContext);
-
-		KaleoInstanceToken kaleoInstanceToken =
-			workflowInstanceAdapter.getKaleoInstanceToken();
-
-		ExecutionContext executionContext = new ExecutionContext(
-			kaleoInstanceToken, workflowContext, serviceContext);
-
-		try {
-			_kaleoSignaler.signalExit(transitionName, executionContext);
-		}
-		catch (Exception e) {
-			throw new WorkflowException("Unable to signal next transition", e);
-		}
-
-		return workflowInstanceAdapter;
+		return _workflowEngine.signalWorkflowInstance(
+			workflowInstanceId, transitionName, workflowContext,
+			serviceContext);
 	}
 
+	@Override
 	public WorkflowInstance startWorkflowInstance(
 			long companyId, long groupId, long userId,
 			String workflowDefinitionName, Integer workflowDefinitionVersion,
@@ -215,27 +202,12 @@ public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 		serviceContext.setScopeGroupId(groupId);
 		serviceContext.setUserId(userId);
 
-		WorkflowInstanceAdapter workflowInstanceAdapter =
-			(WorkflowInstanceAdapter)_workflowEngine.startWorkflowInstance(
-				workflowDefinitionName, workflowDefinitionVersion,
-				transitionName, workflowContext, serviceContext);
-
-		KaleoInstanceToken kaleoInstanceToken =
-			workflowInstanceAdapter.getKaleoInstanceToken();
-
-		ExecutionContext executionContext = new ExecutionContext(
-			kaleoInstanceToken, workflowContext, serviceContext);
-
-		try {
-			_kaleoSignaler.signalEntry(transitionName, executionContext);
-		}
-		catch (Exception e) {
-			throw new WorkflowException("Unable to start workflow", e);
-		}
-
-		return workflowInstanceAdapter;
+		return _workflowEngine.startWorkflowInstance(
+			workflowDefinitionName, workflowDefinitionVersion, transitionName,
+			workflowContext, serviceContext);
 	}
 
+	@Override
 	public WorkflowInstance updateWorkflowContext(
 			long companyId, long workflowInstanceId,
 			Map<String, Serializable> workflowContext)
@@ -249,7 +221,6 @@ public class WorkflowInstanceManagerImpl implements WorkflowInstanceManager {
 			workflowInstanceId, workflowContext, serviceContext);
 	}
 
-	private KaleoSignaler _kaleoSignaler;
 	private WorkflowEngine _workflowEngine;
 
 }

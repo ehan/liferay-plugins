@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -37,6 +37,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the ProjectsEntry service. Represents a row in the &quot;SO_ProjectsEntry&quot; database table, with each column mapped to a property of this class.
@@ -89,56 +91,157 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 				"value.object.column.bitmask.enabled.com.liferay.so.model.ProjectsEntry"),
 			true);
 	public static long USERID_COLUMN_BITMASK = 1L;
+	public static long ENDDATE_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.so.model.ProjectsEntry"));
 
 	public ProjectsEntryModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _projectsEntryId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setProjectsEntryId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_projectsEntryId);
+		return _projectsEntryId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return ProjectsEntry.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return ProjectsEntry.class.getName();
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("projectsEntryId", getProjectsEntryId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("title", getTitle());
+		attributes.put("description", getDescription());
+		attributes.put("startDate", getStartDate());
+		attributes.put("endDate", getEndDate());
+		attributes.put("data", getData());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long projectsEntryId = (Long)attributes.get("projectsEntryId");
+
+		if (projectsEntryId != null) {
+			setProjectsEntryId(projectsEntryId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String title = (String)attributes.get("title");
+
+		if (title != null) {
+			setTitle(title);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		Date startDate = (Date)attributes.get("startDate");
+
+		if (startDate != null) {
+			setStartDate(startDate);
+		}
+
+		Date endDate = (Date)attributes.get("endDate");
+
+		if (endDate != null) {
+			setEndDate(endDate);
+		}
+
+		String data = (String)attributes.get("data");
+
+		if (data != null) {
+			setData(data);
+		}
+	}
+
+	@Override
 	public long getProjectsEntryId() {
 		return _projectsEntryId;
 	}
 
+	@Override
 	public void setProjectsEntryId(long projectsEntryId) {
 		_projectsEntryId = projectsEntryId;
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
 	}
 
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_columnBitmask |= USERID_COLUMN_BITMASK;
 
@@ -151,10 +254,12 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
@@ -163,6 +268,7 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 		return _originalUserId;
 	}
 
+	@Override
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -172,26 +278,32 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	public String getTitle() {
 		if (_title == null) {
 			return StringPool.BLANK;
@@ -201,10 +313,12 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 		}
 	}
 
+	@Override
 	public void setTitle(String title) {
 		_title = title;
 	}
 
+	@Override
 	public String getDescription() {
 		if (_description == null) {
 			return StringPool.BLANK;
@@ -214,28 +328,34 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 		}
 	}
 
+	@Override
 	public void setDescription(String description) {
 		_description = description;
 	}
 
+	@Override
 	public Date getStartDate() {
 		return _startDate;
 	}
 
+	@Override
 	public void setStartDate(Date startDate) {
 		_startDate = startDate;
 	}
 
+	@Override
 	public Date getEndDate() {
 		return _endDate;
 	}
 
+	@Override
 	public void setEndDate(Date endDate) {
 		_columnBitmask = -1L;
 
 		_endDate = endDate;
 	}
 
+	@Override
 	public String getData() {
 		if (_data == null) {
 			return StringPool.BLANK;
@@ -245,6 +365,7 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 		}
 	}
 
+	@Override
 	public void setData(String data) {
 		_data = data;
 	}
@@ -254,29 +375,26 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 	}
 
 	@Override
-	public ProjectsEntry toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (ProjectsEntry)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
-					ProjectsEntry.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
+			ProjectsEntry.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public ProjectsEntry toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (ProjectsEntry)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -300,6 +418,7 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 		return projectsEntryImpl;
 	}
 
+	@Override
 	public int compareTo(ProjectsEntry projectsEntry) {
 		int value = 0;
 
@@ -314,18 +433,15 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof ProjectsEntry)) {
 			return false;
 		}
 
-		ProjectsEntry projectsEntry = null;
-
-		try {
-			projectsEntry = (ProjectsEntry)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		ProjectsEntry projectsEntry = (ProjectsEntry)obj;
 
 		long primaryKey = projectsEntry.getPrimaryKey();
 
@@ -465,6 +581,7 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(37);
 
@@ -523,7 +640,7 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 	}
 
 	private static ClassLoader _classLoader = ProjectsEntry.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			ProjectsEntry.class
 		};
 	private long _projectsEntryId;
@@ -540,7 +657,6 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 	private Date _startDate;
 	private Date _endDate;
 	private String _data;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
-	private ProjectsEntry _escapedModelProxy;
+	private ProjectsEntry _escapedModel;
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,15 +14,20 @@
 
 package com.liferay.so.model;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
  * This class is a wrapper for {@link ProjectsEntry}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       ProjectsEntry
+ * @author Brian Wing Shun Chan
+ * @see ProjectsEntry
  * @generated
  */
 public class ProjectsEntryWrapper implements ProjectsEntry,
@@ -31,12 +36,102 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 		_projectsEntry = projectsEntry;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return ProjectsEntry.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return ProjectsEntry.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("projectsEntryId", getProjectsEntryId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("title", getTitle());
+		attributes.put("description", getDescription());
+		attributes.put("startDate", getStartDate());
+		attributes.put("endDate", getEndDate());
+		attributes.put("data", getData());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long projectsEntryId = (Long)attributes.get("projectsEntryId");
+
+		if (projectsEntryId != null) {
+			setProjectsEntryId(projectsEntryId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String title = (String)attributes.get("title");
+
+		if (title != null) {
+			setTitle(title);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		Date startDate = (Date)attributes.get("startDate");
+
+		if (startDate != null) {
+			setStartDate(startDate);
+		}
+
+		Date endDate = (Date)attributes.get("endDate");
+
+		if (endDate != null) {
+			setEndDate(endDate);
+		}
+
+		String data = (String)attributes.get("data");
+
+		if (data != null) {
+			setData(data);
+		}
 	}
 
 	/**
@@ -44,6 +139,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @return the primary key of this projects entry
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _projectsEntry.getPrimaryKey();
 	}
@@ -53,6 +149,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param primaryKey the primary key of this projects entry
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_projectsEntry.setPrimaryKey(primaryKey);
 	}
@@ -62,6 +159,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @return the projects entry ID of this projects entry
 	*/
+	@Override
 	public long getProjectsEntryId() {
 		return _projectsEntry.getProjectsEntryId();
 	}
@@ -71,6 +169,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param projectsEntryId the projects entry ID of this projects entry
 	*/
+	@Override
 	public void setProjectsEntryId(long projectsEntryId) {
 		_projectsEntry.setProjectsEntryId(projectsEntryId);
 	}
@@ -80,6 +179,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @return the company ID of this projects entry
 	*/
+	@Override
 	public long getCompanyId() {
 		return _projectsEntry.getCompanyId();
 	}
@@ -89,6 +189,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param companyId the company ID of this projects entry
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_projectsEntry.setCompanyId(companyId);
 	}
@@ -98,6 +199,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @return the user ID of this projects entry
 	*/
+	@Override
 	public long getUserId() {
 		return _projectsEntry.getUserId();
 	}
@@ -107,6 +209,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param userId the user ID of this projects entry
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_projectsEntry.setUserId(userId);
 	}
@@ -117,6 +220,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	* @return the user uuid of this projects entry
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _projectsEntry.getUserUuid();
@@ -127,6 +231,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param userUuid the user uuid of this projects entry
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_projectsEntry.setUserUuid(userUuid);
 	}
@@ -136,6 +241,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @return the user name of this projects entry
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _projectsEntry.getUserName();
 	}
@@ -145,6 +251,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param userName the user name of this projects entry
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_projectsEntry.setUserName(userName);
 	}
@@ -154,6 +261,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @return the create date of this projects entry
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _projectsEntry.getCreateDate();
 	}
@@ -163,6 +271,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param createDate the create date of this projects entry
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_projectsEntry.setCreateDate(createDate);
 	}
@@ -172,6 +281,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @return the modified date of this projects entry
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _projectsEntry.getModifiedDate();
 	}
@@ -181,6 +291,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param modifiedDate the modified date of this projects entry
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_projectsEntry.setModifiedDate(modifiedDate);
 	}
@@ -190,6 +301,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @return the title of this projects entry
 	*/
+	@Override
 	public java.lang.String getTitle() {
 		return _projectsEntry.getTitle();
 	}
@@ -199,6 +311,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param title the title of this projects entry
 	*/
+	@Override
 	public void setTitle(java.lang.String title) {
 		_projectsEntry.setTitle(title);
 	}
@@ -208,6 +321,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @return the description of this projects entry
 	*/
+	@Override
 	public java.lang.String getDescription() {
 		return _projectsEntry.getDescription();
 	}
@@ -217,6 +331,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param description the description of this projects entry
 	*/
+	@Override
 	public void setDescription(java.lang.String description) {
 		_projectsEntry.setDescription(description);
 	}
@@ -226,6 +341,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @return the start date of this projects entry
 	*/
+	@Override
 	public java.util.Date getStartDate() {
 		return _projectsEntry.getStartDate();
 	}
@@ -235,6 +351,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param startDate the start date of this projects entry
 	*/
+	@Override
 	public void setStartDate(java.util.Date startDate) {
 		_projectsEntry.setStartDate(startDate);
 	}
@@ -244,6 +361,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @return the end date of this projects entry
 	*/
+	@Override
 	public java.util.Date getEndDate() {
 		return _projectsEntry.getEndDate();
 	}
@@ -253,6 +371,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param endDate the end date of this projects entry
 	*/
+	@Override
 	public void setEndDate(java.util.Date endDate) {
 		_projectsEntry.setEndDate(endDate);
 	}
@@ -262,6 +381,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @return the data of this projects entry
 	*/
+	@Override
 	public java.lang.String getData() {
 		return _projectsEntry.getData();
 	}
@@ -271,42 +391,64 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 	*
 	* @param data the data of this projects entry
 	*/
+	@Override
 	public void setData(java.lang.String data) {
 		_projectsEntry.setData(data);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _projectsEntry.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_projectsEntry.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _projectsEntry.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_projectsEntry.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _projectsEntry.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _projectsEntry.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_projectsEntry.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _projectsEntry.getExpandoBridge();
 	}
 
+	@Override
+	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_projectsEntry.setExpandoBridgeAttributes(baseModel);
+	}
+
+	@Override
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_projectsEntry.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_projectsEntry.setExpandoBridgeAttributes(serviceContext);
@@ -317,6 +459,7 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 		return new ProjectsEntryWrapper((ProjectsEntry)_projectsEntry.clone());
 	}
 
+	@Override
 	public int compareTo(com.liferay.so.model.ProjectsEntry projectsEntry) {
 		return _projectsEntry.compareTo(projectsEntry);
 	}
@@ -326,12 +469,19 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 		return _projectsEntry.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.so.model.ProjectsEntry> toCacheModel() {
 		return _projectsEntry.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry toEscapedModel() {
 		return new ProjectsEntryWrapper(_projectsEntry.toEscapedModel());
+	}
+
+	@Override
+	public com.liferay.so.model.ProjectsEntry toUnescapedModel() {
+		return new ProjectsEntryWrapper(_projectsEntry.toUnescapedModel());
 	}
 
 	@Override
@@ -339,26 +489,49 @@ public class ProjectsEntryWrapper implements ProjectsEntry,
 		return _projectsEntry.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _projectsEntry.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_projectsEntry.persist();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof ProjectsEntryWrapper)) {
+			return false;
+		}
+
+		ProjectsEntryWrapper projectsEntryWrapper = (ProjectsEntryWrapper)obj;
+
+		if (Validator.equals(_projectsEntry, projectsEntryWrapper._projectsEntry)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public ProjectsEntry getWrappedProjectsEntry() {
 		return _projectsEntry;
 	}
 
+	@Override
 	public ProjectsEntry getWrappedModel() {
 		return _projectsEntry;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_projectsEntry.resetOriginalValues();
 	}

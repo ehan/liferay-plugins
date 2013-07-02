@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,7 +26,7 @@
 	</span>
 </logic:messagesPresent>
 
-<html:form action="/sample_struts_portlet/subscribe/action" method="post" focus="firstName">
+<html:form action="/sample_struts_portlet/subscribe/action" focus="firstName" method="post">
 
 <table border="0" cellpadding="0" cellspacing="0">
 <tr>

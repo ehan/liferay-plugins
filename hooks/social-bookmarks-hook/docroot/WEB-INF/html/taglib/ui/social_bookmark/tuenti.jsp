@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,7 +25,7 @@ if (displayStyle.equals("simple")) {
 %>
 
 <liferay-util:html-bottom outputKey="taglib_ui_social_bookmark_tuenti">
-	<script src="http://widgets.tuenti.com/widgets.js" type="text/javascript"></script>
+	<script src="<%= HttpUtil.getProtocol(request) %>://widgets.tuenti.com/widgets.js" type="text/javascript"></script>
 </liferay-util:html-bottom>
 
-<a class="tuenti-share-button" <%= tuentiDisplayStyle%> href="http://www.tuenti.com/share" share-url="<%= url %>"></a>
+<a class="tuenti-share-button" <%= tuentiDisplayStyle%> href="<%= HttpUtil.getProtocol(request) %>://www.tuenti.com/share" share-url="<%= url %>"></a>

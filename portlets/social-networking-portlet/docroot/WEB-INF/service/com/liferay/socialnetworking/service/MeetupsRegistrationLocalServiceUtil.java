@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,16 +15,16 @@
 package com.liferay.socialnetworking.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
- * The utility for the meetups registration local service. This utility wraps {@link com.liferay.socialnetworking.service.impl.MeetupsRegistrationLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for MeetupsRegistration. This utility wraps
+ * {@link com.liferay.socialnetworking.service.impl.MeetupsRegistrationLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see MeetupsRegistrationLocalService
@@ -67,25 +67,32 @@ public class MeetupsRegistrationLocalServiceUtil {
 	* Deletes the meetups registration with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param meetupsRegistrationId the primary key of the meetups registration
+	* @return the meetups registration that was removed
 	* @throws PortalException if a meetups registration with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deleteMeetupsRegistration(long meetupsRegistrationId)
+	public static com.liferay.socialnetworking.model.MeetupsRegistration deleteMeetupsRegistration(
+		long meetupsRegistrationId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteMeetupsRegistration(meetupsRegistrationId);
+		return getService().deleteMeetupsRegistration(meetupsRegistrationId);
 	}
 
 	/**
 	* Deletes the meetups registration from the database. Also notifies the appropriate model listeners.
 	*
 	* @param meetupsRegistration the meetups registration
+	* @return the meetups registration that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deleteMeetupsRegistration(
+	public static com.liferay.socialnetworking.model.MeetupsRegistration deleteMeetupsRegistration(
 		com.liferay.socialnetworking.model.MeetupsRegistration meetupsRegistration)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteMeetupsRegistration(meetupsRegistration);
+		return getService().deleteMeetupsRegistration(meetupsRegistration);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
 	}
 
 	/**
@@ -106,7 +113,7 @@ public class MeetupsRegistrationLocalServiceUtil {
 	* Performs a dynamic query on the database and returns a range of the matching rows.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialnetworking.model.impl.MeetupsRegistrationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param dynamicQuery the dynamic query
@@ -126,7 +133,7 @@ public class MeetupsRegistrationLocalServiceUtil {
 	* Performs a dynamic query on the database and returns an ordered range of the matching rows.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialnetworking.model.impl.MeetupsRegistrationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param dynamicQuery the dynamic query
@@ -157,6 +164,21 @@ public class MeetupsRegistrationLocalServiceUtil {
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().dynamicQueryCount(dynamicQuery);
+	}
+
+	/**
+	* Returns the number of rows that match the dynamic query.
+	*
+	* @param dynamicQuery the dynamic query
+	* @param projection the projection to apply to the query
+	* @return the number of rows that match the dynamic query
+	* @throws SystemException if a system exception occurred
+	*/
+	public static long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
 	public static com.liferay.socialnetworking.model.MeetupsRegistration fetchMeetupsRegistration(
@@ -191,7 +213,7 @@ public class MeetupsRegistrationLocalServiceUtil {
 	* Returns a range of all the meetups registrations.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialnetworking.model.impl.MeetupsRegistrationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of meetups registrations
@@ -230,21 +252,6 @@ public class MeetupsRegistrationLocalServiceUtil {
 	}
 
 	/**
-	* Updates the meetups registration in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param meetupsRegistration the meetups registration
-	* @param merge whether to merge the meetups registration with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
-	* @return the meetups registration that was updated
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.socialnetworking.model.MeetupsRegistration updateMeetupsRegistration(
-		com.liferay.socialnetworking.model.MeetupsRegistration meetupsRegistration,
-		boolean merge)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().updateMeetupsRegistration(meetupsRegistration, merge);
-	}
-
-	/**
 	* Returns the Spring bean ID for this bean.
 	*
 	* @return the Spring bean ID for this bean
@@ -262,11 +269,10 @@ public class MeetupsRegistrationLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static java.util.List<com.liferay.socialnetworking.model.MeetupsRegistration> getMeetupsRegistrations(
-		long meetupsEntryId, int status, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getMeetupsRegistrations(meetupsEntryId, status, start, end);
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
 	public static com.liferay.socialnetworking.model.MeetupsRegistration getMeetupsRegistration(
@@ -274,6 +280,13 @@ public class MeetupsRegistrationLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().getMeetupsRegistration(userId, meetupsEntryId);
+	}
+
+	public static java.util.List<com.liferay.socialnetworking.model.MeetupsRegistration> getMeetupsRegistrations(
+		long meetupsEntryId, int status, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getMeetupsRegistrations(meetupsEntryId, status, start, end);
 	}
 
 	public static int getMeetupsRegistrationsCount(long meetupsEntryId,
@@ -296,35 +309,27 @@ public class MeetupsRegistrationLocalServiceUtil {
 
 	public static MeetupsRegistrationLocalService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					MeetupsRegistrationLocalService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					MeetupsRegistrationLocalService.class.getName(),
-					portletClassLoader);
-
-			_service = new MeetupsRegistrationLocalServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableLocalService instanceof MeetupsRegistrationLocalService) {
+				_service = (MeetupsRegistrationLocalService)invokableLocalService;
+			}
+			else {
+				_service = new MeetupsRegistrationLocalServiceClp(invokableLocalService);
+			}
 
 			ReferenceRegistry.registerReference(MeetupsRegistrationLocalServiceUtil.class,
 				"_service");
-			MethodCache.remove(MeetupsRegistrationLocalService.class);
 		}
 
 		return _service;
 	}
 
+	/**
+	 * @deprecated As of 6.2.0
+	 */
 	public void setService(MeetupsRegistrationLocalService service) {
-		MethodCache.remove(MeetupsRegistrationLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(MeetupsRegistrationLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(MeetupsRegistrationLocalService.class);
 	}
 
 	private static MeetupsRegistrationLocalService _service;

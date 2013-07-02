@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,15 +14,20 @@
 
 package com.liferay.so.model;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
  * This class is a wrapper for {@link MemberRequest}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       MemberRequest
+ * @author Brian Wing Shun Chan
+ * @see MemberRequest
  * @generated
  */
 public class MemberRequestWrapper implements MemberRequest,
@@ -31,12 +36,109 @@ public class MemberRequestWrapper implements MemberRequest,
 		_memberRequest = memberRequest;
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return MemberRequest.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return MemberRequest.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("memberRequestId", getMemberRequestId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("key", getKey());
+		attributes.put("receiverUserId", getReceiverUserId());
+		attributes.put("invitedRoleId", getInvitedRoleId());
+		attributes.put("invitedTeamId", getInvitedTeamId());
+		attributes.put("status", getStatus());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long memberRequestId = (Long)attributes.get("memberRequestId");
+
+		if (memberRequestId != null) {
+			setMemberRequestId(memberRequestId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String key = (String)attributes.get("key");
+
+		if (key != null) {
+			setKey(key);
+		}
+
+		Long receiverUserId = (Long)attributes.get("receiverUserId");
+
+		if (receiverUserId != null) {
+			setReceiverUserId(receiverUserId);
+		}
+
+		Long invitedRoleId = (Long)attributes.get("invitedRoleId");
+
+		if (invitedRoleId != null) {
+			setInvitedRoleId(invitedRoleId);
+		}
+
+		Long invitedTeamId = (Long)attributes.get("invitedTeamId");
+
+		if (invitedTeamId != null) {
+			setInvitedTeamId(invitedTeamId);
+		}
+
+		Integer status = (Integer)attributes.get("status");
+
+		if (status != null) {
+			setStatus(status);
+		}
 	}
 
 	/**
@@ -44,6 +146,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the primary key of this member request
 	*/
+	@Override
 	public long getPrimaryKey() {
 		return _memberRequest.getPrimaryKey();
 	}
@@ -53,6 +156,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param primaryKey the primary key of this member request
 	*/
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_memberRequest.setPrimaryKey(primaryKey);
 	}
@@ -62,6 +166,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the member request ID of this member request
 	*/
+	@Override
 	public long getMemberRequestId() {
 		return _memberRequest.getMemberRequestId();
 	}
@@ -71,6 +176,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param memberRequestId the member request ID of this member request
 	*/
+	@Override
 	public void setMemberRequestId(long memberRequestId) {
 		_memberRequest.setMemberRequestId(memberRequestId);
 	}
@@ -80,6 +186,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the group ID of this member request
 	*/
+	@Override
 	public long getGroupId() {
 		return _memberRequest.getGroupId();
 	}
@@ -89,6 +196,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param groupId the group ID of this member request
 	*/
+	@Override
 	public void setGroupId(long groupId) {
 		_memberRequest.setGroupId(groupId);
 	}
@@ -98,6 +206,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the company ID of this member request
 	*/
+	@Override
 	public long getCompanyId() {
 		return _memberRequest.getCompanyId();
 	}
@@ -107,6 +216,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param companyId the company ID of this member request
 	*/
+	@Override
 	public void setCompanyId(long companyId) {
 		_memberRequest.setCompanyId(companyId);
 	}
@@ -116,6 +226,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the user ID of this member request
 	*/
+	@Override
 	public long getUserId() {
 		return _memberRequest.getUserId();
 	}
@@ -125,6 +236,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param userId the user ID of this member request
 	*/
+	@Override
 	public void setUserId(long userId) {
 		_memberRequest.setUserId(userId);
 	}
@@ -135,6 +247,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	* @return the user uuid of this member request
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _memberRequest.getUserUuid();
@@ -145,6 +258,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param userUuid the user uuid of this member request
 	*/
+	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_memberRequest.setUserUuid(userUuid);
 	}
@@ -154,6 +268,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the user name of this member request
 	*/
+	@Override
 	public java.lang.String getUserName() {
 		return _memberRequest.getUserName();
 	}
@@ -163,6 +278,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param userName the user name of this member request
 	*/
+	@Override
 	public void setUserName(java.lang.String userName) {
 		_memberRequest.setUserName(userName);
 	}
@@ -172,6 +288,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the create date of this member request
 	*/
+	@Override
 	public java.util.Date getCreateDate() {
 		return _memberRequest.getCreateDate();
 	}
@@ -181,6 +298,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param createDate the create date of this member request
 	*/
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_memberRequest.setCreateDate(createDate);
 	}
@@ -190,6 +308,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the modified date of this member request
 	*/
+	@Override
 	public java.util.Date getModifiedDate() {
 		return _memberRequest.getModifiedDate();
 	}
@@ -199,6 +318,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param modifiedDate the modified date of this member request
 	*/
+	@Override
 	public void setModifiedDate(java.util.Date modifiedDate) {
 		_memberRequest.setModifiedDate(modifiedDate);
 	}
@@ -208,6 +328,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the key of this member request
 	*/
+	@Override
 	public java.lang.String getKey() {
 		return _memberRequest.getKey();
 	}
@@ -217,6 +338,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param key the key of this member request
 	*/
+	@Override
 	public void setKey(java.lang.String key) {
 		_memberRequest.setKey(key);
 	}
@@ -226,6 +348,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the receiver user ID of this member request
 	*/
+	@Override
 	public long getReceiverUserId() {
 		return _memberRequest.getReceiverUserId();
 	}
@@ -235,6 +358,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param receiverUserId the receiver user ID of this member request
 	*/
+	@Override
 	public void setReceiverUserId(long receiverUserId) {
 		_memberRequest.setReceiverUserId(receiverUserId);
 	}
@@ -245,6 +369,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	* @return the receiver user uuid of this member request
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.lang.String getReceiverUserUuid()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _memberRequest.getReceiverUserUuid();
@@ -255,6 +380,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param receiverUserUuid the receiver user uuid of this member request
 	*/
+	@Override
 	public void setReceiverUserUuid(java.lang.String receiverUserUuid) {
 		_memberRequest.setReceiverUserUuid(receiverUserUuid);
 	}
@@ -264,6 +390,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the invited role ID of this member request
 	*/
+	@Override
 	public long getInvitedRoleId() {
 		return _memberRequest.getInvitedRoleId();
 	}
@@ -273,6 +400,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param invitedRoleId the invited role ID of this member request
 	*/
+	@Override
 	public void setInvitedRoleId(long invitedRoleId) {
 		_memberRequest.setInvitedRoleId(invitedRoleId);
 	}
@@ -282,6 +410,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the invited team ID of this member request
 	*/
+	@Override
 	public long getInvitedTeamId() {
 		return _memberRequest.getInvitedTeamId();
 	}
@@ -291,6 +420,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param invitedTeamId the invited team ID of this member request
 	*/
+	@Override
 	public void setInvitedTeamId(long invitedTeamId) {
 		_memberRequest.setInvitedTeamId(invitedTeamId);
 	}
@@ -300,6 +430,7 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @return the status of this member request
 	*/
+	@Override
 	public int getStatus() {
 		return _memberRequest.getStatus();
 	}
@@ -309,42 +440,64 @@ public class MemberRequestWrapper implements MemberRequest,
 	*
 	* @param status the status of this member request
 	*/
+	@Override
 	public void setStatus(int status) {
 		_memberRequest.setStatus(status);
 	}
 
+	@Override
 	public boolean isNew() {
 		return _memberRequest.isNew();
 	}
 
+	@Override
 	public void setNew(boolean n) {
 		_memberRequest.setNew(n);
 	}
 
+	@Override
 	public boolean isCachedModel() {
 		return _memberRequest.isCachedModel();
 	}
 
+	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_memberRequest.setCachedModel(cachedModel);
 	}
 
+	@Override
 	public boolean isEscapedModel() {
 		return _memberRequest.isEscapedModel();
 	}
 
+	@Override
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _memberRequest.getPrimaryKeyObj();
 	}
 
+	@Override
 	public void setPrimaryKeyObj(java.io.Serializable primaryKeyObj) {
 		_memberRequest.setPrimaryKeyObj(primaryKeyObj);
 	}
 
+	@Override
 	public com.liferay.portlet.expando.model.ExpandoBridge getExpandoBridge() {
 		return _memberRequest.getExpandoBridge();
 	}
 
+	@Override
+	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_memberRequest.setExpandoBridgeAttributes(baseModel);
+	}
+
+	@Override
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_memberRequest.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	@Override
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_memberRequest.setExpandoBridgeAttributes(serviceContext);
@@ -355,6 +508,7 @@ public class MemberRequestWrapper implements MemberRequest,
 		return new MemberRequestWrapper((MemberRequest)_memberRequest.clone());
 	}
 
+	@Override
 	public int compareTo(com.liferay.so.model.MemberRequest memberRequest) {
 		return _memberRequest.compareTo(memberRequest);
 	}
@@ -364,12 +518,19 @@ public class MemberRequestWrapper implements MemberRequest,
 		return _memberRequest.hashCode();
 	}
 
+	@Override
 	public com.liferay.portal.model.CacheModel<com.liferay.so.model.MemberRequest> toCacheModel() {
 		return _memberRequest.toCacheModel();
 	}
 
+	@Override
 	public com.liferay.so.model.MemberRequest toEscapedModel() {
 		return new MemberRequestWrapper(_memberRequest.toEscapedModel());
+	}
+
+	@Override
+	public com.liferay.so.model.MemberRequest toUnescapedModel() {
+		return new MemberRequestWrapper(_memberRequest.toUnescapedModel());
 	}
 
 	@Override
@@ -377,26 +538,49 @@ public class MemberRequestWrapper implements MemberRequest,
 		return _memberRequest.toString();
 	}
 
+	@Override
 	public java.lang.String toXmlString() {
 		return _memberRequest.toXmlString();
 	}
 
+	@Override
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_memberRequest.persist();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof MemberRequestWrapper)) {
+			return false;
+		}
+
+		MemberRequestWrapper memberRequestWrapper = (MemberRequestWrapper)obj;
+
+		if (Validator.equals(_memberRequest, memberRequestWrapper._memberRequest)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public MemberRequest getWrappedMemberRequest() {
 		return _memberRequest;
 	}
 
+	@Override
 	public MemberRequest getWrappedModel() {
 		return _memberRequest;
 	}
 
+	@Override
 	public void resetOriginalValues() {
 		_memberRequest.resetOriginalValues();
 	}

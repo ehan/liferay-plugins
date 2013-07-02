@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.webcache.WebCacheException;
 import com.liferay.portal.kernel.webcache.WebCacheItem;
+import com.liferay.portal.kernel.xml.Attribute;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
@@ -26,6 +27,8 @@ import com.liferay.weather.model.Weather;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Samuel Kong
+ * @author Preston Crary
  */
 public class WeatherWebCacheItem implements WebCacheItem {
 
@@ -37,33 +40,12 @@ public class WeatherWebCacheItem implements WebCacheItem {
 		}
 	}
 
+	@Override
 	public Object convert(String key) throws WebCacheException {
 		Weather weather = null;
 
 		try {
-			String xml = HttpUtil.URLtoString(
-				"http://www.google.com/ig/api?weather=" +
-					HttpUtil.encodeURL(_zip));
-
-			Document doc = SAXReaderUtil.read(xml);
-
-			Element root = doc.getRootElement();
-
-			Element weatherEl = root.element("weather");
-
-			Element currentConditionsEl = weatherEl.element(
-				"current_conditions");
-
-			Element temperatureEl = currentConditionsEl.element("temp_f");
-
-			float temperature = GetterUtil.getFloat(
-				temperatureEl.attributeValue("data"));
-
-			Element iconEl = currentConditionsEl.element("icon");
-
-			String iconURL = "//www.google.com" + iconEl.attributeValue("data");
-
-			weather = new Weather(_zip, iconURL, temperature);
+			weather = doConvert();
 		}
 		catch (Exception e) {
 			throw new WebCacheException(_zip);
@@ -72,11 +54,44 @@ public class WeatherWebCacheItem implements WebCacheItem {
 		return weather;
 	}
 
+	@Override
 	public long getRefreshTime() {
 		return _REFRESH_TIME;
 	}
 
-	private static final long _REFRESH_TIME = Time.MINUTE * 20;
+	protected Weather doConvert() throws Exception {
+		String xml = HttpUtil.URLtoString(
+			"http://api.openweathermap.org/data/2.5/weather?q=" +
+				HttpUtil.encodeURL(_zip) + "&units=imperial&mode=xml");
+
+		Document document = SAXReaderUtil.read(xml);
+
+		Element rootElement = document.getRootElement();
+
+		Element cityElement = rootElement.element("city");
+
+		Attribute cityIdAttribute = cityElement.attribute("id");
+
+		String cityId = cityIdAttribute.getText();
+
+		Element temperatureElement = rootElement.element("temperature");
+
+		Attribute temperatureAttribute = temperatureElement.attribute("value");
+
+		float temperature = GetterUtil.getFloat(temperatureAttribute.getData());
+
+		Element weatherElement = rootElement.element("weather");
+
+		Attribute iconAttribute = weatherElement.attribute("icon");
+
+		String iconURL =
+			"http://openweathermap.org/img/w/" + iconAttribute.getText() +
+				".png";
+
+		return new Weather(_zip, cityId, iconURL, temperature);
+	}
+
+	private static final long _REFRESH_TIME = Time.MINUTE * 60;
 
 	private String _zip;
 

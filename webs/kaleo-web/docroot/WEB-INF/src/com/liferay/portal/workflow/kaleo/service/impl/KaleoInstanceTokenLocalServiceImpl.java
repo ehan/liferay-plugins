@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -39,6 +39,7 @@ import java.util.Map;
 public class KaleoInstanceTokenLocalServiceImpl
 	extends KaleoInstanceTokenLocalServiceBaseImpl {
 
+	@Override
 	public KaleoInstanceToken addKaleoInstanceToken(
 			long parentKaleoInstanceTokenId,
 			Map<String, Serializable> workflowContext,
@@ -93,11 +94,12 @@ public class KaleoInstanceTokenLocalServiceImpl
 
 		kaleoInstanceToken.setCompleted(false);
 
-		kaleoInstanceTokenPersistence.update(kaleoInstanceToken, false);
+		kaleoInstanceTokenPersistence.update(kaleoInstanceToken);
 
 		return kaleoInstanceToken;
 	}
 
+	@Override
 	public KaleoInstanceToken completeKaleoInstanceToken(
 			long kaleoInstanceTokenId)
 		throws PortalException, SystemException {
@@ -109,17 +111,19 @@ public class KaleoInstanceTokenLocalServiceImpl
 		kaleoInstanceToken.setCompleted(true);
 		kaleoInstanceToken.setCompletionDate(new Date());
 
-		kaleoInstanceTokenPersistence.update(kaleoInstanceToken, false);
+		kaleoInstanceTokenPersistence.update(kaleoInstanceToken);
 
 		return kaleoInstanceToken;
 	}
 
+	@Override
 	public void deleteCompanyKaleoInstanceTokens(long companyId)
 		throws SystemException {
 
 		kaleoInstanceTokenPersistence.removeByCompanyId(companyId);
 	}
 
+	@Override
 	public void deleteKaleoDefinitionKaleoInstanceTokens(long kaleoDefinitionId)
 		throws SystemException {
 
@@ -127,12 +131,14 @@ public class KaleoInstanceTokenLocalServiceImpl
 			kaleoDefinitionId);
 	}
 
+	@Override
 	public void deleteKaleoInstanceKaleoInstanceTokens(long kaleoInstanceId)
 		throws SystemException {
 
 		kaleoInstanceTokenPersistence.removeByKaleoInstanceId(kaleoInstanceId);
 	}
 
+	@Override
 	public List<KaleoInstanceToken> getKaleoInstanceTokens(
 			long parentKaleoInstanceTokenId, Date completionDate,
 			ServiceContext serviceContext)
@@ -143,6 +149,7 @@ public class KaleoInstanceTokenLocalServiceImpl
 			completionDate);
 	}
 
+	@Override
 	public List<KaleoInstanceToken> getKaleoInstanceTokens(
 			long parentKaleoInstanceTokenId, ServiceContext serviceContext)
 		throws SystemException {
@@ -151,6 +158,7 @@ public class KaleoInstanceTokenLocalServiceImpl
 			serviceContext.getCompanyId(), parentKaleoInstanceTokenId);
 	}
 
+	@Override
 	public int getKaleoInstanceTokensCount(
 			long parentKaleoInstanceTokenId, Date completionDate,
 			ServiceContext serviceContext)
@@ -161,6 +169,7 @@ public class KaleoInstanceTokenLocalServiceImpl
 			completionDate);
 	}
 
+	@Override
 	public int getKaleoInstanceTokensCount(
 			long parentKaleoInstanceTokenId, ServiceContext serviceContext)
 		throws SystemException {
@@ -169,6 +178,7 @@ public class KaleoInstanceTokenLocalServiceImpl
 			serviceContext.getCompanyId(), parentKaleoInstanceTokenId);
 	}
 
+	@Override
 	public KaleoInstanceToken getRootKaleoInstanceToken(
 			long kaleoInstanceId, Map<String, Serializable> workflowContext,
 			ServiceContext serviceContext)
@@ -225,17 +235,18 @@ public class KaleoInstanceTokenLocalServiceImpl
 						WorkflowConstants.CONTEXT_ENTRY_CLASS_PK)));
 		}
 
-		kaleoInstanceTokenPersistence.update(kaleoInstanceToken, false);
+		kaleoInstanceTokenPersistence.update(kaleoInstanceToken);
 
 		// Kaleo instance
 
 		kaleoInstance.setRootKaleoInstanceTokenId(rootKaleoInstanceTokenId);
 
-		kaleoInstancePersistence.update(kaleoInstance, false);
+		kaleoInstancePersistence.update(kaleoInstance);
 
 		return kaleoInstanceToken;
 	}
 
+	@Override
 	public KaleoInstanceToken updateKaleoInstanceToken(
 			long kaleoInstanceTokenId, long currentKaleoNodeId)
 		throws PortalException, SystemException {
@@ -248,7 +259,7 @@ public class KaleoInstanceTokenLocalServiceImpl
 
 		setCurrentKaleoNode(kaleoInstanceToken, currentKaleoNodeId);
 
-		kaleoInstanceTokenPersistence.update(kaleoInstanceToken, false);
+		kaleoInstanceTokenPersistence.update(kaleoInstanceToken);
 
 		return kaleoInstanceToken;
 	}

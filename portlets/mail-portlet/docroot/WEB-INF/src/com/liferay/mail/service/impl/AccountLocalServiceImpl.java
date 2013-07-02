@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -83,13 +83,13 @@ public class AccountLocalServiceImpl extends AccountLocalServiceBaseImpl {
 		account.setTrashFolderId(trashFolderId);
 		account.setDefaultSender(defaultSender);
 
-		accountPersistence.update(account, false);
+		accountPersistence.update(account);
 
 		return account;
 	}
 
 	@Override
-	public void deleteAccount(Account account)
+	public Account deleteAccount(Account account)
 		throws PortalException, SystemException {
 
 		// Account
@@ -105,15 +105,17 @@ public class AccountLocalServiceImpl extends AccountLocalServiceBaseImpl {
 		Indexer indexer = IndexerRegistryUtil.getIndexer(Message.class);
 
 		indexer.delete(account);
+
+		return account;
 	}
 
 	@Override
-	public void deleteAccount(long accountId)
+	public Account deleteAccount(long accountId)
 		throws PortalException, SystemException {
 
 		Account account = accountPersistence.findByPrimaryKey(accountId);
 
-		deleteAccount(account);
+		return deleteAccount(account);
 	}
 
 	public void deleteAccounts(long userId)
@@ -132,9 +134,7 @@ public class AccountLocalServiceImpl extends AccountLocalServiceBaseImpl {
 		return accountPersistence.findByU_A(userId, address);
 	}
 
-	public List<Account> getAccounts(long userId)
-		throws SystemException {
-
+	public List<Account> getAccounts(long userId) throws SystemException {
 		return accountPersistence.findByUserId(userId);
 	}
 
@@ -162,7 +162,7 @@ public class AccountLocalServiceImpl extends AccountLocalServiceBaseImpl {
 		account.setFolderPrefix(folderPrefix);
 		account.setDefaultSender(defaultSender);
 
-		accountPersistence.update(account, false);
+		accountPersistence.update(account);
 
 		return account;
 	}
@@ -181,7 +181,7 @@ public class AccountLocalServiceImpl extends AccountLocalServiceBaseImpl {
 		account.setSentFolderId(sentFolderId);
 		account.setTrashFolderId(trashFolderId);
 
-		accountPersistence.update(account, false);
+		accountPersistence.update(account);
 
 		return account;
 	}
