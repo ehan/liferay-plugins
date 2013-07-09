@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -69,7 +69,7 @@ public class WSRPProducerLocalServiceImpl
 		wsrpProducer.setVersion(version);
 		wsrpProducer.setPortletIds(portletIds);
 
-		wsrpProducerPersistence.update(wsrpProducer, false);
+		wsrpProducerPersistence.update(wsrpProducer);
 
 		return wsrpProducer;
 	}
@@ -87,17 +87,17 @@ public class WSRPProducerLocalServiceImpl
 	}
 
 	@Override
-	public void deleteWSRPProducer(long wsrpProducerId)
+	public WSRPProducer deleteWSRPProducer(long wsrpProducerId)
 		throws PortalException, SystemException {
 
 		WSRPProducer wsrpProducer = wsrpProducerPersistence.findByPrimaryKey(
 			wsrpProducerId);
 
-		deleteWSRPProducer(wsrpProducer);
+		return deleteWSRPProducer(wsrpProducer);
 	}
 
 	@Override
-	public void deleteWSRPProducer(WSRPProducer wsrpProducer)
+	public WSRPProducer deleteWSRPProducer(WSRPProducer wsrpProducer)
 		throws PortalException, SystemException {
 
 		// WSRP producer
@@ -107,6 +107,8 @@ public class WSRPProducerLocalServiceImpl
 		// Group
 
 		groupLocalService.deleteGroup(wsrpProducer.getGroupId());
+
+		return wsrpProducer;
 	}
 
 	public WSRPProducer getWSRPProducer(String wsrpProducerUuid)
@@ -152,7 +154,7 @@ public class WSRPProducerLocalServiceImpl
 		wsrpProducer.setVersion(version);
 		wsrpProducer.setPortletIds(portletIds);
 
-		wsrpProducerPersistence.update(wsrpProducer, false);
+		wsrpProducerPersistence.update(wsrpProducer);
 
 		// Group
 
@@ -175,14 +177,16 @@ public class WSRPProducerLocalServiceImpl
 		params.put("type", type);
 
 		List<Group> groups = groupLocalService.search(
-			user.getCompanyId(), name, null, params, 0, 1);
+			user.getCompanyId(), name, params, 0, 1);
 
 		if (!groups.isEmpty()) {
 			return groups.get(0);
 		}
 
 		Group group = groupLocalService.addGroup(
-			user.getUserId(), null, 0, 0, name, null, type, null, true, true,
+			user.getUserId(), GroupConstants.DEFAULT_PARENT_GROUP_ID, null, 0,
+			GroupConstants.DEFAULT_LIVE_GROUP_ID, name, null, type, true,
+			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, null, true, true,
 			null);
 
 		layoutLocalService.addLayout(

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,13 +16,21 @@ package com.liferay.knowledgebase.service.impl;
 
 import com.liferay.knowledgebase.KBCommentContentException;
 import com.liferay.knowledgebase.admin.social.AdminActivityKeys;
+import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.model.KBComment;
+import com.liferay.knowledgebase.model.KBTemplate;
+import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
+import com.liferay.knowledgebase.service.KBTemplateLocalServiceUtil;
 import com.liferay.knowledgebase.service.base.KBCommentLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -64,19 +72,25 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		kbComment.setContent(content);
 		kbComment.setHelpful(helpful);
 
-		kbCommentPersistence.update(kbComment, false);
+		kbCommentPersistence.update(kbComment);
 
 		// Social
 
+		JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
+
+		putTitle(extraDataJSONObject, kbComment);
+
 		socialActivityLocalService.addActivity(
 			userId, kbComment.getGroupId(), KBComment.class.getName(),
-			kbCommentId, AdminActivityKeys.ADD_KB_COMMENT, StringPool.BLANK, 0);
+			kbCommentId, AdminActivityKeys.ADD_KB_COMMENT,
+			extraDataJSONObject.toString(), 0);
 
 		return kbComment;
 	}
 
 	@Override
-	public void deleteKBComment(KBComment kbComment) throws SystemException {
+	public KBComment deleteKBComment(KBComment kbComment)
+		throws PortalException, SystemException {
 
 		// KB comment
 
@@ -86,16 +100,18 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 
 		socialActivityLocalService.deleteActivities(
 			KBComment.class.getName(), kbComment.getKbCommentId());
+
+		return kbComment;
 	}
 
 	@Override
-	public void deleteKBComment(long kbCommentId)
+	public KBComment deleteKBComment(long kbCommentId)
 		throws PortalException, SystemException {
 
 		KBComment kbComment = kbCommentPersistence.findByPrimaryKey(
 			kbCommentId);
 
-		deleteKBComment(kbComment);
+		return deleteKBComment(kbComment);
 	}
 
 	public void deleteKBComments(String className, long classPK)
@@ -156,16 +172,46 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		kbComment.setContent(content);
 		kbComment.setHelpful(helpful);
 
-		kbCommentPersistence.update(kbComment, false);
+		kbCommentPersistence.update(kbComment);
 
 		// Social
+
+		JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
+
+		putTitle(extraDataJSONObject, kbComment);
 
 		socialActivityLocalService.addActivity(
 			kbComment.getUserId(), kbComment.getGroupId(),
 			KBComment.class.getName(), kbCommentId,
-			AdminActivityKeys.UPDATE_KB_COMMENT, StringPool.BLANK, 0);
+			AdminActivityKeys.UPDATE_KB_COMMENT, extraDataJSONObject.toString(),
+			0);
 
 		return kbComment;
+	}
+
+	protected void putTitle(JSONObject jsonObject, KBComment kbComment) {
+		KBArticle kbArticle = null;
+		KBTemplate kbTemplate = null;
+
+		String className = kbComment.getClassName();
+
+		try {
+			if (className.equals(KBArticle.class.getName())) {
+				kbArticle = KBArticleLocalServiceUtil.getLatestKBArticle(
+					kbComment.getClassPK(), WorkflowConstants.STATUS_APPROVED);
+
+				jsonObject.put("title", kbArticle.getTitle());
+			}
+			else if (className.equals(KBTemplate.class.getName())) {
+				kbTemplate = KBTemplateLocalServiceUtil.getKBTemplate(
+					kbComment.getClassPK());
+
+				jsonObject.put("title", kbTemplate.getTitle());
+			}
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
 	}
 
 	protected void validate(String content) throws PortalException {
@@ -173,5 +219,8 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 			throw new KBCommentContentException();
 		}
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		KBCommentLocalServiceImpl.class);
 
 }

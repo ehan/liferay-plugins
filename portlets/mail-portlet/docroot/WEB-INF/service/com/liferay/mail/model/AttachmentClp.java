@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,16 +15,22 @@
 package com.liferay.mail.model;
 
 import com.liferay.mail.service.AttachmentLocalServiceUtil;
+import com.liferay.mail.service.ClpSerializer;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
 import java.io.Serializable;
 
-import java.lang.reflect.Proxy;
+import java.lang.reflect.Method;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Brian Wing Shun Chan
@@ -34,110 +40,377 @@ public class AttachmentClp extends BaseModelImpl<Attachment>
 	public AttachmentClp() {
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Attachment.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Attachment.class.getName();
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _attachmentId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setAttachmentId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_attachmentId);
+		return _attachmentId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("attachmentId", getAttachmentId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("accountId", getAccountId());
+		attributes.put("folderId", getFolderId());
+		attributes.put("messageId", getMessageId());
+		attributes.put("contentPath", getContentPath());
+		attributes.put("fileName", getFileName());
+		attributes.put("size", getSize());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long attachmentId = (Long)attributes.get("attachmentId");
+
+		if (attachmentId != null) {
+			setAttachmentId(attachmentId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		Long accountId = (Long)attributes.get("accountId");
+
+		if (accountId != null) {
+			setAccountId(accountId);
+		}
+
+		Long folderId = (Long)attributes.get("folderId");
+
+		if (folderId != null) {
+			setFolderId(folderId);
+		}
+
+		Long messageId = (Long)attributes.get("messageId");
+
+		if (messageId != null) {
+			setMessageId(messageId);
+		}
+
+		String contentPath = (String)attributes.get("contentPath");
+
+		if (contentPath != null) {
+			setContentPath(contentPath);
+		}
+
+		String fileName = (String)attributes.get("fileName");
+
+		if (fileName != null) {
+			setFileName(fileName);
+		}
+
+		Long size = (Long)attributes.get("size");
+
+		if (size != null) {
+			setSize(size);
+		}
+	}
+
+	@Override
 	public long getAttachmentId() {
 		return _attachmentId;
 	}
 
+	@Override
 	public void setAttachmentId(long attachmentId) {
 		_attachmentId = attachmentId;
+
+		if (_attachmentRemoteModel != null) {
+			try {
+				Class<?> clazz = _attachmentRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setAttachmentId", long.class);
+
+				method.invoke(_attachmentRemoteModel, attachmentId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
+
+		if (_attachmentRemoteModel != null) {
+			try {
+				Class<?> clazz = _attachmentRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCompanyId", long.class);
+
+				method.invoke(_attachmentRemoteModel, companyId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
+
+		if (_attachmentRemoteModel != null) {
+			try {
+				Class<?> clazz = _attachmentRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserId", long.class);
+
+				method.invoke(_attachmentRemoteModel, userId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
+	@Override
 	public long getAccountId() {
 		return _accountId;
 	}
 
+	@Override
 	public void setAccountId(long accountId) {
 		_accountId = accountId;
+
+		if (_attachmentRemoteModel != null) {
+			try {
+				Class<?> clazz = _attachmentRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setAccountId", long.class);
+
+				method.invoke(_attachmentRemoteModel, accountId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getFolderId() {
 		return _folderId;
 	}
 
+	@Override
 	public void setFolderId(long folderId) {
 		_folderId = folderId;
+
+		if (_attachmentRemoteModel != null) {
+			try {
+				Class<?> clazz = _attachmentRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setFolderId", long.class);
+
+				method.invoke(_attachmentRemoteModel, folderId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getMessageId() {
 		return _messageId;
 	}
 
+	@Override
 	public void setMessageId(long messageId) {
 		_messageId = messageId;
+
+		if (_attachmentRemoteModel != null) {
+			try {
+				Class<?> clazz = _attachmentRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setMessageId", long.class);
+
+				method.invoke(_attachmentRemoteModel, messageId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getContentPath() {
 		return _contentPath;
 	}
 
+	@Override
 	public void setContentPath(String contentPath) {
 		_contentPath = contentPath;
+
+		if (_attachmentRemoteModel != null) {
+			try {
+				Class<?> clazz = _attachmentRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setContentPath", String.class);
+
+				method.invoke(_attachmentRemoteModel, contentPath);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getFileName() {
 		return _fileName;
 	}
 
+	@Override
 	public void setFileName(String fileName) {
 		_fileName = fileName;
+
+		if (_attachmentRemoteModel != null) {
+			try {
+				Class<?> clazz = _attachmentRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setFileName", String.class);
+
+				method.invoke(_attachmentRemoteModel, fileName);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getSize() {
 		return _size;
 	}
 
+	@Override
 	public void setSize(long size) {
 		_size = size;
+
+		if (_attachmentRemoteModel != null) {
+			try {
+				Class<?> clazz = _attachmentRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setSize", long.class);
+
+				method.invoke(_attachmentRemoteModel, size);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	public BaseModel<?> getAttachmentRemoteModel() {
+		return _attachmentRemoteModel;
+	}
+
+	public void setAttachmentRemoteModel(BaseModel<?> attachmentRemoteModel) {
+		_attachmentRemoteModel = attachmentRemoteModel;
+	}
+
+	public Object invokeOnRemoteModel(String methodName,
+		Class<?>[] parameterTypes, Object[] parameterValues)
+		throws Exception {
+		Object[] remoteParameterValues = new Object[parameterValues.length];
+
+		for (int i = 0; i < parameterValues.length; i++) {
+			if (parameterValues[i] != null) {
+				remoteParameterValues[i] = ClpSerializer.translateInput(parameterValues[i]);
+			}
+		}
+
+		Class<?> remoteModelClass = _attachmentRemoteModel.getClass();
+
+		ClassLoader remoteModelClassLoader = remoteModelClass.getClassLoader();
+
+		Class<?>[] remoteParameterTypes = new Class[parameterTypes.length];
+
+		for (int i = 0; i < parameterTypes.length; i++) {
+			if (parameterTypes[i].isPrimitive()) {
+				remoteParameterTypes[i] = parameterTypes[i];
+			}
+			else {
+				String parameterTypeName = parameterTypes[i].getName();
+
+				remoteParameterTypes[i] = remoteModelClassLoader.loadClass(parameterTypeName);
+			}
+		}
+
+		Method method = remoteModelClass.getMethod(methodName,
+				remoteParameterTypes);
+
+		Object returnValue = method.invoke(_attachmentRemoteModel,
+				remoteParameterValues);
+
+		if (returnValue != null) {
+			returnValue = ClpSerializer.translateOutput(returnValue);
+		}
+
+		return returnValue;
+	}
+
+	@Override
 	public void persist() throws SystemException {
 		if (this.isNew()) {
 			AttachmentLocalServiceUtil.addAttachment(this);
@@ -149,7 +422,7 @@ public class AttachmentClp extends BaseModelImpl<Attachment>
 
 	@Override
 	public Attachment toEscapedModel() {
-		return (Attachment)Proxy.newProxyInstance(Attachment.class.getClassLoader(),
+		return (Attachment)ProxyUtil.newProxyInstance(Attachment.class.getClassLoader(),
 			new Class[] { Attachment.class }, new AutoEscapeBeanHandler(this));
 	}
 
@@ -170,6 +443,7 @@ public class AttachmentClp extends BaseModelImpl<Attachment>
 		return clone;
 	}
 
+	@Override
 	public int compareTo(Attachment attachment) {
 		long primaryKey = attachment.getPrimaryKey();
 
@@ -186,18 +460,15 @@ public class AttachmentClp extends BaseModelImpl<Attachment>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof AttachmentClp)) {
 			return false;
 		}
 
-		AttachmentClp attachment = null;
-
-		try {
-			attachment = (AttachmentClp)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		AttachmentClp attachment = (AttachmentClp)obj;
 
 		long primaryKey = attachment.getPrimaryKey();
 
@@ -241,6 +512,7 @@ public class AttachmentClp extends BaseModelImpl<Attachment>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(31);
 
@@ -300,4 +572,5 @@ public class AttachmentClp extends BaseModelImpl<Attachment>
 	private String _contentPath;
 	private String _fileName;
 	private long _size;
+	private BaseModel<?> _attachmentRemoteModel;
 }

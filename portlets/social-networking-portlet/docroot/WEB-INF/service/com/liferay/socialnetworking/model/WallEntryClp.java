@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,17 +17,22 @@ package com.liferay.socialnetworking.model;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
+import com.liferay.socialnetworking.service.ClpSerializer;
 import com.liferay.socialnetworking.service.WallEntryLocalServiceUtil;
 
 import java.io.Serializable;
 
-import java.lang.reflect.Proxy;
+import java.lang.reflect.Method;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Brian Wing Shun Chan
@@ -36,102 +41,347 @@ public class WallEntryClp extends BaseModelImpl<WallEntry> implements WallEntry 
 	public WallEntryClp() {
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return WallEntry.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return WallEntry.class.getName();
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _wallEntryId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setWallEntryId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_wallEntryId);
+		return _wallEntryId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("wallEntryId", getWallEntryId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("comments", getComments());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long wallEntryId = (Long)attributes.get("wallEntryId");
+
+		if (wallEntryId != null) {
+			setWallEntryId(wallEntryId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String comments = (String)attributes.get("comments");
+
+		if (comments != null) {
+			setComments(comments);
+		}
+	}
+
+	@Override
 	public long getWallEntryId() {
 		return _wallEntryId;
 	}
 
+	@Override
 	public void setWallEntryId(long wallEntryId) {
 		_wallEntryId = wallEntryId;
+
+		if (_wallEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _wallEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setWallEntryId", long.class);
+
+				method.invoke(_wallEntryRemoteModel, wallEntryId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_groupId = groupId;
+
+		if (_wallEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _wallEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setGroupId", long.class);
+
+				method.invoke(_wallEntryRemoteModel, groupId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
+
+		if (_wallEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _wallEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCompanyId", long.class);
+
+				method.invoke(_wallEntryRemoteModel, companyId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
+
+		if (_wallEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _wallEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserId", long.class);
+
+				method.invoke(_wallEntryRemoteModel, userId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
+	@Override
 	public String getUserName() {
 		return _userName;
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
+
+		if (_wallEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _wallEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserName", String.class);
+
+				method.invoke(_wallEntryRemoteModel, userName);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
+
+		if (_wallEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _wallEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCreateDate", Date.class);
+
+				method.invoke(_wallEntryRemoteModel, createDate);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
+
+		if (_wallEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _wallEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setModifiedDate", Date.class);
+
+				method.invoke(_wallEntryRemoteModel, modifiedDate);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public String getComments() {
 		return _comments;
 	}
 
+	@Override
 	public void setComments(String comments) {
 		_comments = comments;
+
+		if (_wallEntryRemoteModel != null) {
+			try {
+				Class<?> clazz = _wallEntryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setComments", String.class);
+
+				method.invoke(_wallEntryRemoteModel, comments);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	public BaseModel<?> getWallEntryRemoteModel() {
+		return _wallEntryRemoteModel;
+	}
+
+	public void setWallEntryRemoteModel(BaseModel<?> wallEntryRemoteModel) {
+		_wallEntryRemoteModel = wallEntryRemoteModel;
+	}
+
+	public Object invokeOnRemoteModel(String methodName,
+		Class<?>[] parameterTypes, Object[] parameterValues)
+		throws Exception {
+		Object[] remoteParameterValues = new Object[parameterValues.length];
+
+		for (int i = 0; i < parameterValues.length; i++) {
+			if (parameterValues[i] != null) {
+				remoteParameterValues[i] = ClpSerializer.translateInput(parameterValues[i]);
+			}
+		}
+
+		Class<?> remoteModelClass = _wallEntryRemoteModel.getClass();
+
+		ClassLoader remoteModelClassLoader = remoteModelClass.getClassLoader();
+
+		Class<?>[] remoteParameterTypes = new Class[parameterTypes.length];
+
+		for (int i = 0; i < parameterTypes.length; i++) {
+			if (parameterTypes[i].isPrimitive()) {
+				remoteParameterTypes[i] = parameterTypes[i];
+			}
+			else {
+				String parameterTypeName = parameterTypes[i].getName();
+
+				remoteParameterTypes[i] = remoteModelClassLoader.loadClass(parameterTypeName);
+			}
+		}
+
+		Method method = remoteModelClass.getMethod(methodName,
+				remoteParameterTypes);
+
+		Object returnValue = method.invoke(_wallEntryRemoteModel,
+				remoteParameterValues);
+
+		if (returnValue != null) {
+			returnValue = ClpSerializer.translateOutput(returnValue);
+		}
+
+		return returnValue;
+	}
+
+	@Override
 	public void persist() throws SystemException {
 		if (this.isNew()) {
 			WallEntryLocalServiceUtil.addWallEntry(this);
@@ -143,7 +393,7 @@ public class WallEntryClp extends BaseModelImpl<WallEntry> implements WallEntry 
 
 	@Override
 	public WallEntry toEscapedModel() {
-		return (WallEntry)Proxy.newProxyInstance(WallEntry.class.getClassLoader(),
+		return (WallEntry)ProxyUtil.newProxyInstance(WallEntry.class.getClassLoader(),
 			new Class[] { WallEntry.class }, new AutoEscapeBeanHandler(this));
 	}
 
@@ -163,6 +413,7 @@ public class WallEntryClp extends BaseModelImpl<WallEntry> implements WallEntry 
 		return clone;
 	}
 
+	@Override
 	public int compareTo(WallEntry wallEntry) {
 		int value = 0;
 
@@ -179,18 +430,15 @@ public class WallEntryClp extends BaseModelImpl<WallEntry> implements WallEntry 
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof WallEntryClp)) {
 			return false;
 		}
 
-		WallEntryClp wallEntry = null;
-
-		try {
-			wallEntry = (WallEntryClp)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		WallEntryClp wallEntry = (WallEntryClp)obj;
 
 		long primaryKey = wallEntry.getPrimaryKey();
 
@@ -232,6 +480,7 @@ public class WallEntryClp extends BaseModelImpl<WallEntry> implements WallEntry 
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(28);
 
@@ -286,4 +535,5 @@ public class WallEntryClp extends BaseModelImpl<WallEntry> implements WallEntry 
 	private Date _createDate;
 	private Date _modifiedDate;
 	private String _comments;
+	private BaseModel<?> _wallEntryRemoteModel;
 }

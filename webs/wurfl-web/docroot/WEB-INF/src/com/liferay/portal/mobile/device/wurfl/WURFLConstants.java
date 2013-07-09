@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License as published by the Free
@@ -7,7 +7,7 @@
  *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
  * details.
  */
 
@@ -24,6 +24,8 @@ public class WURFLConstants {
 	public static final String DEVICE_OS = "device_os";
 
 	public static final String DEVICE_OS_VERSION = "device_os_version";
+
+	public static final String DUAL_ORIENTATION = "dual_orientation";
 
 	public static final String HAS_QWERTY_KEYBOARD = "has_qwerty_keyboard";
 
@@ -43,5 +45,10 @@ public class WURFLConstants {
 	public static final String RESOLUTION_HEIGHT = "resolution_height";
 
 	public static final String RESOLUTION_WIDTH = "resolution_width";
+
+	public static final String SCREEN_PHYSICAL_HEIGHT =
+		"physical_screen_height";
+
+	public static final String SCREEN_PHYSICAL_WIDTH = "physical_screen_width";
 
 }

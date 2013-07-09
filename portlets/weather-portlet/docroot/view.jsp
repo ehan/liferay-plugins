@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,7 +16,7 @@
 
 <%@ include file="/init.jsp" %>
 
-<form name="<portlet:namespace />fm" target="_blank" onSubmit="submitForm(document.<portlet:namespace />fm, 'http://www.weather.com/search/enhancedlocalsearch', false); return false;">
+<form name="<portlet:namespace />fm" onSubmit="submitForm(document.<portlet:namespace />fm, 'http://openweathermap.org/find?q=', false); return false;" target="_blank">
 
 <table class="lfr-table">
 
@@ -29,7 +29,7 @@ for (String zip : zips) {
 
 		<tr>
 			<td>
-				<a href="http://www.weather.com/search/enhancedlocalsearch?where=<%= weather.getZip() %>" style="font-size: xx-small; font-weight: bold;" target="_blank"><%= weather.getZip() %></a>
+				<a href="http://www.openweathermap.org/city/<%= HtmlUtil.escapeURL(weather.getCityId()) %>" style="font-size: xx-small; font-weight: bold;" target="_blank"><%= HtmlUtil.escape(weather.getZip()) %></a>
 			</td>
 			<td align="right">
 				<span style="font-size: xx-small;">
@@ -60,14 +60,18 @@ for (String zip : zips) {
 
 <liferay-ui:message key="city-or-zip-code" />
 
-<input name="where" size="23" type="text" />
+<input name="q" size="23" type="text" />
 
 <input type="submit" value="<liferay-ui:message key="search" />" />
 
 </form>
 
+<br />
+
+<liferay-ui:message key="powered-by" /> <a href="http://www.openweathermap.org" target="_blank">Open Weather Map</a>
+
 <c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
 	<aui:script>
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.where);
+		Liferay.Util.focusFormField(document.<portlet:namespace />fm.q);
 	</aui:script>
 </c:if>

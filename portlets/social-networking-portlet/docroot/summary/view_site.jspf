@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -40,9 +40,9 @@
 				<p class="leave-site">
 					<liferay-ui:icon
 						image="leave"
+						label="<%= true %>"
 						message="leave-site"
 						url="<%= leaveGroupHREF %>"
-						label="<%= true %>"
 					/>
 				</p>
 			</c:when>
@@ -58,9 +58,9 @@
 				<p class="join-site">
 					<liferay-ui:icon
 						image="join"
+						label="<%= true %>"
 						message="join-site"
 						url="<%= joinGroupURL.toString() %>"
-						label="<%= true %>"
 					/>
 				</p>
 			</c:when>

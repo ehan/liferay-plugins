@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,9 +25,9 @@ import com.liferay.weather.model.Weather;
 public class WeatherUtil {
 
 	public static Weather getWeather(String zip) {
-		WebCacheItem wci = new WeatherWebCacheItem(zip);
-
 		String key = WeatherUtil.class.getName() + StringPool.PERIOD + zip;
+
+		WebCacheItem wci = new WeatherWebCacheItem(zip);
 
 		try {
 			return (Weather)WebCachePoolUtil.get(key, wci);

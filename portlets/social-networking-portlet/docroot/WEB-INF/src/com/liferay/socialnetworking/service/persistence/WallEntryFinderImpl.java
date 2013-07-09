@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,10 +34,10 @@ import java.util.List;
 public class WallEntryFinderImpl
 	extends BasePersistenceImpl implements WallEntryFinder {
 
-	public static String COUNT_BY_G1_G2_U1_U2 =
+	public static final String COUNT_BY_G1_G2_U1_U2 =
 		WallEntryFinder.class.getName() + ".countByG1_G2_U1_U2";
 
-	public static String FIND_BY_G1_G2_U1_U2 =
+	public static final String FIND_BY_G1_G2_U1_U2 =
 		WallEntryFinder.class.getName() + ".findByG1_G2_U1_U2";
 
 	public int countByG1_G2_U1_U2(

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,7 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
-String redirect = ParamUtil.getString(request, "redirect");
+String redirect = ParamUtil.getString(request, "redirect", currentURL);
 
 DDLRecordSet recordSet = null;
 
@@ -27,6 +27,10 @@ try {
 	if (recordSetId > 0) {
 		recordSet = DDLRecordSetLocalServiceUtil.getRecordSet(recordSetId);
 	}
+
+	if (formDDMTemplateId > 0) {
+		ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(formDDMTemplateId);
+	}
 %>
 
 	<c:choose>
@@ -35,36 +39,48 @@ try {
 				<portlet:param name="<%= ActionRequest.ACTION_NAME %>" value="saveData" />
 			</portlet:actionURL>
 
-			<aui:form action="<%= saveDataURL %>" cssClass="lfr-dynamic-form" method="post" name="fm">
+			<aui:form action="<%= saveDataURL %>" cssClass="lfr-dynamic-form" enctype="multipart/form-data" method="post" name="fm">
 				<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 				<aui:input name="recordSetId" type="hidden" value="<%= recordSet.getRecordSetId() %>" />
 				<aui:input name="multipleSubmissions" type="hidden" value="<%= multipleSubmissions %>" />
 				<aui:input name="workflowAction" type="hidden" value="<%= WorkflowConstants.ACTION_PUBLISH %>" />
 
 				<liferay-ui:error exception="<%= DuplicateSubmissionException.class %>" message="you-may-only-submit-the-form-once" />
+
+				<liferay-ui:error exception="<%= FileSizeException.class %>">
+					<liferay-ui:message arguments="<%= PrefsPropsUtil.getLong(PropsKeys.DL_FILE_MAX_SIZE) / 1024 %>" key="please-enter-a-file-with-a-valid-file-size-no-larger-than-x" />
+				</liferay-ui:error>
+
 				<liferay-ui:error exception="<%= StorageFieldRequiredException.class %>" message="please-fill-out-all-required-fields" />
 
 				<c:choose>
-					<c:when test="<%= themeDisplay.isSignedIn() %>">
+					<c:when test="<%= (themeDisplay.isSignedIn() || multipleSubmissions) && permissionChecker.hasPermission(scopeGroupId, DDLRecordSet.class.getName(), recordSetId, ActionKeys.VIEW) %>">
 						<c:choose>
+							<c:when test="<%= !permissionChecker.hasPermission(scopeGroupId, DDLRecordSet.class.getName(), recordSetId, ActionKeys.ADD_RECORD) %>">
+								<div class="portlet-msg-info">
+									<liferay-ui:message key="you-do-not-have-the-required-permissions" />
+								</div>
+							</c:when>
 							<c:when test="<%= multipleSubmissions || !(DDLFormUtil.hasSubmitted(request, recordSet.getRecordSetId())) %>">
 								<aui:fieldset>
 
 									<%
-									DDMStructure ddmStructure = recordSet.getDDMStructure();
+									long classNameId = PortalUtil.getClassNameId(DDMStructure.class);
 
-									if (detailDDMTemplateId > 0) {
-										try {
-											ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(detailDDMTemplateId);
+									long classPK = recordSet.getDDMStructureId();
 
-											ddmStructure.setXsd(ddmTemplate.getScript());
-										}
-										catch (NoSuchTemplateException nste) {
-										}
+									if (formDDMTemplateId > 0) {
+										classNameId = PortalUtil.getClassNameId(DDMTemplate.class);
+
+										classPK = formDDMTemplateId;
 									}
 									%>
 
-									<%= DDMXSDUtil.getHTML(pageContext, ddmStructure.getXsd(), locale) %>
+									<liferay-ddm:html
+										classNameId="<%= classNameId %>"
+										classPK="<%= classPK %>"
+										requestedLocale="<%= locale %>"
+									/>
 
 									<aui:button-row>
 										<aui:button onClick='<%= renderResponse.getNamespace() + "publishRecord();" %>' type="submit" value="send" />
@@ -80,7 +96,7 @@ try {
 					</c:when>
 					<c:otherwise>
 						<div class="portlet-msg-info">
-							<liferay-ui:message key="you-must-be-authenticated-to-use-this-portlet" />
+							<liferay-ui:message key="you-do-not-have-the-required-permissions" />
 						</div>
 					</c:otherwise>
 				</c:choose>
@@ -112,24 +128,27 @@ catch (NoSuchRecordSetException nsrse) {
 <%
 }
 
-boolean showAddListIcon = PortletPermissionUtil.contains(permissionChecker, plid, portletDisplay.getId(), ActionKeys.CONFIGURATION) && permissionChecker.hasPermission(scopeGroupId, "com.liferay.portlet.dynamicdatalists", scopeGroupId, ActionKeys.ADD_RECORD_SET);
-boolean showAddTemplateIcon = (recordSet != null) && permissionChecker.hasPermission(scopeGroupId, "com.liferay.portlet.dynamicdatalists", scopeGroupId, ActionKeys.ADD_TEMPLATE);
+boolean hasConfigurationPermission = PortletPermissionUtil.contains(permissionChecker, layout, portletDisplay.getId(), ActionKeys.CONFIGURATION);
+
+boolean showAddListIcon = hasConfigurationPermission && permissionChecker.hasPermission(scopeGroupId, ddmDisplay.getResourceName(), scopeGroupId, ActionKeys.ADD_RECORD_SET);
+boolean showAddTemplateIcon = (recordSet != null) && permissionChecker.hasPermission(scopeGroupId, ddmDisplay.getResourceName(), scopeGroupId, ActionKeys.ADD_TEMPLATE);
 boolean showEditTemplateIcon = (ddmTemplate != null) && (permissionChecker.hasOwnerPermission(ddmTemplate.getCompanyId(), DDMTemplate.class.getName(), ddmTemplate.getTemplateId(), ddmTemplate.getUserId(), ActionKeys.UPDATE) || permissionChecker.hasPermission(ddmTemplate.getGroupId(), DDMTemplate.class.getName(), ddmTemplate.getTemplateId(), ActionKeys.UPDATE));
-boolean showSelectListIcon = PortletPermissionUtil.contains(permissionChecker, plid, portletDisplay.getId(), ActionKeys.CONFIGURATION);
 %>
 
-<c:if test="<%= themeDisplay.isSignedIn() && (showEditTemplateIcon || showSelectListIcon || showAddListIcon) %>">
+<c:if test="<%= themeDisplay.isSignedIn() && (hasConfigurationPermission || showEditTemplateIcon || showAddListIcon) %>">
 	<div class="lfr-meta-actions icons-container">
 		<div class="icon-actions">
 			<c:if test="<%= showAddTemplateIcon %>">
-				<liferay-portlet:renderURL windowState="<%= WindowState.MAXIMIZED.toString() %>" var="addTemplateURL" portletName="<%= PortletKeys.DYNAMIC_DATA_MAPPING %>">
+				<liferay-portlet:renderURL portletName="<%= PortletKeys.DYNAMIC_DATA_MAPPING %>" var="addTemplateURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
 					<portlet:param name="struts_action" value="/dynamic_data_mapping/edit_template" />
-					<portlet:param name="portletResource" value="<%= portletDisplay.getId() %>" />
 					<portlet:param name="redirect" value="<%= currentURL %>" />
+					<portlet:param name="portletResource" value="<%= portletDisplay.getId() %>" />
 					<portlet:param name="portletResourceNamespace" value="<%= renderResponse.getNamespace() %>" />
+					<portlet:param name="refererPortletName" value="<%= PortletKeys.DYNAMIC_DATA_LISTS %>" />
 					<portlet:param name="groupId" value="<%= String.valueOf(scopeGroupId) %>" />
-					<portlet:param name="structureId" value="<%= String.valueOf(recordSet.getDDMStructureId()) %>" />
-					<portlet:param name="structureAvailableFields" value='<%= renderResponse.getNamespace() + "structureAvailableFields" %>' />
+					<portlet:param name="classNameId" value="<%= String.valueOf(PortalUtil.getClassNameId(DDMStructure.class)) %>" />
+					<portlet:param name="classPK" value="<%= String.valueOf(recordSet.getDDMStructureId()) %>" />
+					<portlet:param name="structureAvailableFields" value='<%= renderResponse.getNamespace() + "getAvailableFields" %>' />
 				</liferay-portlet:renderURL>
 
 				<liferay-ui:icon
@@ -139,14 +158,14 @@ boolean showSelectListIcon = PortletPermissionUtil.contains(permissionChecker, p
 				/>
 			</c:if>
 			<c:if test="<%= showEditTemplateIcon %>">
-				<liferay-portlet:renderURL windowState="<%= WindowState.MAXIMIZED.toString() %>" var="editTemplateURL" portletName="<%= PortletKeys.DYNAMIC_DATA_MAPPING %>">
+				<liferay-portlet:renderURL portletName="<%= PortletKeys.DYNAMIC_DATA_MAPPING %>" var="editTemplateURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
 					<portlet:param name="struts_action" value="/dynamic_data_mapping/edit_template" />
 					<portlet:param name="redirect" value="<%= currentURL %>" />
+					<portlet:param name="portletResource" value="<%= portletDisplay.getId() %>" />
 					<portlet:param name="portletResourceNamespace" value="<%= renderResponse.getNamespace() %>" />
-					<portlet:param name="groupId" value="<%= String.valueOf(ddmTemplate.getGroupId()) %>" />
-					<portlet:param name="templateId" value="<%= String.valueOf(ddmTemplate.getTemplateId()) %>" />
-					<portlet:param name="structureId" value="<%= String.valueOf(ddmTemplate.getStructureId()) %>" />
-					<portlet:param name="structureAvailableFields" value='<%= renderResponse.getNamespace() + "structureAvailableFields" %>' />
+					<portlet:param name="refererPortletName" value="<%= PortletKeys.DYNAMIC_DATA_LISTS %>" />
+					<portlet:param name="templateId" value="<%= String.valueOf(formDDMTemplateId) %>" />
+					<portlet:param name="structureAvailableFields" value='<%= renderResponse.getNamespace() + "getAvailableFields" %>' />
 				</liferay-portlet:renderURL>
 
 				<liferay-ui:icon
@@ -156,7 +175,7 @@ boolean showSelectListIcon = PortletPermissionUtil.contains(permissionChecker, p
 				/>
 			</c:if>
 
-			<c:if test="<%= showSelectListIcon %>">
+			<c:if test="<%= hasConfigurationPermission %>">
 				<liferay-ui:icon
 					cssClass="portlet-configuration"
 					image="configuration"
@@ -168,7 +187,7 @@ boolean showSelectListIcon = PortletPermissionUtil.contains(permissionChecker, p
 			</c:if>
 
 			<c:if test="<%= showAddListIcon %>">
-				<liferay-portlet:renderURL windowState="<%= WindowState.MAXIMIZED.toString() %>" var="addListURL" portletName="<%= PortletKeys.DYNAMIC_DATA_LISTS %>">
+				<liferay-portlet:renderURL portletName="<%= PortletKeys.DYNAMIC_DATA_LISTS %>" var="addListURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
 					<portlet:param name="struts_action" value="/dynamic_data_lists/edit_record_set" />
 					<portlet:param name="redirect" value="<%= currentURL %>" />
 					<portlet:param name="portletResource" value="<%= portletDisplay.getId() %>" />

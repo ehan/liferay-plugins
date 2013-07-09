@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -35,6 +35,7 @@ import java.util.Set;
  */
 public class KaleoTimerLocalServiceImpl extends KaleoTimerLocalServiceBaseImpl {
 
+	@Override
 	public KaleoTimer addKaleoTimer(
 			String kaleoClassName, long kaleoClassPK, long kaleoDefinitionId,
 			Timer timer, ServiceContext serviceContext)
@@ -75,7 +76,7 @@ public class KaleoTimerLocalServiceImpl extends KaleoTimerLocalServiceBaseImpl {
 				recurrenceDelayDuration.getDurationScale().getValue());
 		}
 
-		kaleoTimerPersistence.update(kaleoTimer, false);
+		kaleoTimerPersistence.update(kaleoTimer);
 
 		// Kaleo actions
 
@@ -110,6 +111,7 @@ public class KaleoTimerLocalServiceImpl extends KaleoTimerLocalServiceBaseImpl {
 		return kaleoTimer;
 	}
 
+	@Override
 	public List<KaleoTimer> getKaleoTimers(
 			String kaleoClassName, long kaleoClassPK)
 		throws SystemException {
@@ -118,6 +120,7 @@ public class KaleoTimerLocalServiceImpl extends KaleoTimerLocalServiceBaseImpl {
 			kaleoClassName, kaleoClassPK);
 	}
 
+	@Override
 	public List<KaleoTimer> getKaleoTimers(
 			String kaleoClassName, long kaleoClassPK, boolean blocking)
 		throws SystemException {

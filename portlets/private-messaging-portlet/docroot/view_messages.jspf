@@ -1,40 +1,44 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * This file is part of Liferay Social Office. Liferay Social Office is free
+ * software: you can redistribute it and/or modify it under the terms of the GNU
+ * Affero General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ * Liferay Social Office is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 --%>
 
-<aui:layout cssClass="controls">
-	<aui:column columnWidth="85" cssClass="col-1">
-		<liferay-ui:message key="select" />:
+<aui:nav-bar>
+	<aui:nav cssClass="controls">
+		<aui:nav-item>
+			<aui:input cssClass="check-all" inline="<%= true %>" label="" name="checkAllMessages" title='<%= LanguageUtil.get(pageContext, "check-all-messages") %>' type="checkbox" />
+		</aui:nav-item>
 
-		<span class="select-all"><a href="javascript:;"><liferay-ui:message key="all" /></a></span>
+		<aui:nav-item id="markMessagesAsUnread" label="mark-as-unread" />
 
-		<span class="select-none"><a href="javascript:;"><liferay-ui:message key="none" /></a></span>
+		<aui:nav-item id="markMessagesAsRead" label="mark-as-read" />
 
-		<aui:button cssClass="mark-messages-as-unread" name="markAsUnread" value="mark-as-unread" />
+		<aui:nav-item id="deleteMessages" label="delete" />
+	</aui:nav>
 
-		<aui:button cssClass="mark-messages-as-read" name="markAsRead" value="mark-as-read" />
+	<aui:nav cssClass="pull-right">
+		<aui:nav-item id="newMessage" label="new-message" />
+	</aui:nav>
+</aui:nav-bar>
 
-		<aui:button cssClass="delete-messages" name="deleteMessage" value="delete" />
-	</aui:column>
-
-	<aui:column columnWidth="15" cssClass="col-2">
-		<aui:button cssClass="new-message" name="newMessage" value="new-message" />
-	</aui:column>
-</aui:layout>
-
-<liferay-ui:search-container delta="10" emptyResultsMessage="no-messages-found">
+<liferay-ui:search-container
+	delta="10"
+	emptyResultsMessage="no-messages-found"
+>
 	<liferay-ui:search-container-results>
 
 		<%
@@ -59,7 +63,7 @@
 		%>
 
 		<liferay-ui:search-container-column-text align="center">
-			<aui:input label="" name="mbThread" type="checkbox" data-mbThreadId="<%= userThread.getMbThreadId() %>" />
+			<aui:input data-mbThreadId="<%= userThread.getMbThreadId() %>" id='<%= "mbThread" + index++ %>' label="" name="mbThread" type="checkbox" />
 		</liferay-ui:search-container-column-text>
 
 		<liferay-ui:search-container-column-text valign="top">
@@ -71,8 +75,8 @@
 			%>
 
 			<liferay-ui:user-display
-				userId="<%= userId %>"
 				displayStyle="<%= 2 %>"
+				userId="<%= userId %>"
 			/>
 
 			<div class="last-thread">
@@ -94,7 +98,16 @@
 						User curUser = users.get(i);
 					%>
 
-						<span class="author-sender"><%= HtmlUtil.escape(curUser.getFullName()) %></span>
+						<c:choose>
+							<c:when test="<%= curUser.isActive() %>">
+								<span class="author-sender"><%= HtmlUtil.escape(curUser.getFullName()) %></span>
+							</c:when>
+							<c:otherwise>
+								<liferay-ui:icon-help message="deleted-user">
+									<span class="author-sender line-through"><%= HtmlUtil.escape(curUser.getFullName()) %></span>
+								</liferay-ui:icon-help>
+							</c:otherwise>
+						</c:choose>
 
 						<c:if test="<%= i != users.size() - 1 %>">
 							,

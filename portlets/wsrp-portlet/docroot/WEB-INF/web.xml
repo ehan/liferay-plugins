@@ -26,8 +26,8 @@
 		</init-param>
 	</filter>
 	<filter>
-		<filter-name>WSRP HTTP Sender Filter</filter-name>
-		<filter-class>com.liferay.wsrp.servlet.filters.WSRPHTTPSenderFilter</filter-class>
+		<filter-name>WSRP Filter</filter-name>
+		<filter-class>com.liferay.wsrp.servlet.filters.WSRPFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>Axis Clean Up Filter</filter-name>
@@ -40,21 +40,15 @@
 		<url-pattern>/proxy/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>WSRP HTTP Sender Filter</filter-name>
+		<filter-name>WSRP Filter</filter-name>
 		<url-pattern>/1/*</url-pattern>
 		<dispatcher>INCLUDE</dispatcher>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>WSRP HTTP Sender Filter</filter-name>
+		<filter-name>WSRP Filter</filter-name>
 		<url-pattern>/2/*</url-pattern>
 		<dispatcher>INCLUDE</dispatcher>
 	</filter-mapping>
-	<listener>
-		<listener-class>com.liferay.portal.kernel.spring.context.PortletContextLoaderListener</listener-class>
-	</listener>
-	<listener>
-		<listener-class>com.liferay.portal.kernel.servlet.PortletContextListener</listener-class>
-	</listener>
 	<listener>
 		<listener-class>com.liferay.wsrp.servlet.WSRPServletContextListener</listener-class>
 	</listener>

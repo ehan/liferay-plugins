@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,10 +17,7 @@
 <%@ include file="/WEB-INF/jsp/ams/controllers/init.jsp" %>
 
 <%@ page import="com.liferay.ams.model.Asset" %>
-<%@ page import="com.liferay.ams.model.impl.AssetImpl" %>
 <%@ page import="com.liferay.ams.service.AssetLocalServiceUtil" %>
-<%@ page import="com.liferay.counter.service.CounterLocalServiceUtil" %>
-<%@ page import="com.liferay.portal.kernel.bean.BeanPropertiesUtil" %>
 
 <%!
 public class AlloyControllerImpl extends BaseAlloyControllerImpl {
@@ -44,15 +41,9 @@ public class AlloyControllerImpl extends BaseAlloyControllerImpl {
 	}
 
 	public void save() throws Exception {
-		Asset asset = new AssetImpl();
+		Asset asset = AssetLocalServiceUtil.createAsset(0);
 
-		BeanPropertiesUtil.setProperties(asset, request);
-
-		if (asset.isNew()) {
-			asset.setPrimaryKey(CounterLocalServiceUtil.increment());
-
-			AssetLocalServiceUtil.addAsset(asset);
-		}
+		updateModel(asset);
 
 		addSuccessMessage();
 

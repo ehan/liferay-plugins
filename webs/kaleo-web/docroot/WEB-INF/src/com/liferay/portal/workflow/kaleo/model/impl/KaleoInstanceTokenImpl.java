@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -29,14 +29,14 @@ import java.util.List;
 /**
  * @author Brian Wing Shun Chan
  */
-public class KaleoInstanceTokenImpl
-	extends KaleoInstanceTokenBaseImpl {
+public class KaleoInstanceTokenImpl extends KaleoInstanceTokenBaseImpl {
 
 	public static final long DEFAULT_PARENT_KALEO_INSTANCE_TOKEN_ID = 0;
 
 	public KaleoInstanceTokenImpl() {
 	}
 
+	@Override
 	public List<KaleoInstanceToken> getChildrenKaleoInstanceTokens()
 		throws SystemException {
 
@@ -48,12 +48,14 @@ public class KaleoInstanceTokenImpl
 			getKaleoInstanceTokenId(), serviceContext);
 	}
 
+	@Override
 	public KaleoNode getCurrentKaleoNode()
 		throws PortalException, SystemException {
 
 		return KaleoNodeLocalServiceUtil.getKaleoNode(getCurrentKaleoNodeId());
 	}
 
+	@Override
 	public List<KaleoInstanceToken> getIncompleteChildrenKaleoInstanceTokens()
 		throws SystemException {
 
@@ -65,6 +67,7 @@ public class KaleoInstanceTokenImpl
 			getKaleoInstanceTokenId(), null, serviceContext);
 	}
 
+	@Override
 	public KaleoInstance getKaleoInstance()
 		throws PortalException, SystemException {
 
@@ -72,6 +75,7 @@ public class KaleoInstanceTokenImpl
 			getKaleoInstanceId());
 	}
 
+	@Override
 	public KaleoInstanceToken getParentKaleoInstanceToken()
 		throws PortalException, SystemException {
 
@@ -79,6 +83,7 @@ public class KaleoInstanceTokenImpl
 			getParentKaleoInstanceTokenId());
 	}
 
+	@Override
 	public boolean hasIncompleteChildrenKaleoInstanceToken()
 		throws SystemException {
 
@@ -98,6 +103,7 @@ public class KaleoInstanceTokenImpl
 		}
 	}
 
+	@Override
 	public void setCurrentKaleoNode(KaleoNode kaleoNode)
 		throws PortalException, SystemException {
 

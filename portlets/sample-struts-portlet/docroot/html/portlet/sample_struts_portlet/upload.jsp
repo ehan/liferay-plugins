@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,7 +16,7 @@
 
 <%@ include file="/html/portlet/sample_struts_portlet/init.jsp" %>
 
-<html:form action="/sample_struts_portlet/upload/action" enctype="multipart/form-data" method="post" focus="file">
+<html:form action="/sample_struts_portlet/upload/action" enctype="multipart/form-data" focus="file" method="post">
 
 <table border="0" cellpadding="0" cellspacing="0">
 <tr>

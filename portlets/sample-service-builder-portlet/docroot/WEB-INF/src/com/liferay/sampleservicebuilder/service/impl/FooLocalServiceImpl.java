@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,11 +18,13 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.sampleservicebuilder.model.Foo;
 import com.liferay.sampleservicebuilder.service.base.FooLocalServiceBaseImpl;
+import com.liferay.sampleservicebuilder.util.LocalObject;
 
 import java.util.Date;
 import java.util.List;
@@ -60,7 +62,7 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 		foo.setField5(field5);
 		foo.setExpandoBridgeAttributes(serviceContext);
 
-		fooPersistence.update(foo, false);
+		fooPersistence.update(foo);
 
 		// Asset
 
@@ -70,7 +72,7 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 	}
 
 	@Override
-	public void deleteFoo(Foo foo) throws SystemException {
+	public Foo deleteFoo(Foo foo) throws SystemException {
 		try {
 			assetEntryLocalService.deleteEntry(
 				Foo.class.getName(), foo.getFooId());
@@ -78,16 +80,18 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 		catch (PortalException pe) {
 		}
 
-		fooPersistence.remove(foo);
+		return fooPersistence.remove(foo);
 	}
 
 	@Override
-	public void deleteFoo(long fooId) throws SystemException {
+	public Foo deleteFoo(long fooId) throws SystemException {
 		Foo foo = fooPersistence.fetchByPrimaryKey(fooId);
 
-		if (foo != null) {
-			deleteFoo(foo);
+		if (foo == null) {
+			return null;
 		}
+
+		return deleteFoo(foo);
 	}
 
 	public List<Foo> getFoos(int start, int end, OrderByComparator obc)
@@ -98,6 +102,15 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 
 	public List<Foo> getFoos(OrderByComparator obc) throws SystemException {
 		return getFoos(QueryUtil.ALL_POS, QueryUtil.ALL_POS, obc);
+	}
+
+	public Object getLocalObject() throws Exception {
+		Thread currentThread = Thread.currentThread();
+
+		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+
+		return InstanceFactory.newInstance(
+			contextClassLoader, LocalObject.class.getName());
 	}
 
 	public void updateAsset(
@@ -130,7 +143,7 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 		foo.setField5(field5);
 		foo.setExpandoBridgeAttributes(serviceContext);
 
-		fooPersistence.update(foo, false);
+		fooPersistence.update(foo);
 
 		updateAsset(
 			user.getUserId(), foo, serviceContext.getAssetCategoryIds(),

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -76,9 +76,9 @@ Do you have the <i><liferay-ui:message key='<%= "action." + actionId %>' /></i> 
 <portlet:renderURL var="redirectURL" />
 
 <liferay-security:permissionsURL
-	redirect="<%= redirectURL %>"
 	modelResource="<%= name %>"
 	modelResourceDescription='<%= "Hello World" %>'
+	redirect="<%= redirectURL %>"
 	resourcePrimKey="<%= primKey %>"
 	var="permissionsURL"
 />

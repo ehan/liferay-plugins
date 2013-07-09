@@ -1,16 +1,19 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * This file is part of Liferay Social Office. Liferay Social Office is free
+ * software: you can redistribute it and/or modify it under the terms of the GNU
+ * Affero General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ * Liferay Social Office is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 --%>
 
@@ -42,7 +45,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 				cssClass="action remove-connection"
 				image="../social/remove_coworker"
 				label="<%= true %>"
-				message="remove-as-connection"
+				message="disconnect"
 				method="get"
 				url="<%= removeConnectionURL %>"
 			/>
@@ -50,8 +53,8 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 		<c:when test="<%= SocialRequestLocalServiceUtil.hasRequest(themeDisplay.getUserId(), User.class.getName(), themeDisplay.getUserId(), SocialRelationConstants.TYPE_BI_CONNECTION, user2.getUserId(), SocialRequestConstants.STATUS_PENDING) %>">
 			<liferay-ui:icon
 				cssClass="disabled"
-				label="<%= true %>"
 				image="../social/coworker"
+				label="<%= true %>"
 				message="connection-requested"
 			/>
 		</c:when>
@@ -66,7 +69,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 				cssClass="action add-connection"
 				image="../social/add_coworker"
 				label="<%= true %>"
-				message="add-as-connection"
+				message="connect"
 				method="get"
 				url="<%= addConnectionURL %>"
 			/>
@@ -144,13 +147,18 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 	</c:when>
 </c:choose>
 
-<c:if test="<%= user.getUserId() == user2.getUserId() %>">
+<c:if test="<%= user2.getUserId() != themeDisplay.getUserId() %>">
+
+	<%
+	String messageTaglibOnClick = liferayPortletResponse.getNamespace() + "sendMessage();";
+	%>
+
 	<liferay-ui:icon
-		cssClass="edit-profile"
-		image="edit"
+		cssClass="send-message"
+		image="../mail/compose"
 		label="<%= true %>"
-		message="edit-profile"
-		method="get"
+		message="message"
+		onClick="<%= messageTaglibOnClick %>"
 		url="javascript:;"
 	/>
 </c:if>
@@ -162,46 +170,41 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 <liferay-ui:icon
 	image="export"
 	label="<%= true %>"
-	message="export-vcard"
+	message="vcard"
 	url="<%= exportURL %>"
 />
 
+<aui:script>
+	function <portlet:namespace />sendMessage() {
+		var A = AUI();
+
+		<portlet:renderURL var="redirectURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>" />
+
+		var uri = '<liferay-portlet:renderURL portletName="1_WAR_privatemessagingportlet" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="mvcPath" value="/new_message.jsp" /><portlet:param name="redirect" value="<%= redirectURL %>" /></liferay-portlet:renderURL>';
+
+		new A.Dialog(
+			{
+				align: Liferay.Util.Window.ALIGN_CENTER,
+				cssClass: 'private-messaging-portlet',
+				destroyOnClose: true,
+				modal: true,
+				title: '<%= UnicodeLanguageUtil.get(pageContext, "new-message") %>',
+				width: 600
+			}
+		).plug(
+			A.Plugin.IO,
+			{
+				data: {
+					userIds: <%= user2.getUserId() %>
+				},
+				uri: uri
+			}
+		).render();
+	}
+</aui:script>
+
 <aui:script use="aui-base,aui-dialog,aui-dialog-iframe">
-	<c:if test="<%= user.getUserId() == user2.getUserId() %>">
-		var editProfile = A.one('.contacts-portlet .edit-profile');
-
-		if (editProfile) {
-			editProfile.on(
-				'click',
-				function(event) {
-					event.preventDefault();
-
-					var url = Liferay.Util.addParams('controlPanelCategory=<%= PortletCategoryKeys.MY %>', '<%= themeDisplay.getURLMyAccount().toString() %>');
-
-					var dialog = new A.Dialog(
-						{
-							align: {
-								node: null,
-								points: ['tc', 'tc']
-							},
-							constrain2view: true,
-							modal: true,
-							resizable: false,
-							title: '<liferay-ui:message key="edit-profile" />',
-							width: 950
-						}
-					).plug(
-						A.Plugin.DialogIframe,
-						{
-							uri: url
-						}
-					).render();
-				}
-			);
-		}
-	</c:if>
-
-	<liferay-portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" var="viewSummaryURL">
+	<liferay-portlet:renderURL var="viewSummaryURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 		<portlet:param name="mvcPath" value="/contacts_center/view_user.jsp" />
 		<portlet:param name="userId" value="<%= String.valueOf(user2.getUserId()) %>" />
 	</liferay-portlet:renderURL>

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,6 +21,7 @@ import com.liferay.knowledgebase.model.KBArticleSoap;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -41,7 +42,9 @@ import java.sql.Types;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the KBArticle service. Represents a row in the &quot;KBArticle&quot; database table, with each column mapped to a property of this class.
@@ -117,6 +120,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	public static long STATUS_COLUMN_BITMASK = 128L;
 	public static long UUID_COLUMN_BITMASK = 256L;
 	public static long VERSION_COLUMN_BITMASK = 512L;
+	public static long MODIFIEDDATE_COLUMN_BITMASK = 1024L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -125,6 +129,10 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	 * @return the normal model instance
 	 */
 	public static KBArticle toModel(KBArticleSoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
 		KBArticle model = new KBArticleImpl();
 
 		model.setUuid(soapModel.getUuid());
@@ -162,6 +170,10 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	 * @return the normal model instances
 	 */
 	public static List<KBArticle> toModels(KBArticleSoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
 		List<KBArticle> models = new ArrayList<KBArticle>(soapModels.length);
 
 		for (KBArticleSoap soapModel : soapModels) {
@@ -177,30 +189,217 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	public KBArticleModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _kbArticleId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setKbArticleId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_kbArticleId);
+		return _kbArticleId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return KBArticle.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return KBArticle.class.getName();
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("uuid", getUuid());
+		attributes.put("kbArticleId", getKbArticleId());
+		attributes.put("resourcePrimKey", getResourcePrimKey());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("rootResourcePrimKey", getRootResourcePrimKey());
+		attributes.put("parentResourcePrimKey", getParentResourcePrimKey());
+		attributes.put("version", getVersion());
+		attributes.put("title", getTitle());
+		attributes.put("content", getContent());
+		attributes.put("description", getDescription());
+		attributes.put("priority", getPriority());
+		attributes.put("sections", getSections());
+		attributes.put("viewCount", getViewCount());
+		attributes.put("latest", getLatest());
+		attributes.put("main", getMain());
+		attributes.put("status", getStatus());
+		attributes.put("statusByUserId", getStatusByUserId());
+		attributes.put("statusByUserName", getStatusByUserName());
+		attributes.put("statusDate", getStatusDate());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
+		Long kbArticleId = (Long)attributes.get("kbArticleId");
+
+		if (kbArticleId != null) {
+			setKbArticleId(kbArticleId);
+		}
+
+		Long resourcePrimKey = (Long)attributes.get("resourcePrimKey");
+
+		if (resourcePrimKey != null) {
+			setResourcePrimKey(resourcePrimKey);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long rootResourcePrimKey = (Long)attributes.get("rootResourcePrimKey");
+
+		if (rootResourcePrimKey != null) {
+			setRootResourcePrimKey(rootResourcePrimKey);
+		}
+
+		Long parentResourcePrimKey = (Long)attributes.get(
+				"parentResourcePrimKey");
+
+		if (parentResourcePrimKey != null) {
+			setParentResourcePrimKey(parentResourcePrimKey);
+		}
+
+		Integer version = (Integer)attributes.get("version");
+
+		if (version != null) {
+			setVersion(version);
+		}
+
+		String title = (String)attributes.get("title");
+
+		if (title != null) {
+			setTitle(title);
+		}
+
+		String content = (String)attributes.get("content");
+
+		if (content != null) {
+			setContent(content);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		Double priority = (Double)attributes.get("priority");
+
+		if (priority != null) {
+			setPriority(priority);
+		}
+
+		String sections = (String)attributes.get("sections");
+
+		if (sections != null) {
+			setSections(sections);
+		}
+
+		Integer viewCount = (Integer)attributes.get("viewCount");
+
+		if (viewCount != null) {
+			setViewCount(viewCount);
+		}
+
+		Boolean latest = (Boolean)attributes.get("latest");
+
+		if (latest != null) {
+			setLatest(latest);
+		}
+
+		Boolean main = (Boolean)attributes.get("main");
+
+		if (main != null) {
+			setMain(main);
+		}
+
+		Integer status = (Integer)attributes.get("status");
+
+		if (status != null) {
+			setStatus(status);
+		}
+
+		Long statusByUserId = (Long)attributes.get("statusByUserId");
+
+		if (statusByUserId != null) {
+			setStatusByUserId(statusByUserId);
+		}
+
+		String statusByUserName = (String)attributes.get("statusByUserName");
+
+		if (statusByUserName != null) {
+			setStatusByUserName(statusByUserName);
+		}
+
+		Date statusDate = (Date)attributes.get("statusDate");
+
+		if (statusDate != null) {
+			setStatusDate(statusDate);
+		}
+	}
+
+	@Override
 	@JSON
 	public String getUuid() {
 		if (_uuid == null) {
@@ -211,6 +410,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		}
 	}
 
+	@Override
 	public void setUuid(String uuid) {
 		if (_originalUuid == null) {
 			_originalUuid = _uuid;
@@ -223,20 +423,24 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		return GetterUtil.getString(_originalUuid);
 	}
 
+	@Override
 	@JSON
 	public long getKbArticleId() {
 		return _kbArticleId;
 	}
 
+	@Override
 	public void setKbArticleId(long kbArticleId) {
 		_kbArticleId = kbArticleId;
 	}
 
+	@Override
 	@JSON
 	public long getResourcePrimKey() {
 		return _resourcePrimKey;
 	}
 
+	@Override
 	public void setResourcePrimKey(long resourcePrimKey) {
 		_columnBitmask |= RESOURCEPRIMKEY_COLUMN_BITMASK;
 
@@ -249,6 +453,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		_resourcePrimKey = resourcePrimKey;
 	}
 
+	@Override
 	public boolean isResourceMain() {
 		return true;
 	}
@@ -257,11 +462,13 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		return _originalResourcePrimKey;
 	}
 
+	@Override
 	@JSON
 	public long getGroupId() {
 		return _groupId;
 	}
 
+	@Override
 	public void setGroupId(long groupId) {
 		_columnBitmask |= GROUPID_COLUMN_BITMASK;
 
@@ -278,11 +485,13 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		return _originalGroupId;
 	}
 
+	@Override
 	@JSON
 	public long getCompanyId() {
 		return _companyId;
 	}
 
+	@Override
 	public void setCompanyId(long companyId) {
 		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
 
@@ -299,23 +508,28 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		return _originalCompanyId;
 	}
 
+	@Override
 	@JSON
 	public long getUserId() {
 		return _userId;
 	}
 
+	@Override
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
+	@Override
 	public String getUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
 	}
 
+	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
 	}
 
+	@Override
 	@JSON
 	public String getUserName() {
 		if (_userName == null) {
@@ -326,44 +540,53 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		}
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		_userName = userName;
 	}
 
+	@Override
 	@JSON
 	public Date getCreateDate() {
 		return _createDate;
 	}
 
+	@Override
 	public void setCreateDate(Date createDate) {
 		_createDate = createDate;
 	}
 
+	@Override
 	@JSON
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
 
+	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		_columnBitmask = -1L;
 
 		_modifiedDate = modifiedDate;
 	}
 
+	@Override
 	@JSON
 	public long getRootResourcePrimKey() {
 		return _rootResourcePrimKey;
 	}
 
+	@Override
 	public void setRootResourcePrimKey(long rootResourcePrimKey) {
 		_rootResourcePrimKey = rootResourcePrimKey;
 	}
 
+	@Override
 	@JSON
 	public long getParentResourcePrimKey() {
 		return _parentResourcePrimKey;
 	}
 
+	@Override
 	public void setParentResourcePrimKey(long parentResourcePrimKey) {
 		_columnBitmask |= PARENTRESOURCEPRIMKEY_COLUMN_BITMASK;
 
@@ -380,11 +603,13 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		return _originalParentResourcePrimKey;
 	}
 
+	@Override
 	@JSON
 	public int getVersion() {
 		return _version;
 	}
 
+	@Override
 	public void setVersion(int version) {
 		_columnBitmask |= VERSION_COLUMN_BITMASK;
 
@@ -401,6 +626,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		return _originalVersion;
 	}
 
+	@Override
 	@JSON
 	public String getTitle() {
 		if (_title == null) {
@@ -411,10 +637,12 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		}
 	}
 
+	@Override
 	public void setTitle(String title) {
 		_title = title;
 	}
 
+	@Override
 	@JSON
 	public String getContent() {
 		if (_content == null) {
@@ -425,10 +653,12 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		}
 	}
 
+	@Override
 	public void setContent(String content) {
 		_content = content;
 	}
 
+	@Override
 	@JSON
 	public String getDescription() {
 		if (_description == null) {
@@ -439,19 +669,23 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		}
 	}
 
+	@Override
 	public void setDescription(String description) {
 		_description = description;
 	}
 
+	@Override
 	@JSON
 	public double getPriority() {
 		return _priority;
 	}
 
+	@Override
 	public void setPriority(double priority) {
 		_priority = priority;
 	}
 
+	@Override
 	@JSON
 	public String getSections() {
 		if (_sections == null) {
@@ -462,6 +696,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		}
 	}
 
+	@Override
 	public void setSections(String sections) {
 		_columnBitmask |= SECTIONS_COLUMN_BITMASK;
 
@@ -476,24 +711,29 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		return GetterUtil.getString(_originalSections);
 	}
 
+	@Override
 	@JSON
 	public int getViewCount() {
 		return _viewCount;
 	}
 
+	@Override
 	public void setViewCount(int viewCount) {
 		_viewCount = viewCount;
 	}
 
+	@Override
 	@JSON
 	public boolean getLatest() {
 		return _latest;
 	}
 
+	@Override
 	public boolean isLatest() {
 		return _latest;
 	}
 
+	@Override
 	public void setLatest(boolean latest) {
 		_columnBitmask |= LATEST_COLUMN_BITMASK;
 
@@ -510,15 +750,18 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		return _originalLatest;
 	}
 
+	@Override
 	@JSON
 	public boolean getMain() {
 		return _main;
 	}
 
+	@Override
 	public boolean isMain() {
 		return _main;
 	}
 
+	@Override
 	public void setMain(boolean main) {
 		_columnBitmask |= MAIN_COLUMN_BITMASK;
 
@@ -535,11 +778,13 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		return _originalMain;
 	}
 
+	@Override
 	@JSON
 	public int getStatus() {
 		return _status;
 	}
 
+	@Override
 	public void setStatus(int status) {
 		_columnBitmask |= STATUS_COLUMN_BITMASK;
 
@@ -556,24 +801,29 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		return _originalStatus;
 	}
 
+	@Override
 	@JSON
 	public long getStatusByUserId() {
 		return _statusByUserId;
 	}
 
+	@Override
 	public void setStatusByUserId(long statusByUserId) {
 		_statusByUserId = statusByUserId;
 	}
 
+	@Override
 	public String getStatusByUserUuid() throws SystemException {
 		return PortalUtil.getUserValue(getStatusByUserId(), "uuid",
 			_statusByUserUuid);
 	}
 
+	@Override
 	public void setStatusByUserUuid(String statusByUserUuid) {
 		_statusByUserUuid = statusByUserUuid;
 	}
 
+	@Override
 	@JSON
 	public String getStatusByUserName() {
 		if (_statusByUserName == null) {
@@ -584,26 +834,37 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		}
 	}
 
+	@Override
 	public void setStatusByUserName(String statusByUserName) {
 		_statusByUserName = statusByUserName;
 	}
 
+	@Override
 	@JSON
 	public Date getStatusDate() {
 		return _statusDate;
 	}
 
+	@Override
 	public void setStatusDate(Date statusDate) {
 		_statusDate = statusDate;
 	}
 
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				KBArticle.class.getName()));
+	}
+
 	/**
-	 * @deprecated {@link #isApproved}
+	 * @deprecated As of 6.1.0, replaced by {@link #isApproved}
 	 */
+	@Override
 	public boolean getApproved() {
 		return isApproved();
 	}
 
+	@Override
 	public boolean isApproved() {
 		if (getStatus() == WorkflowConstants.STATUS_APPROVED) {
 			return true;
@@ -613,6 +874,17 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		}
 	}
 
+	@Override
+	public boolean isDenied() {
+		if (getStatus() == WorkflowConstants.STATUS_DENIED) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
 	public boolean isDraft() {
 		if (getStatus() == WorkflowConstants.STATUS_DRAFT) {
 			return true;
@@ -622,6 +894,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		}
 	}
 
+	@Override
 	public boolean isExpired() {
 		if (getStatus() == WorkflowConstants.STATUS_EXPIRED) {
 			return true;
@@ -631,8 +904,49 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		}
 	}
 
+	@Override
+	public boolean isInactive() {
+		if (getStatus() == WorkflowConstants.STATUS_INACTIVE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isIncomplete() {
+		if (getStatus() == WorkflowConstants.STATUS_INCOMPLETE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isInTrash() {
+		if (getStatus() == WorkflowConstants.STATUS_IN_TRASH) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
 	public boolean isPending() {
 		if (getStatus() == WorkflowConstants.STATUS_PENDING) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isScheduled() {
+		if (getStatus() == WorkflowConstants.STATUS_SCHEDULED) {
 			return true;
 		}
 		else {
@@ -645,29 +959,26 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	}
 
 	@Override
-	public KBArticle toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (KBArticle)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
-					KBArticle.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
+			KBArticle.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public KBArticle toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (KBArticle)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -704,6 +1015,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		return kbArticleImpl;
 	}
 
+	@Override
 	public int compareTo(KBArticle kbArticle) {
 		int value = 0;
 
@@ -721,18 +1033,15 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof KBArticle)) {
 			return false;
 		}
 
-		KBArticle kbArticle = null;
-
-		try {
-			kbArticle = (KBArticle)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		KBArticle kbArticle = (KBArticle)obj;
 
 		long primaryKey = kbArticle.getPrimaryKey();
 
@@ -967,6 +1276,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(76);
 
@@ -1077,7 +1387,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	}
 
 	private static ClassLoader _classLoader = KBArticle.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			KBArticle.class
 		};
 	private String _uuid;
@@ -1124,7 +1434,6 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	private String _statusByUserUuid;
 	private String _statusByUserName;
 	private Date _statusDate;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
-	private KBArticle _escapedModelProxy;
+	private KBArticle _escapedModel;
 }
